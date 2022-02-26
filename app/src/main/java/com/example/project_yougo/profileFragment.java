@@ -72,14 +72,7 @@ public class profileFragment extends Fragment {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = getParentFragment().getContext();
-                CharSequence text = "Its works..";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-
-
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_create_postFragment);
             }
         });
         return view;
