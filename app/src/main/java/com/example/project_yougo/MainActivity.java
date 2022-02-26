@@ -3,6 +3,8 @@ package com.example.project_yougo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHost;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
@@ -18,5 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         NavHost navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navHost);
         navController = navHost.getNavController();
+
+
     }
 }
