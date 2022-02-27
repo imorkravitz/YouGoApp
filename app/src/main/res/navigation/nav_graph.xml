@@ -3,24 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/profileFragment">
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.project_yougo.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.project_yougo.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.project_yougo.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.project_yougo.profileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_profileFragment_to_create_postFragment"
-            app:destination="@id/create_postFragment" />
+            android:id="@+id/action_homeFragment4_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment4_to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/create_postFragment"
-        android:name="com.example.project_yougo.create_postFragment"
-        android:label="fragment_create_post"
-        tools:layout="@layout/fragment_create_post" />
 </navigation>
