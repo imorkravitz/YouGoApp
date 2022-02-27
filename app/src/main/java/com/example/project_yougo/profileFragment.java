@@ -69,12 +69,6 @@ public class profileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         Button edit = view.findViewById(R.id.profile_frag_edit_btn);
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_create_postFragment);
-            }
-        });
         return view;
     }
 }
