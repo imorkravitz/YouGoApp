@@ -54,7 +54,6 @@ public class PostListFragment extends Fragment {
                 }
             });
         }
-
     }
 
     interface OnItemClickListener {
