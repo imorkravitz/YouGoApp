@@ -1,10 +1,8 @@
 package com.example.project_yougo;
 
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +30,7 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_login,container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_register,container, false);
 
         this.name = view.findViewById(R.id.register_name);
         this.lastname = view.findViewById(R.id.register_lastname);
@@ -40,6 +38,7 @@ public class RegisterFragment extends Fragment {
         this.password = view.findViewById(R.id.register_password);
         this.confirmPassword = view.findViewById(R.id.register_confirm_password);
         this.signup = view.findViewById(R.id.profile_frag_back_btn);
+
 
 
         return view;
