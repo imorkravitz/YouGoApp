@@ -7,8 +7,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.project_yougo.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_postListFragment"
             app:destination="@id/postListFragment" />
@@ -16,13 +16,13 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.project_yougo.RegisterFragment"
-        android:label="fragment_register"
+        android:label="Register"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.project_yougo.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        android:label="Yougo"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_postListFragment"
             app:destination="@id/postListFragment" />
@@ -30,16 +30,30 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.project_yougo.profileFragment"
-        android:label="fragment_profile"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/create_postFragment2"
         android:name="com.example.project_yougo.create_postFragment"
-        android:label="fragment_create_post"
+        android:label="Create Post"
         tools:layout="@layout/fragment_create_post" />
     <fragment
         android:id="@+id/postListFragment"
         android:name="com.example.project_yougo.PostListFragment"
-        android:label="fragment_post_list"
-        tools:layout="@layout/fragment_post_list" />
+        android:label="Yougo"
+        tools:layout="@layout/fragment_post_list">
+        <action
+            android:id="@+id/action_postListFragment_to_create_postFragment2"
+            app:destination="@id/create_postFragment2" />
+        <action
+            android:id="@+id/action_postListFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.project_yougo.aboutFragment"
+        android:label="About Us"
+        tools:layout="@layout/fragment_about" />
+    <action android:id="@+id/action_global_aboutFragment" app:destination="@id/aboutFragment" />
+    <action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment" />
 </navigation>

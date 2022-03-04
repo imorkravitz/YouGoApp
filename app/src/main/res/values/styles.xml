@@ -1,7 +1,7 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-       <item name="colorPrimary">@color/design_default_color_background</item>
+       <item name="colorPrimary">@color/myGreen</item>
         <item name="colorPrimaryDark">@color/myGreen</item>
        <item name="colorAccent">@color/cardview_light_background</item>
 
