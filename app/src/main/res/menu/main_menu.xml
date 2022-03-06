@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/menu_about_us"
+        android:id="@+id/aboutFragment_menu"
         android:title="About us"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_logout"
+        android:id="@+id/logout_menu"
         android:title="Logout"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_profile"
+        android:id="@+id/postListFragment_menu"
+        android:icon="@drawable/home"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/profileFragment_menu"
         android:icon="@drawable/profile_menu"
         android:title="Profile"
         app:showAsAction="always" />

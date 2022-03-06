@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.project_yougo.LoginFragment"
@@ -11,7 +12,8 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_postListFragment"
-            app:destination="@id/postListFragment" />
+            app:destination="@id/postListFragment"
+            app:popUpTo="@+id/postListFragment"/>
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -25,7 +27,8 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_postListFragment"
-            app:destination="@id/postListFragment" />
+            app:destination="@id/postListFragment"
+            app:popUpTo="@+id/postListFragment"/>
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -33,7 +36,7 @@
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
-        android:id="@+id/create_postFragment2"
+        android:id="@+id/create_postFragment"
         android:name="com.example.project_yougo.create_postFragment"
         android:label="Create Post"
         tools:layout="@layout/fragment_create_post" />
@@ -44,16 +47,28 @@
         tools:layout="@layout/fragment_post_list">
         <action
             android:id="@+id/action_postListFragment_to_create_postFragment2"
-            app:destination="@id/create_postFragment2" />
+            app:destination="@id/create_postFragment"
+            app:popUpTo="@+id/postListFragment"/>
         <action
             android:id="@+id/action_postListFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:popUpTo="@+id/postListFragment"/>
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.example.project_yougo.aboutFragment"
+        android:name="com.example.project_yougo.AboutFragment"
         android:label="About Us"
-        tools:layout="@layout/fragment_about" />
-    <action android:id="@+id/action_global_aboutFragment" app:destination="@id/aboutFragment" />
-    <action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment" />
+        tools:layout="@layout/fragment_about"/>
+
+    <action android:id="@+id/action_global_aboutFragment"
+        app:destination="@id/aboutFragment"
+        app:popUpTo="@+id/postListFragment"/>
+
+    <action android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment"
+        app:popUpTo="@+id/postListFragment"/>
+
+    <action android:id="@+id/action_global_postListFragment"
+        app:destination="@id/postListFragment"
+        app:popUpTo="@+id/postListFragment"/>
 </navigation>
