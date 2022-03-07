@@ -9,6 +9,13 @@ import androidx.navigation.ui.NavigationUI;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
@@ -53,5 +60,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return true;
+    }
+
+    public void onRegisterButtonClick(View view) {
+        RegisterFragment registerFragment = (RegisterFragment)(getSupportFragmentManager()
+                .findFragmentById(R.id.registerFragment));
+        registerFragment.register();
     }
 }
