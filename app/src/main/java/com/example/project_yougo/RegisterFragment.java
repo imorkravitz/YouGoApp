@@ -48,6 +48,7 @@ public class RegisterFragment extends Fragment {
         this.signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 register();
             }
         });

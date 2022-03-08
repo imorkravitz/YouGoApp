@@ -42,7 +42,7 @@ public class FirebaseDatabaseHandler {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    User user = new User(firebaseAuth.getUid(), email, firstName, lastName);
+                    User user = new User(firebaseAuth.getUid(), email, firstName, lastName,password);
                     DatabaseReference databaseReference = getDatabaseReference();
                     databaseReference.child("users").child(user.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -67,5 +67,23 @@ public class FirebaseDatabaseHandler {
 
     private DatabaseReference getDatabaseReference() {
         return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+    }
+    public interface LoginCompleteListener{
+        void onLoginSuccessful();
+        void onLoginFailed();
+    }
+    public void loginWithEmailAndPassword(Context context,FirebaseAuth firebaseAuth,
+                                          String email,String password,
+                                          LoginCompleteListener loginCompleteListener){
+        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    loginCompleteListener.onLoginSuccessful();
+                }else{
+                    loginCompleteListener.onLoginFailed();
+                }
+            }
+        });
     }
 }
