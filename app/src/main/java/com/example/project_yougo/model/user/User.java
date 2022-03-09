@@ -1,7 +1,4 @@
-package com.example.project_yougo.model.User;
-
-import androidx.annotation.NonNull;
-import androidx.room.PrimaryKey;
+package com.example.project_yougo.model.user;
 
 import java.util.HashMap;
 import java.util.List;

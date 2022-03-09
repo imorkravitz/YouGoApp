@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.example.project_yougo.feed.MainActivity;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -32,5 +34,18 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, 3000);
 
+    }
+
+
+    private void toLoginActivity() {
+        Intent intent = new Intent(this, IntroActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void toFeedActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

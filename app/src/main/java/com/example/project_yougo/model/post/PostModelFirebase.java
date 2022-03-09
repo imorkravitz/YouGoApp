@@ -1,8 +1,8 @@
-package com.example.project_yougo.model.Post;
+package com.example.project_yougo.model.post;
 
 import androidx.annotation.NonNull;
 
-import com.example.project_yougo.model.User.User;
+import com.example.project_yougo.model.user.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

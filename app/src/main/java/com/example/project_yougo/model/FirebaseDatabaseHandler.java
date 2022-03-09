@@ -1,15 +1,14 @@
-package com.example.project_yougo;
+package com.example.project_yougo.model;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.project_yougo.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -86,4 +85,17 @@ public class FirebaseDatabaseHandler {
             }
         });
     }
+
+    /**
+     * Authentication
+     */
+    private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    //TODO: fix "isSignedIn()"
+    public static boolean isSignedIn(){
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        return (currentUser != null);
+    }
+
+
 }

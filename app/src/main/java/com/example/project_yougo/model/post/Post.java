@@ -1,6 +1,4 @@
-package com.example.project_yougo.model.Post;
-
-import com.example.project_yougo.model.User.User;
+package com.example.project_yougo.model.post;
 
 import java.util.HashMap;
 import java.util.List;

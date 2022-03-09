@@ -1,4 +1,4 @@
-package com.example.project_yougo;
+package com.example.project_yougo.login;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.project_yougo.R;
+import com.example.project_yougo.model.FirebaseDatabaseHandler;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {

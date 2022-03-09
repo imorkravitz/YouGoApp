@@ -1,10 +1,13 @@
-package com.example.project_yougo;
+package com.example.project_yougo.login;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.example.project_yougo.login.LoginFragment;
+import com.example.project_yougo.login.RegisterFragment;
 
 import java.util.ArrayList;
 import java.util.List;

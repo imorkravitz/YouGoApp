@@ -1,4 +1,4 @@
-package com.example.project_yougo;
+package com.example.project_yougo.feed;
 
 import android.os.Bundle;
 
@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.project_yougo.R;
 
 public class profileFragment extends Fragment {
 

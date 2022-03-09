@@ -1,4 +1,4 @@
-package com.example.project_yougo;
+package com.example.project_yougo.feed;
 
 
 import android.os.Bundle;

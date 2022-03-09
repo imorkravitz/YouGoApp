@@ -1,4 +1,4 @@
-package com.example.project_yougo;
+package com.example.project_yougo.feed;
 
 import android.os.Bundle;
 
@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.project_yougo.R;
 
 
 public class PostListFragment extends Fragment {

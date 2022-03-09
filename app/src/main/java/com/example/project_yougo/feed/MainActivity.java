@@ -1,4 +1,4 @@
-package com.example.project_yougo;
+package com.example.project_yougo.feed;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,11 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.project_yougo.R;
+import com.example.project_yougo.login.RegisterFragment;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;

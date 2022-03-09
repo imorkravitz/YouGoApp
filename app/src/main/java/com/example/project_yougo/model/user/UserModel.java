@@ -1,4 +1,4 @@
-package com.example.project_yougo.model.User;
+package com.example.project_yougo.model.user;
 
 import java.util.List;
 
