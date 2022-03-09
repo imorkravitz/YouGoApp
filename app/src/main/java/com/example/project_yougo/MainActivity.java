@@ -65,6 +65,6 @@ public class MainActivity extends AppCompatActivity {
     public void onRegisterButtonClick(View view) {
         RegisterFragment registerFragment = (RegisterFragment)(getSupportFragmentManager()
                 .findFragmentById(R.id.registerFragment));
-        registerFragment.register();
+        registerFragment.register(view);
     }
 }

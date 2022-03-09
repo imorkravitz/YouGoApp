@@ -3,6 +3,8 @@ package com.example.project_yougo;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,15 +50,19 @@ public class RegisterFragment extends Fragment {
         this.signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                register();
+                register(v);
             }
         });
 
         return view;
     }
 
-    public void register() {
+    public void register(View v) {
+        if(!validateFirstname() | !validateLastname() | !validateEmail()
+                | !validatePassword() | !validateConfirmPassword()){
+            return;
+        }
+
         String firstname = this.name.getText().toString();
         String lastname = this.lastname.getText().toString();
         String email = this.email.getText().toString();
@@ -66,6 +72,7 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void onSignupSuccessful() {
                         Toast.makeText(getContext(), "oved", Toast.LENGTH_LONG).show();
+                        Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
                     }
 
                     @Override
@@ -75,4 +82,89 @@ public class RegisterFragment extends Fragment {
             }
         );
     } //bluestacks
+
+    private Boolean validateFirstname(){
+        String val = this.name.getText().toString();
+        String noWhiteSpace = "\\A[a-zA-Z]{1,20}\\z";
+
+        if(val.isEmpty()){
+            this.name.setError("Field cannot be empty");
+            return false;
+        }else if(!val.matches(noWhiteSpace)){
+            this.name.setError("Invalid firstname address");
+            return false;
+        }
+        else{
+            this.name.setError(null);
+            return true;
+        }
+    }
+    // \A\w{4,20}\z
+    private Boolean validateLastname(){
+        String val = this.lastname.getText().toString();
+        String noWhiteSpace = "\\A[a-zA-Z]{1,20}\\z";
+        if(val.isEmpty()){
+            this.lastname.setError("Field cannot be empty");
+            return false;
+        }else if(!val.matches(noWhiteSpace)){
+            this.lastname.setError("Invalid lastname address");
+            return false;
+        }
+        else{
+            this.lastname.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validateEmail(){
+        String val = this.email.getText().toString();
+        String emailPattern = "[a-zA-Z0-9,_-]+@[a-z]+\\.+[a-z]+";
+
+        if(val.isEmpty()){
+            this.email.setError("Field cannot be empty");
+            return false;
+        }
+        else if(!val.matches(emailPattern)){
+            this.email.setError("Invalid email address");
+            return false;
+        }
+        else{
+            this.email.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validatePassword(){
+        String val = this.password.getText().toString();
+        String passwordval = "\\A[a-zA-Z0-9]{6,10}\\z";
+        if(val.isEmpty()){
+            this.password.setError("Field cannot be empty");
+            return false;
+        }else if(!val.matches(passwordval)){
+            this.password.setError("Password must be only letters and number & between 6 to 10 characters");
+            return false;
+        }
+        else{
+            this.password.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validateConfirmPassword(){
+        String val1 = this.password.getText().toString();
+        String val2 = this.confirmPassword.getText().toString();
+
+        if(val2.isEmpty()){
+            this.confirmPassword.setError("Field cannot be empty");
+            return false;
+        }
+        else if(!val2.equals(val1)){
+            this.confirmPassword.setError("Different password");
+            return false;
+        }
+        else{
+            this.confirmPassword.setError(null);
+            return true;
+        }
+    }
 }
