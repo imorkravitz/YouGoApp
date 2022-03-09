@@ -43,6 +43,10 @@ public class FriendListFragment extends Fragment {
 //                    Log.d("Tag", "click on position" + position);
 //                }
 //        });
+
+  
+//        setHasOptionsMenu(true);
+
 //        return view;
 //    }
 //
@@ -119,4 +123,11 @@ public class FriendListFragment extends Fragment {
 //            return data.size();
 //        }
 //    }
+
+//
+//     @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+//    }
+
 }

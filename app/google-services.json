@@ -1,6 +1,9 @@
 {
   "project_info": {
     "project_number": "1046817728137",
+
+    "firebase_url": "https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app",
+
     "project_id": "yougoapp-50cbe",
     "storage_bucket": "yougoapp-50cbe.appspot.com"
   },
