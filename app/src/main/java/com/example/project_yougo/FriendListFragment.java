@@ -1,7 +1,6 @@
 package com.example.project_yougo;
 
-import com.example.project_yougo.model.Model;
-import com.example.project_yougo.model.Friend;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,9 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.project_yougo.model.Friend;
-import com.example.project_yougo.model.Model;
 
 import java.util.List;
 
@@ -47,7 +43,10 @@ public class FriendListFragment extends Fragment {
 //                    Log.d("Tag", "click on position" + position);
 //                }
 //        });
+
+  
 //        setHasOptionsMenu(true);
+
 //        return view;
 //    }
 //
@@ -124,9 +123,11 @@ public class FriendListFragment extends Fragment {
 //            return data.size();
 //        }
 //    }
+
 //
 //     @Override
 //    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 //        return super.onOptionsItemSelected(item);
 //    }
+
 }
