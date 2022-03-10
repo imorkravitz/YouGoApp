@@ -12,16 +12,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.AuthenticationHandler;
 import com.example.project_yougo.model.FirebaseDatabaseHandler;
-import com.google.firebase.auth.FirebaseAuth;
+
 
 public class LoginFragment extends Fragment {
 
     EditText email, password;
     Button login;
     boolean log=false;
-    private FirebaseDatabaseHandler firebaseDatabaseHandler;
-    private FirebaseAuth firebaseAuth;
+    private AuthenticationHandler authenticationHandler;
+
 
     public LoginFragment(){
         //required empty public constructor.
@@ -37,12 +38,12 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_login, container, false);
-        this.firebaseDatabaseHandler = FirebaseDatabaseHandler.getInstance();
-        this.firebaseAuth = FirebaseAuth.getInstance();
+
+        this.authenticationHandler = AuthenticationHandler.getInstance();
 
         this.email = view.findViewById(R.id.login_email);
         this.password = view.findViewById(R.id.login_password);
-        this.login = (Button) view.findViewById(R.id.login_login_btn);
+        this.login = view.findViewById(R.id.login_login_btn);
 
         login.setOnClickListener((v)->{
             loginApproved(v);
@@ -53,20 +54,20 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginApproved(View v) {
-
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
-        this.firebaseDatabaseHandler.loginWithEmailAndPassword(getContext(), firebaseAuth, email, password, new FirebaseDatabaseHandler.LoginCompleteListener() {
+        this.authenticationHandler.login(email, password, new AuthenticationHandler.SignInCompleteListener() {
             @Override
-            public void onLoginSuccessful() {
+            public void onSignInSuccessful() {
                 Toast.makeText(getContext(), "login oved", Toast.LENGTH_LONG).show();
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
             }
 
             @Override
-            public void onLoginFailed() {
+            public void onSignInFailed() {
                 Toast.makeText(getContext(), "Wrong password or email!", Toast.LENGTH_LONG).show();
             }
         });
+
     }
 }

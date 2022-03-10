@@ -64,38 +64,13 @@ public class FirebaseDatabaseHandler {
         });
     }
 
-    private DatabaseReference getDatabaseReference() {
-        return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-    }
-    public interface LoginCompleteListener{
-        void onLoginSuccessful();
-        void onLoginFailed();
-    }
-    public void loginWithEmailAndPassword(Context context,FirebaseAuth firebaseAuth,
-                                          String email,String password,
-                                          LoginCompleteListener loginCompleteListener){
-        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    loginCompleteListener.onLoginSuccessful();
-                }else{
-                    loginCompleteListener.onLoginFailed();
-                }
-            }
-        });
-    }
-
-    /**
-     * Authentication
-     */
-    private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-    //TODO: fix "isSignedIn()"
-    public static boolean isSignedIn(){
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        return (currentUser != null);
-    }
+//    public DatabaseReference
+//            () {
+//        return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+//    }
+public DatabaseReference getDatabaseReference() {
+    return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+}
 
 
 }

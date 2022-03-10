@@ -9,27 +9,35 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.project_yougo.feed.MainActivity;
+import com.example.project_yougo.model.AuthenticationHandler;
 
 public class SplashActivity extends AppCompatActivity {
+    private AuthenticationHandler authenticationHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Context context = getApplicationContext();
+        authenticationHandler = AuthenticationHandler.getInstance();
+
         CharSequence text = "loading app..";
         int duration = Toast.LENGTH_SHORT;
 
-        Toast toast = Toast.makeText(context, text, duration);
+        Toast toast = Toast.makeText(this, text, duration);
         toast.show();
-
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(i);
+                Intent intent;
+
+                if(authenticationHandler.isLoggedIn()) {
+                    intent = new Intent(SplashActivity.this, MainActivity.class);
+                } else {
+                    intent = new Intent(SplashActivity.this, MainActivity.class);
+                }
+                startActivity(intent);
                 finish();
             }
         }, 3000);
