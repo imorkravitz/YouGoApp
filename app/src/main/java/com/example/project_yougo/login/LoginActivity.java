@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PostModel.getInstance().addPost("my descript", "123dsd");
+        //PostModel.getInstance().addPost("my descript", "123dsd");
 
         navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.Feed_navHost);
         navController = navHost != null ? navHost.getNavController() : null;
