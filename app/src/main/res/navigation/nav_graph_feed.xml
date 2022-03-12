@@ -3,21 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_feed"
+    android:label="Profile"
     app:startDestination="@id/postListFragment2">
 
     <fragment
-        android:id="@+id/create_postFragment2"
+        android:id="@+id/create_postFragment"
         android:name="com.example.project_yougo.feed.create_postFragment"
         android:label="Create Post"
         tools:layout="@layout/fragment_create_post" />
     <fragment
         android:id="@+id/postListFragment2"
         android:name="com.example.project_yougo.feed.PostListFragment"
-        android:label="fragment_post_list"
+        android:label="Home"
         tools:layout="@layout/fragment_post_list" />
     <fragment
         android:id="@+id/profileFragment2"
         android:name="com.example.project_yougo.feed.profileFragment"
-        android:label="fragment_profile"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+    <action
+        android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment2"
+        app:popUpTo="@id/postListFragment2"
+        app:popUpToInclusive="false" />
+    <action
+        android:id="@+id/action_global_create_postFragment"
+        app:destination="@id/create_postFragment"
+        app:popUpTo="@id/postListFragment2" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.project_yougo.common.AboutFragment"
+        android:label="About Us"
+        tools:layout="@layout/fragment_about" />
+    <action
+        android:id="@+id/action_global_aboutFragment"
+        app:destination="@id/aboutFragment"
+        app:popUpTo="@id/postListFragment2" />
+    <action
+        android:id="@+id/action_global_postListFragment"
+        app:destination="@id/postListFragment2"
+        app:launchSingleTop="false"
+        app:popUpTo="@id/nav_graph_feed"
+        app:popUpToInclusive="false" />
 </navigation>

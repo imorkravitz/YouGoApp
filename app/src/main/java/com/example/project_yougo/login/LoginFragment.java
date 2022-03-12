@@ -62,8 +62,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSignInSuccessful() {
                 Toast.makeText(getContext(), "login oved", Toast.LENGTH_LONG).show();
-                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
-               // toFeedActivity();
+               // Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
+               toFeedActivity();
             }
 
             @Override

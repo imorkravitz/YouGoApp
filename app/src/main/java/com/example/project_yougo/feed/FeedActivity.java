@@ -40,7 +40,7 @@ public class FeedActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.feed_menu,menu);
         return false;
     }
 
@@ -60,6 +60,9 @@ public class FeedActivity extends AppCompatActivity {
                     break;
                 case R.id.postListFragment_menu:
                     navController.navigate(R.id.action_global_postListFragment);
+                    break;
+                case R.id.CreatePostFragment_menu:
+                    navController.navigate(R.id.action_global_create_postFragment);
             }
         }else{
             return true;

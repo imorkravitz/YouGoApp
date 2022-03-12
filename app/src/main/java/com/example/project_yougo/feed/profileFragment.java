@@ -43,13 +43,13 @@ public class profileFragment extends Fragment {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
-        UserModel.GetUserById(uid,new UserModel.GetUserById(){
-
-            @Override
-            public void onComplete(User user) {
-
-            }
-        });
+//        UserModel.GetUserById(uid,new UserModel.GetUserById(){
+//
+//            @Override
+//            public void onComplete(User user) {
+//
+//            }
+//        });
 
 
         return view;

@@ -21,4 +21,10 @@
         android:title="Profile"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/CreatePostFragment_menu"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Item"
+        app:showAsAction="always" />
+
 </menu>
