@@ -2,13 +2,13 @@ package com.example.project_yougo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.example.project_yougo.feed.MainActivity;
+import com.example.project_yougo.feed.FeedActivity;
+import com.example.project_yougo.login.LoginActivity;
 import com.example.project_yougo.model.AuthenticationHandler;
 
 public class SplashActivity extends AppCompatActivity {
@@ -33,12 +33,14 @@ public class SplashActivity extends AppCompatActivity {
                 Intent intent;
 
                 if(authenticationHandler.isLoggedIn()) {
-                    intent = new Intent(SplashActivity.this, MainActivity.class);
+                    //intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    toFeedActivity();
                 } else {
-                    intent = new Intent(SplashActivity.this, MainActivity.class);
+                    //intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    toLoginActivity();
                 }
-                startActivity(intent);
-                finish();
+//                startActivity(intent);
+//                finish();
             }
         }, 3000);
 
@@ -46,13 +48,13 @@ public class SplashActivity extends AppCompatActivity {
 
 
     private void toLoginActivity() {
-        Intent intent = new Intent(this, IntroActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
     private void toFeedActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

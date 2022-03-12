@@ -1,5 +1,6 @@
 package com.example.project_yougo.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.feed.FeedActivity;
 import com.example.project_yougo.model.AuthenticationHandler;
 import com.example.project_yougo.model.FirebaseDatabaseHandler;
 
@@ -60,7 +62,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSignInSuccessful() {
                 Toast.makeText(getContext(), "login oved", Toast.LENGTH_LONG).show();
-                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
+                //Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
+                toFeedActivity();
             }
 
             @Override
@@ -70,4 +73,10 @@ public class LoginFragment extends Fragment {
         });
 
     }
+    private void toFeedActivity() {
+        Intent intent = new Intent(getContext(), FeedActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
 }

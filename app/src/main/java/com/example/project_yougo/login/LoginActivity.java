@@ -1,4 +1,4 @@
-package com.example.project_yougo.feed;
+package com.example.project_yougo.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +15,7 @@ import com.example.project_yougo.R;
 import com.example.project_yougo.login.RegisterFragment;
 import com.example.project_yougo.model.post.PostModel;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     NavController navController;
     NavHost navHost;
 
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         PostModel.getInstance().addPost("my descript", "123dsd");
 
-        navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navHost);
+        navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.Feed_navHost);
         navController = navHost != null ? navHost.getNavController() : null;
 
         NavigationUI.setupActionBarWithNavController(this,navController);

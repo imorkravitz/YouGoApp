@@ -13,10 +13,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".IntroActivity"
-            android:exported="false"
-            android:label="@string/title_activity_intro"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".feed.FeedActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -28,9 +26,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feed.MainActivity"
+            android:name=".login.LoginActivity"
             android:exported="true"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
