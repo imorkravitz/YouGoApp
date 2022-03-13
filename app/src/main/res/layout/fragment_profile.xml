@@ -94,4 +94,12 @@
         app:layout_constraintStart_toEndOf="@+id/profile_frag_back_btn"
         app:layout_constraintWidth_percent=".8" />
 
+    <ImageButton
+        android:id="@+id/profile_frag_image_btn"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:src="@android:drawable/ic_menu_camera"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_fragment_layout_img"
+        app:layout_constraintEnd_toEndOf="@+id/profile_frag_user_img" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

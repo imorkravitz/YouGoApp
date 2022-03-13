@@ -26,13 +26,6 @@ public class PostModel {
         databaseReference.child("posts").child(postId).setValue(post);
     }
 
-
-
-
-
-
-
-
 //    PostModelFirebase PostModelFirebase = new PostModelFirebase();
 //    private PostModel(){ }
 //
