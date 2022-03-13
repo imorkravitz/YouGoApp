@@ -43,7 +43,7 @@ public class FirebaseDatabaseHandler {
                 if(task.isSuccessful()) {
                     User user = new User(firebaseAuth.getUid(), email, firstName, lastName, age, gender,password);
                     DatabaseReference databaseReference = getDatabaseReference();
-                    databaseReference.child("users").child(user.getFirstName() +" "+ user.getLastName()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    databaseReference.child("users").child(user.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {

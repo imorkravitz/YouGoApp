@@ -7,13 +7,13 @@ import java.util.Map;
 public class User {
 
     final public static String COLLECTION_NAME = "users";
+    int age;
     String firstName="";
     String lastName="";
     String gender="";
     String email="";
     String id="";
     List<String> friends;//identify by user id
-    int age;
 
 
 
