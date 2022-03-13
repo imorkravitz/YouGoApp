@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PostModel.getInstance().addPost("my descript", "123dsd");
+        PostModel.getInstance().addPost("my description", "123dsd");
 
         navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navHost);
         navController = navHost != null ? navHost.getNavController() : null;
@@ -46,14 +46,18 @@ public class MainActivity extends AppCompatActivity {
                 case android.R.id.home:
                     navController.navigateUp();
                     break;
-                case R.id.aboutFragment_menu:
-                    navController.navigate(R.id.action_global_aboutFragment);
-                    break;
                 case R.id.profileFragment_menu:
                     navController.navigate(R.id.action_global_profileFragment);
                     break;
                 case R.id.postListFragment_menu:
                     navController.navigate(R.id.action_global_postListFragment);
+                    break;
+                case R.id.item_post_menu:
+                    navController.navigate(R.id.action_postListFragment_to_create_postFragment);
+                    break;
+                case R.id.aboutFragment_menu:
+                    navController.navigate(R.id.action_global_aboutFragment);
+                    break;
             }
         }else{
             return true;

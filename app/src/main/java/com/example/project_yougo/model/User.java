@@ -9,14 +9,18 @@ public class User {
     private String firstName;
     private String lastName;
     private String password;
+    private String gender;
+    private String age;
     private List<String> friendIds;
 
-    public User(String uid, String email, String firstName, String lastName,String password) {
+    public User(String uid, String email, String firstName, String lastName,String age, String gender,String password) {
         this.uid = uid;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password=password;
+        this.age=age;
+        this.gender=gender;
         this.friendIds = new ArrayList<>();
     }
 
@@ -25,6 +29,7 @@ public class User {
     public User() {
 
     }
+
     public String getUid() {
         return uid;
     }
@@ -39,9 +44,11 @@ public class User {
         return firstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastName() { return lastName;
     }
+    public String getGender() { return gender; }
+
+    public String getAge() { return age; }
 
     public List<String> getFriendIds() {
         return friendIds;
