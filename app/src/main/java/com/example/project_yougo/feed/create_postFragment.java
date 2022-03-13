@@ -4,6 +4,8 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,10 +23,13 @@ import android.widget.Toast;
 
 import com.example.project_yougo.R;
 
+import java.io.InputStream;
+
 
 public class create_postFragment extends Fragment {
     ImageButton addImg;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_GALLERY = 2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,10 +90,25 @@ public class create_postFragment extends Fragment {
                 // TODO : Insert the image to object
                 //profileImg.setImageBitmap(imageBitmap);
             }
+        }else if(requestCode == REQUEST_IMAGE_GALLERY){
+            if(resultCode == RESULT_OK){
+                try {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    //TODO : Insert the image to object
+                    //image_view.setImageBitmap(selectedImage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
     }
 
     private void openGallery(View v){
-
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
     }
 }

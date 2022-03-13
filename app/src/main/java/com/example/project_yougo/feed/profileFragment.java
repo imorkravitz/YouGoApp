@@ -4,6 +4,8 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -28,6 +30,8 @@ import com.example.project_yougo.model.user.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.InputStream;
+
 public class profileFragment extends Fragment {
     TextView FirstName;
     TextView LastName;
@@ -35,6 +39,7 @@ public class profileFragment extends Fragment {
     ImageView profileImg;
     ImageButton profileBtn;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_GALLERY = 2;
     Bitmap imageBitmap;
     private AuthenticationHandler authenticationHandler;
     @Override
@@ -114,11 +119,24 @@ public class profileFragment extends Fragment {
                 imageBitmap = (Bitmap) extras.get("data");
                 profileImg.setImageBitmap(imageBitmap);
             }
+        }else if(requestCode == REQUEST_IMAGE_GALLERY){
+            if(resultCode == RESULT_OK){
+                try {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                    imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    profileImg.setImageBitmap(imageBitmap);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     private void openGallery(View v){
-
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
     }
 
 
