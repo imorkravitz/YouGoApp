@@ -73,7 +73,7 @@ public class RegisterFragment extends Fragment {
                 email, password, firstname, lastname, new FirebaseDatabaseHandler.SignUpCompleteListener() {
                     @Override
                     public void onSignupSuccessful() {
-                        Toast.makeText(getContext(), "oved", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Signed up", Toast.LENGTH_LONG).show();
                         Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
                     }
 

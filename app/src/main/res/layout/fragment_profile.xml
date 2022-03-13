@@ -36,8 +36,7 @@
         android:layout_marginTop="40dp"
         android:includeFontPadding="false"
         android:text="Name"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_frag_user_img" />
 
@@ -48,8 +47,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
         android:text="Last Name"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_frag_name_tv" />
 
@@ -60,8 +58,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
         android:text="E-mail"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_frag_Last_name_tv" />
 
@@ -71,9 +68,10 @@
         android:layout_height="48dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_bg"
-        android:text="back"
+        android:text="Back"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/profile_frag_edit_btn"
         app:layout_constraintHorizontal_bias="0.5"
@@ -87,6 +85,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_bg"
         android:text="edit"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
