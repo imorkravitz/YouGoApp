@@ -48,6 +48,7 @@ public class UserModel {
     public interface GetUserById{
         void onComplete(User user);
     }
+
     public User getUserById(GetUserById listener){
         String userId=firebaseAuth.getCurrentUser().getUid();
         userModelFirebase.getUserById(userId,listener);
