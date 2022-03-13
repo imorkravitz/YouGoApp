@@ -9,14 +9,34 @@ public class User {
     private String firstName;
     private String lastName;
     private String password;
+    private String gender;
+    private String age;
     private List<String> friendIds;
 
-    public User(String uid, String email, String firstName, String lastName,String password) {
+    public String getGender() {
+        return gender;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public User(String uid, String email, String firstName, String lastName, String password) {
         this.uid = uid;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password=password;
+        this.friendIds = new ArrayList<>();
+    }
+    public User(String uid, String email, String firstName, String lastName,String age, String gender,String password) {
+        this.uid = uid;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password=password;
+        this.age=age;
+        this.gender=gender;
         this.friendIds = new ArrayList<>();
     }
 

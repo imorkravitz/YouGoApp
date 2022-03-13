@@ -42,14 +42,14 @@ public class UserModelFirebase {
     }
 
     public void signUpWithEmailAndPassword(Context context, FirebaseAuth firebaseAuth,
-                                            String email, String password, String firstName,
-                                            String lastName,
-                                            SignUpCompleteListener signUpCompleteListener) {
+                                                                          String email, String password, String firstName,
+                                                                          String lastName, String gender, String age,
+                                                                          SignUpCompleteListener signUpCompleteListener) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    User user = new User(firebaseAuth.getUid(), email, firstName, lastName,password);
+                    User user = new User(firebaseAuth.getUid(), email, firstName, lastName, age, gender,password);
                     DatabaseReference databaseReference = getDatabaseReference();
                     databaseReference.child("users").child(user.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -65,13 +65,12 @@ public class UserModelFirebase {
                     });
                 } else {
                     signUpCompleteListener.onSignupFailed();
-                    // no internet conection or duplicate email or password length < 6
+                    // no internet connection or duplicate email or password length < 6
 
                 }
             }
         });
     }
-
     public DatabaseReference getDatabaseReference() {
         return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
     }

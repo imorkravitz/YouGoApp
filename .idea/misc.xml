@@ -40,6 +40,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10207700101317123" />
         <entry key="app/src/main/res/layout/fragment_post_list.xml" value="0.17291666666666666" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.11413043478260869" />
         <entry key="app/src/main/res/layout/postlist_row.xml" value="0.18" />
       </map>
     </option>

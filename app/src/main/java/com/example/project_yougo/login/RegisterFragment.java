@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterFragment extends Fragment {
 
-    EditText name, lastname, email, password, confirmPassword;
+    EditText name, lastname, email, password, confirmPassword,gender,age;
     Button signup;
     private UserModelFirebase userModelFirebase;
     private FirebaseAuth firebaseAuth;
@@ -42,6 +42,8 @@ public class RegisterFragment extends Fragment {
         this.userModelFirebase = UserModelFirebase.getInstance();
         this.firebaseAuth = FirebaseAuth.getInstance();
 
+        this.age = view.findViewById(R.id.register_age);
+        this.gender = view.findViewById(R.id.register_gender);
         this.name = view.findViewById(R.id.register_name);
         this.lastname = view.findViewById(R.id.register_lastname);
         this.email = view.findViewById(R.id.register_email);
@@ -64,13 +66,14 @@ public class RegisterFragment extends Fragment {
                 | !validatePassword() | !validateConfirmPassword()){
             return;
         }
-
+        String gender = this.gender.getText().toString();
+        String age = this.age.getText().toString();
         String firstname = this.name.getText().toString();
         String lastname = this.lastname.getText().toString();
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
         this.userModelFirebase.signUpWithEmailAndPassword(getContext(), firebaseAuth,
-                email, password, firstname, lastname, new UserModelFirebase.SignUpCompleteListener() {
+                email, password, firstname, lastname,gender,age, new UserModelFirebase.SignUpCompleteListener() {
                     @Override
                     public void onSignupSuccessful() {
                         Toast.makeText(getContext(), "oved", Toast.LENGTH_LONG).show();
