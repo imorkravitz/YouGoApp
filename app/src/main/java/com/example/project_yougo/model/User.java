@@ -13,6 +13,22 @@ public class User {
     private String age;
     private List<String> friendIds;
 
+    public String getGender() {
+        return gender;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public User(String uid, String email, String firstName, String lastName, String password) {
+        this.uid = uid;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password=password;
+        this.friendIds = new ArrayList<>();
+    }
     public User(String uid, String email, String firstName, String lastName,String age, String gender,String password) {
         this.uid = uid;
         this.email = email;
@@ -26,9 +42,7 @@ public class User {
 
     // for firebase
 
-    public User() {
-
-    }
+    public User() { }
 
     public String getUid() {
         return uid;
@@ -44,11 +58,9 @@ public class User {
         return firstName;
     }
 
-    public String getLastName() { return lastName;
+    public String getLastName() {
+        return lastName;
     }
-    public String getGender() { return gender; }
-
-    public String getAge() { return age; }
 
     public List<String> getFriendIds() {
         return friendIds;

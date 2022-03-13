@@ -13,15 +13,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.FirebaseDatabaseHandler;
+import com.example.project_yougo.model.UserModelFirebase;
 import com.google.firebase.auth.FirebaseAuth;
 
 
 public class RegisterFragment extends Fragment {
 
-    EditText name, lastname, email, password, confirmPassword, gender, age;
+    EditText name, lastname, email, password, confirmPassword,gender,age;
     Button signup;
-    private FirebaseDatabaseHandler firebaseDatabaseHandler;
+    private UserModelFirebase userModelFirebase;
     private FirebaseAuth firebaseAuth;
 
     public RegisterFragment(){
@@ -39,7 +39,7 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_register,container, false);
-        this.firebaseDatabaseHandler = FirebaseDatabaseHandler.getInstance();
+        this.userModelFirebase = UserModelFirebase.getInstance();
         this.firebaseAuth = FirebaseAuth.getInstance();
 
         this.age = view.findViewById(R.id.register_age);
@@ -66,18 +66,17 @@ public class RegisterFragment extends Fragment {
                 | !validatePassword() | !validateConfirmPassword()){
             return;
         }
-
         String gender = this.gender.getText().toString();
         String age = this.age.getText().toString();
         String firstname = this.name.getText().toString();
         String lastname = this.lastname.getText().toString();
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
-        this.firebaseDatabaseHandler.signUpWithEmailAndPassword(getContext(), firebaseAuth,
-                email, password, firstname, lastname, gender, age, new FirebaseDatabaseHandler.SignUpCompleteListener() {
+        this.userModelFirebase.signUpWithEmailAndPassword(getContext(), firebaseAuth,
+                email, password, firstname, lastname,gender,age, new UserModelFirebase.SignUpCompleteListener() {
                     @Override
                     public void onSignupSuccessful() {
-                        Toast.makeText(getContext(), "Signed up", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "oved", Toast.LENGTH_LONG).show();
                         Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
                     }
 

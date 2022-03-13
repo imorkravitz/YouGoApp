@@ -6,24 +6,26 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AuthenticationHandler {
+public class UserModel {
     public interface SignInCompleteListener {
         void onSignInSuccessful();
         void onSignInFailed();
     }
 
-    private static AuthenticationHandler instance;
+    private static UserModel instance;
 
     private final FirebaseAuth firebaseAuth;
+    UserModelFirebase userModelFirebase=new UserModelFirebase();
 
-    private AuthenticationHandler() {
+    private UserModel() {
         this.firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public static AuthenticationHandler getInstance() {
+    public static UserModel getInstance() {
         if(instance == null) {
-            instance = new AuthenticationHandler();
+            instance = new UserModel();
         }
 
         return instance;
@@ -42,6 +44,15 @@ public class AuthenticationHandler {
                 }
             }
         });
+    }
+    public interface GetUserById{
+        void onComplete(User user);
+    }
+
+    public User getUserById(GetUserById listener){
+        String userId=firebaseAuth.getCurrentUser().getUid();
+        userModelFirebase.getUserById(userId,listener);
+        return null;
     }
 
     public boolean isLoggedIn() {

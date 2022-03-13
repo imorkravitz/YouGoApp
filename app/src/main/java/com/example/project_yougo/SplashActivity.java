@@ -2,24 +2,23 @@ package com.example.project_yougo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.project_yougo.feed.MainActivity;
-import com.example.project_yougo.model.AuthenticationHandler;
+import com.example.project_yougo.model.UserModel;
 
 public class SplashActivity extends AppCompatActivity {
-    private AuthenticationHandler authenticationHandler;
+    private UserModel userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        authenticationHandler = AuthenticationHandler.getInstance();
+        userModel = UserModel.getInstance();
 
         CharSequence text = "loading app..";
         int duration = Toast.LENGTH_SHORT;
@@ -32,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Intent intent;
 
-                if(authenticationHandler.isLoggedIn()) {
+                if(userModel.isLoggedIn()) {
                     intent = new Intent(SplashActivity.this, MainActivity.class);
                 } else {
                     intent = new Intent(SplashActivity.this, MainActivity.class);
