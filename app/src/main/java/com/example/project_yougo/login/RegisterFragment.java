@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterFragment extends Fragment {
 
-    EditText name, lastname, email, password, confirmPassword;
+    EditText name, lastname, email, password, confirmPassword, gender, age;
     Button signup;
     private FirebaseDatabaseHandler firebaseDatabaseHandler;
     private FirebaseAuth firebaseAuth;
@@ -42,6 +42,8 @@ public class RegisterFragment extends Fragment {
         this.firebaseDatabaseHandler = FirebaseDatabaseHandler.getInstance();
         this.firebaseAuth = FirebaseAuth.getInstance();
 
+        this.age = view.findViewById(R.id.register_age);
+        this.gender = view.findViewById(R.id.register_gender);
         this.name = view.findViewById(R.id.register_name);
         this.lastname = view.findViewById(R.id.register_lastname);
         this.email = view.findViewById(R.id.register_email);
@@ -65,12 +67,14 @@ public class RegisterFragment extends Fragment {
             return;
         }
 
+        String gender = this.gender.getText().toString();
+        String age = this.age.getText().toString();
         String firstname = this.name.getText().toString();
         String lastname = this.lastname.getText().toString();
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
         this.firebaseDatabaseHandler.signUpWithEmailAndPassword(getContext(), firebaseAuth,
-                email, password, firstname, lastname, new FirebaseDatabaseHandler.SignUpCompleteListener() {
+                email, password, firstname, lastname, gender, age, new FirebaseDatabaseHandler.SignUpCompleteListener() {
                     @Override
                     public void onSignupSuccessful() {
                         Toast.makeText(getContext(), "Signed up", Toast.LENGTH_LONG).show();
