@@ -58,7 +58,7 @@ public class LoginFragment extends Fragment {
         this.userModel.login(email, password, new UserModel.SignInCompleteListener() {
             @Override
             public void onSignInSuccessful() {
-                Toast.makeText(getContext(), "login oved", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "login", Toast.LENGTH_LONG).show();
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
             }
 
