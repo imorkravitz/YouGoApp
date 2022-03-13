@@ -22,9 +22,7 @@ public class User {
 
     // for firebase
 
-    public User() {
-
-    }
+    public User() { }
     public String getUid() {
         return uid;
     }

@@ -12,8 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.AuthenticationHandler;
-import com.example.project_yougo.model.FirebaseDatabaseHandler;
+import com.example.project_yougo.model.UserModel;
 
 
 public class LoginFragment extends Fragment {
@@ -21,7 +20,7 @@ public class LoginFragment extends Fragment {
     EditText email, password;
     Button login;
     boolean log=false;
-    private AuthenticationHandler authenticationHandler;
+    private UserModel userModel;
 
 
     public LoginFragment(){
@@ -39,7 +38,7 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_login, container, false);
 
-        this.authenticationHandler = AuthenticationHandler.getInstance();
+        this.userModel = UserModel.getInstance();
 
         this.email = view.findViewById(R.id.login_email);
         this.password = view.findViewById(R.id.login_password);
@@ -56,7 +55,7 @@ public class LoginFragment extends Fragment {
     private void loginApproved(View v) {
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
-        this.authenticationHandler.login(email, password, new AuthenticationHandler.SignInCompleteListener() {
+        this.userModel.login(email, password, new UserModel.SignInCompleteListener() {
             @Override
             public void onSignInSuccessful() {
                 Toast.makeText(getContext(), "login oved", Toast.LENGTH_LONG).show();

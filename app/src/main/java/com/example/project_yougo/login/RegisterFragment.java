@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.FirebaseDatabaseHandler;
+import com.example.project_yougo.model.UserModelFirebase;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -21,7 +21,7 @@ public class RegisterFragment extends Fragment {
 
     EditText name, lastname, email, password, confirmPassword;
     Button signup;
-    private FirebaseDatabaseHandler firebaseDatabaseHandler;
+    private UserModelFirebase userModelFirebase;
     private FirebaseAuth firebaseAuth;
 
     public RegisterFragment(){
@@ -39,7 +39,7 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_register,container, false);
-        this.firebaseDatabaseHandler = FirebaseDatabaseHandler.getInstance();
+        this.userModelFirebase = UserModelFirebase.getInstance();
         this.firebaseAuth = FirebaseAuth.getInstance();
 
         this.name = view.findViewById(R.id.register_name);
@@ -69,8 +69,8 @@ public class RegisterFragment extends Fragment {
         String lastname = this.lastname.getText().toString();
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
-        this.firebaseDatabaseHandler.signUpWithEmailAndPassword(getContext(), firebaseAuth,
-                email, password, firstname, lastname, new FirebaseDatabaseHandler.SignUpCompleteListener() {
+        this.userModelFirebase.signUpWithEmailAndPassword(getContext(), firebaseAuth,
+                email, password, firstname, lastname, new UserModelFirebase.SignUpCompleteListener() {
                     @Override
                     public void onSignupSuccessful() {
                         Toast.makeText(getContext(), "oved", Toast.LENGTH_LONG).show();

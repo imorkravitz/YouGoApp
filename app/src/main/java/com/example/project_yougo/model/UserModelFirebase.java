@@ -8,26 +8,30 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class FirebaseDatabaseHandler {
+public class UserModelFirebase {
+    private FirebaseDatabase db;
+    private DatabaseReference usersRef;
+
     public interface SignUpCompleteListener {
         // maybe add parameter(s) to specify reason
         void onSignupSuccessful();
         void onSignupFailed();
     }
 
-    private static FirebaseDatabaseHandler instance;
+    private static UserModelFirebase instance;
 
-    private FirebaseDatabaseHandler() {
-
+    UserModelFirebase() {
+        db=FirebaseDatabase.getInstance();
+        usersRef=db.getReference("users");
     }
 
-    public static FirebaseDatabaseHandler getInstance() {
+    public static UserModelFirebase getInstance() {
         if(instance == null) {
-            instance = new FirebaseDatabaseHandler();
+            instance = new UserModelFirebase();
         }
 
         return instance;
@@ -64,13 +68,25 @@ public class FirebaseDatabaseHandler {
         });
     }
 
-//    public DatabaseReference
-//            () {
-//        return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-//    }
-public DatabaseReference getDatabaseReference() {
-    return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-}
+    public DatabaseReference getDatabaseReference() {
+        return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+    }
+
+    public void getUserById(String userId,UserModel.GetUserById listener){
+        usersRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                String firstName=task.getResult().getValue(String.class);
+                String lastName=task.getResult().getValue(String.class);
+                String email=task.getResult().getValue(String.class);
+                String password=task.getResult().getValue(String.class);
+                User user=new User(userId,email,firstName,lastName,password);
+                listener.onComplete(user);
+            }
+
+        });
+
+    }
 
 
 }

@@ -1,10 +1,8 @@
 package com.example.project_yougo.model.post;
 
-import com.example.project_yougo.model.FirebaseDatabaseHandler;
+import com.example.project_yougo.model.UserModelFirebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
-
-import java.util.List;
 
 public class PostModel {
     public static PostModel instance;
@@ -22,7 +20,7 @@ public class PostModel {
     }
 
     public void addPost(String description, String publisherId) {
-        DatabaseReference databaseReference = FirebaseDatabaseHandler.getInstance().getDatabaseReference();
+        DatabaseReference databaseReference = UserModelFirebase.getInstance().getDatabaseReference();
         String postId = databaseReference.child("posts").push().getKey();
         Post post = new Post(postId, publisherId, description, ServerValue.TIMESTAMP);
         databaseReference.child("posts").child(postId).setValue(post);
