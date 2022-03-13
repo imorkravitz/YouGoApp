@@ -46,9 +46,9 @@
         android:label="Yougo"
         tools:layout="@layout/fragment_post_list">
         <action
-            android:id="@+id/action_postListFragment_to_create_postFragment2"
+            android:id="@+id/action_postListFragment_to_create_postFragment"
             app:destination="@id/create_postFragment"
-            app:popUpTo="@+id/postListFragment"/>
+            app:popUpTo="@+id/postListFragment" />
         <action
             android:id="@+id/action_postListFragment_to_profileFragment"
             app:destination="@id/profileFragment"

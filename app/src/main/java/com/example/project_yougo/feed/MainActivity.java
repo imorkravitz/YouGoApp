@@ -54,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.postListFragment_menu:
                     navController.navigate(R.id.action_global_postListFragment);
+                    break;
+                case R.id.item_post_menu:
+                    navController.navigate(R.id.action_postListFragment_to_create_postFragment);
+                    break;
             }
         }else{
             return true;

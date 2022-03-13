@@ -54,18 +54,6 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_frag_name_tv" />
 
     <TextView
-        android:id="@+id/profile_frag_Coгntry_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
-        android:text="Birthday"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_frag_e_mail_tv" />
-
-    <TextView
         android:id="@+id/profile_frag_e_mail_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
