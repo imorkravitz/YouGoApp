@@ -13,12 +13,9 @@ import android.widget.TextView;
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.User;
 import com.example.project_yougo.model.UserModel;
-import com.example.project_yougo.model.UserModelFirebase;
-import com.google.firebase.auth.FirebaseAuth;
+
 
 public class profileFragment extends Fragment {
-    private UserModelFirebase userModelFirebase;
-    private FirebaseAuth firebaseAuth;
     TextView firstName;
     TextView lastName;
     TextView email;
@@ -34,9 +31,9 @@ public class profileFragment extends Fragment {
         UserModel.getInstance().getUserById(new UserModel.GetUserById() {
             @Override
             public void onComplete(User user) {
-//                firstName.setText(user.getFirstName());
-//                lastName.setText(user.getLastName());
-//                email.setText(user.getEmail());
+                firstName.setText(user.getFirstName());
+                lastName.setText(user.getLastName());
+                email.setText(user.getEmail());
             }
         });
         return view;
