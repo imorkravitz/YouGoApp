@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PostModel.getInstance().addPost("my description", "123dsd");
 
         navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navHost);
         navController = navHost != null ? navHost.getNavController() : null;
