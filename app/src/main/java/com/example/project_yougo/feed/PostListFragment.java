@@ -8,6 +8,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,35 +21,62 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.post.Post;
+import com.example.project_yougo.model.post.PostModel;
+
+import java.util.List;
 
 
 public class PostListFragment extends Fragment {
-
+    private RecyclerView postRecyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        RecyclerView list = view.findViewById((R.id.postlist_rv));
-        list.setHasFixedSize(true);
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
-        MyAdapter adapter = new MyAdapter();
-        list.setAdapter(adapter);
+        postRecyclerView = view.findViewById((R.id.postlist_rv));
+        postRecyclerView.setHasFixedSize(true);
+        postRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        setHasOptionsMenu(true);
+        initPostList();
+
+        return view;
+    }
+
+    private void initPostList() {
+        PostModel.getInstance().loadPostList(getActivity().getApplicationContext(), new PostModel.PostListLoadListener() {
+            @Override
+            public void onPostListLoaded(List<Post> postList) {
+                updatePostRecyclerView(postList);
+            }
+        });
+        PostModel.getInstance().listenForPostListUpdates(getActivity().getApplicationContext(), new PostModel.PostListUpdateListener() {
+            @Override
+            public void onPostListUpdated(List<Post> postList) {
+                updatePostRecyclerView(postList);
+            }
+        });
+    }
+
+    private void updatePostRecyclerView(List<Post> postList) {
+        MyAdapter adapter = new MyAdapter(postList);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
             }
         });
-        setHasOptionsMenu(true);
-        return view;
+
+        postRecyclerView.setAdapter(adapter);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName;
-        TextView description;
+        TextView rowPostFreeTextTextView;
+        TextView rowPostDifficultyTextView;
+        TextView rowPostTypeOfWorkoutTextView;
         ImageView userImg;
         ImageButton likeBtn;
         ImageButton commentBtn;
@@ -55,7 +84,9 @@ public class PostListFragment extends Fragment {
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             userName = itemView.findViewById(R.id.userName_list_row);
-            description = itemView.findViewById(R.id.postdescription_row);
+            rowPostFreeTextTextView = itemView.findViewById(R.id.rowPostFreeTextTextView);
+            rowPostDifficultyTextView = itemView.findViewById(R.id.rowPostDifficultyTextView);
+            rowPostTypeOfWorkoutTextView = itemView.findViewById(R.id.rowPostTypeOfWorkoutTextView);
             userImg = itemView.findViewById(R.id.userImg_list_row);
             likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
@@ -73,9 +104,13 @@ public class PostListFragment extends Fragment {
         void onItemClick(View v, int position);
     }
 
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
-
+    private class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         OnItemClickListener listener;
+        private List<Post> postList;
+
+        public MyAdapter(List<Post> postList) {
+            this.postList = postList;
+        }
 
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
@@ -91,15 +126,15 @@ public class PostListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-//            Student student = data.get(position);
-//            holder.nameTv.setText(student.getName());
-//            holder.idTv.setText(student.getId());
-//            holder.cb.setChecked(student.isFlag());
+            Post post = postList.get(position);
+            holder.rowPostFreeTextTextView.setText(post.getFreeText());
+            holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
+            holder.rowPostDifficultyTextView.setText(post.getDifficulty());
         }
 
         @Override
         public int getItemCount() {
-            return 5;
+            return postList.size();
         }
     }
 

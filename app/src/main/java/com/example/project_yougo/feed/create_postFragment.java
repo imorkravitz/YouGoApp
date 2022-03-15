@@ -12,24 +12,34 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.post.PostModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.InputStream;
 
 
 public class create_postFragment extends Fragment {
-    ImageButton addImg;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_IMAGE_GALLERY = 2;
+    private ImageButton addImg;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_GALLERY = 2;
+    private Button createPostButton;
+    private EditText freeTexEditText;
+    private EditText difficultyEditText;
+    private EditText typeOfWorkoutEditText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,8 +53,54 @@ public class create_postFragment extends Fragment {
                 showPopup(v);
             }
         });
+
+        createPostButton = view.findViewById(R.id.create_post_frag_post_btn);
+        createPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCreatePostButtonClicked();
+            }
+        });
+
+        freeTexEditText = view.findViewById(R.id.create_post_frag_freeText_PL);
+        difficultyEditText = view.findViewById(R.id.create_post_frag_difficulty);
+        typeOfWorkoutEditText = view.findViewById(R.id.create_post_frag_TOW_PT);
+
         return view;
 
+    }
+
+    public void onCreatePostButtonClicked() {
+        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+            // not signed in
+            return;
+        }
+        // TODO: add validation
+        // TODO: + add GPS fields in Post + PostModel
+        String freeText = freeTexEditText.getText().toString();
+        String difficulty = difficultyEditText.getText().toString();
+        String typeOfWorkout = typeOfWorkoutEditText.getText().toString();
+        String publisherId = FirebaseAuth.getInstance().getUid();
+
+        PostModel.getInstance().addPost(freeText, difficulty, typeOfWorkout,
+                publisherId, new PostModel.PostCreationListener() {
+                    @Override
+                    public void onCreationSuccess() {
+                        // TODO: navigate to different frag?
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(), "Post Creation success",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCreationFailed() {
+
+                    }
+                });
     }
 
     @Override
