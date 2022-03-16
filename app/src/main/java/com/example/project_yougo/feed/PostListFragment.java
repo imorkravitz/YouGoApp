@@ -65,11 +65,12 @@ public class PostListFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+                //TODO fixe that
+                //Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
             }
         });
 
-        postRecyclerView.setAdapter(adapter);
+        //postRecyclerView.setAdapter(adapter);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

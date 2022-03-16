@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.example.project_yougo.feed.MainActivity;
+import com.example.project_yougo.login.LoginActivity;
 import com.example.project_yougo.model.UserModel;
 
 public class SplashActivity extends AppCompatActivity {
@@ -32,9 +32,9 @@ public class SplashActivity extends AppCompatActivity {
                 Intent intent;
 
                 if(userModel.isLoggedIn()) {
-                    intent = new Intent(SplashActivity.this, MainActivity.class);
+                    intent = new Intent(SplashActivity.this, LoginActivity.class);
                 } else {
-                    intent = new Intent(SplashActivity.this, MainActivity.class);
+                    intent = new Intent(SplashActivity.this, LoginActivity.class);
                 }
                 startActivity(intent);
                 finish();
@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void toFeedActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
