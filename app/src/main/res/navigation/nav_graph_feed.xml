@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_grach_feed"
-    app:startDestination="@id/editUserFragment">
+    app:startDestination="@id/postListFragment">
 
     <fragment
         android:id="@+id/postListFragment"
