@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -36,13 +39,13 @@ public class profileFragment extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
     Bitmap imageBitmap;
-
+    Button edit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        Button edit = view.findViewById(R.id.profile_frag_edit_btn);
+        edit = view.findViewById(R.id.profile_frag_edit_btn);
         setHasOptionsMenu(true);
         firstName=view.findViewById(R.id.profile_frag_name_tv);
         lastName=view.findViewById(R.id.profile_frag_Last_name_tv);
@@ -63,6 +66,15 @@ public class profileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showPopup(v);
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //action_profileFragment_to_editUserFragment
+
             }
         });
 

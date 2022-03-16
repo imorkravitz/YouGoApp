@@ -11,10 +11,15 @@
         android:label="YouGo"
         tools:layout="@layout/fragment_post_list" />
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/profileFragment1"
         android:name="com.example.project_yougo.feed.profileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editUserFragment"
+            app:destination="@id/editUserFragment"
+            app:popUpTo="@id/postListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.project_yougo.common.AboutFragment"
@@ -26,7 +31,7 @@
         android:label="create_postFragment" />
     <action
         android:id="@+id/action_global_profileFragment"
-        app:destination="@id/profileFragment"
+        app:destination="@id/profileFragment1"
         app:popUpTo="@id/postListFragment" />
     <action
         android:id="@+id/action_global_create_postFragment"
@@ -40,4 +45,8 @@
         android:id="@+id/action_global_postListFragment"
         app:destination="@id/postListFragment"
         app:popUpTo="@id/postListFragment" />
+    <fragment
+        android:id="@+id/editUserFragment"
+        android:name="com.example.project_yougo.feed.EditUserFragment"
+        android:label="EditUserFragment" />
 </navigation>

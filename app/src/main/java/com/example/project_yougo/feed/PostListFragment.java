@@ -66,7 +66,7 @@ public class PostListFragment extends Fragment {
             @Override
             public void onItemClick(View v, int position) {
                 //TODO fixe that
-                //Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+               // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
             }
         });
 
