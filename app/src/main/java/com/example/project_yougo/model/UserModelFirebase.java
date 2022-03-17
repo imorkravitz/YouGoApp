@@ -100,6 +100,7 @@ public class UserModelFirebase {
         map.put("age",age);
         map.put("email",email);
         map.put("firstName",firstName);
+        map.put("gender",gender);
         map.put("lastName",lastName);
         map.put("password",password);
         usersRef.child(userId).updateChildren(map).addOnCompleteListener(new OnCompleteListener() {

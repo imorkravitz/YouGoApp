@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.UserModel;
 import com.example.project_yougo.model.UserModelFirebase;
 import com.google.firebase.auth.FirebaseAuth;
 
