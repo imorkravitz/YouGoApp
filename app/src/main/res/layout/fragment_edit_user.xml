@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/register_name"
+            android:id="@+id/editUser_name_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_bg"
@@ -37,11 +37,11 @@
             android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createPost_frag_img"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_img"
             app:layout_constraintWidth_percent=".8" />
 
         <EditText
-            android:id="@+id/register_lastname"
+            android:id="@+id/editUser_lastname_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -52,11 +52,11 @@
             android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_name"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_name_et"
             app:layout_constraintWidth_percent=".8" />
 
         <EditText
-            android:id="@+id/register_gender"
+            android:id="@+id/editUser_gender_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -67,11 +67,11 @@
             android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_lastname"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_lastname_et"
             app:layout_constraintWidth_percent=".8" />
 
         <EditText
-            android:id="@+id/register_age"
+            android:id="@+id/editUser_age_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -82,11 +82,11 @@
             android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_gender"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_gender_et"
             app:layout_constraintWidth_percent=".8" />
 
         <EditText
-            android:id="@+id/register_email"
+            android:id="@+id/editUser_email_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -98,11 +98,11 @@
             android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_age"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_age_et"
             app:layout_constraintWidth_percent=".8" />
 
         <EditText
-            android:id="@+id/register_password"
+            android:id="@+id/editUser_password_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -113,11 +113,11 @@
             android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_email"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_email_et"
             app:layout_constraintWidth_percent=".8" />
 
         <EditText
-            android:id="@+id/register_confirm_password"
+            android:id="@+id/editUser_conPassword_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -128,12 +128,12 @@
             android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_password"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_password_et"
             app:layout_constraintWidth_percent=".8" />
 
 
         <Button
-            android:id="@+id/profile_frag_back_btn"
+            android:id="@+id/editUser_save_btn"
             android:layout_width="155dp"
             android:layout_height="47dp"
             android:layout_marginTop="12dp"
@@ -145,12 +145,12 @@
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_confirm_password"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_conPassword_et"
             app:layout_constraintWidth_percent=".5" />
 
 
         <ImageView
-            android:id="@+id/createPost_frag_img"
+            android:id="@+id/editUser_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="createPost_frag_img"
@@ -163,6 +163,7 @@
             app:layout_constraintVertical_bias="0.194" />
 
         <Button
+            android:id="@+id/editUser_cancel_btn"
             android:layout_width="155dp"
             android:layout_height="47dp"
             android:layout_marginStart="40dp"
@@ -174,7 +175,7 @@
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_confirm_password" />
+            app:layout_constraintTop_toBottomOf="@+id/editUser_conPassword_et" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

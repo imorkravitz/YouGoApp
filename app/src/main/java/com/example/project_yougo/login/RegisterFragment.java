@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.UserModel;
 import com.example.project_yougo.model.UserModelFirebase;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -42,14 +43,14 @@ public class RegisterFragment extends Fragment {
         this.userModelFirebase = UserModelFirebase.getInstance();
         this.firebaseAuth = FirebaseAuth.getInstance();
 
-        this.age = view.findViewById(R.id.register_age);
-        this.gender = view.findViewById(R.id.register_gender);
-        this.name = view.findViewById(R.id.register_name);
-        this.lastname = view.findViewById(R.id.register_lastname);
-        this.email = view.findViewById(R.id.register_email);
-        this.password = view.findViewById(R.id.register_password);
-        this.confirmPassword = view.findViewById(R.id.register_confirm_password);
-        this.signup = view.findViewById(R.id.profile_frag_back_btn);
+        this.age = view.findViewById(R.id.editUser_age_et);
+        this.gender = view.findViewById(R.id.editUser_gender_et);
+        this.name = view.findViewById(R.id.editUser_name_et);
+        this.lastname = view.findViewById(R.id.editUser_lastname_et);
+        this.email = view.findViewById(R.id.editUser_email_et);
+        this.password = view.findViewById(R.id.editUser_password_et);
+        this.confirmPassword = view.findViewById(R.id.editUser_conPassword_et);
+        this.signup = view.findViewById(R.id.editUser_save_btn);
 
         this.signup.setOnClickListener(new View.OnClickListener() {
             @Override
