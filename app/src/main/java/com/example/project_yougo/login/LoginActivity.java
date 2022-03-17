@@ -49,9 +49,6 @@ public class LoginActivity extends AppCompatActivity {
                 case R.id.postListFragment_menu:
                     navController.navigate(R.id.action_global_postListFragment);
                     break;
-                case R.id.item_post_menu:
-                    navController.navigate(R.id.action_postListFragment_to_create_postFragment);
-                    break;
                 case R.id.aboutFragment_menu:
                     navController.navigate(R.id.action_global_aboutFragment);
                     break;
@@ -67,4 +64,5 @@ public class LoginActivity extends AppCompatActivity {
                 .findFragmentById(R.id.registerFragment));
         registerFragment.register(view);
     }
+
 }

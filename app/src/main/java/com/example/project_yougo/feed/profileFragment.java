@@ -31,15 +31,15 @@ import java.io.InputStream;
 
 
 public class profileFragment extends Fragment {
-    TextView firstName;
-    TextView lastName;
-    TextView email;
-    ImageView profileImg;
-    ImageButton profileBtn;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_IMAGE_GALLERY = 2;
-    Bitmap imageBitmap;
-    Button edit;
+    private TextView firstName;
+    private TextView lastName;
+    private TextView email;
+    private ImageView profileImg;
+    private ImageButton profileBtn;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_GALLERY = 2;
+    private Bitmap imageBitmap;
+    private Button edit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {

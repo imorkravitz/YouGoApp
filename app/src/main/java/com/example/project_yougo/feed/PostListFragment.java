@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,16 +62,20 @@ public class PostListFragment extends Fragment {
     }
 
     private void updatePostRecyclerView(List<Post> postList) {
-        MyAdapter adapter = new MyAdapter(postList);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position) {
-                //TODO fixe that
-               // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+            public void run() {
+                MyAdapter adapter = new MyAdapter(postList);
+                adapter.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        //TODO fixe that
+                        // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+                    }
+                });
+                postRecyclerView.setAdapter(adapter);
             }
         });
-
-        //postRecyclerView.setAdapter(adapter);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -131,6 +136,13 @@ public class PostListFragment extends Fragment {
             holder.rowPostFreeTextTextView.setText(post.getFreeText());
             holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
             holder.rowPostDifficultyTextView.setText(post.getDifficulty());
+            holder.commentBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavDirections navDirections = PostListFragmentDirections.actionPostListFragmentToCommentListFragment2(post.getId());
+                    Navigation.findNavController(v).navigate(navDirections);
+                }
+            });
         }
 
         @Override

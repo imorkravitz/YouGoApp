@@ -96,20 +96,23 @@ public class UserModelFirebase {
     }
     public void updateUser(String userId,String email,String password,String firstName,String lastName,
                            String gender,String age,UserModel.UpdateUser listener) {
-        HashMap map=new HashMap();
-        map.put("age",age);
-        map.put("email",email);
-        map.put("firstName",firstName);
-        map.put("gender",gender);
-        map.put("lastName",lastName);
-        map.put("password",password);
-        usersRef.child(userId).updateChildren(map).addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                listener.onComplete();
-            }
-        });
+        User user = new User(userId, email, firstName, lastName, age, gender, password);
+//        HashMap map=new HashMap();
+//        map.put("age",age);
+//        map.put("email",email);
+//        map.put("firstName",firstName);
+//        map.put("gender",gender);
+//        map.put("lastName",lastName);
+//        map.put("password",password);
+//        usersRef.child(userId).updateChildren(map).addOnCompleteListener(new OnCompleteListener() {
+//            @Override
+//            public void onComplete(@NonNull Task task) {
+//                listener.onComplete();
+//            }
+//        });
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child(userId).setValue(user);
     }
 
 }

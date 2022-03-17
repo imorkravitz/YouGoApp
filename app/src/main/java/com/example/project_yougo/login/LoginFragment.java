@@ -74,7 +74,7 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void toFeedActivity() {
+    public void toFeedActivity() {
         Intent intent = new Intent(getContext(), FeedActivity.class);
         startActivity(intent);
         getActivity().finish();
