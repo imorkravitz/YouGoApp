@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UserModel {
@@ -54,7 +55,15 @@ public class UserModel {
         userModelFirebase.getUserById(userId,listener);
         return null;
     }
+    public interface UpdateUser{
+        void onComplete();
+    }
+    public void updateUser(String email,String password,String firstName,String lastName,
+                           String gender,String age,UpdateUser listener){
+        String userId=firebaseAuth.getCurrentUser().getUid();
+        userModelFirebase.updateUser(userId,email,password,firstName,lastName,gender,age,listener);
 
+    }
     public boolean isLoggedIn() {
         return firebaseAuth.getCurrentUser() != null;
     }

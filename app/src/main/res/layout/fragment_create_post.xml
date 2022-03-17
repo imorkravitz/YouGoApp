@@ -139,7 +139,7 @@
 
 
         <ImageView
-            android:id="@+id/createPost_frag_img"
+            android:id="@+id/editUser_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="createPost_frag_img"

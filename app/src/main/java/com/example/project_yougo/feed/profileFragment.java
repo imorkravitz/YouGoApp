@@ -54,7 +54,6 @@ public class profileFragment extends Fragment {
         profileBtn = view.findViewById(R.id.profile_frag_image_btn);
 
         UserModel.getInstance().getUserById(new UserModel.GetUserById() {
-
             @Override
             public void onComplete(User user) {
                 firstName.setText(user.getFirstName());
@@ -72,9 +71,7 @@ public class profileFragment extends Fragment {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //action_profileFragment_to_editUserFragment
-
+                Navigation.findNavController(v).navigate(R.id.action_profileFragment1_to_editUserFragment);
             }
         });
 

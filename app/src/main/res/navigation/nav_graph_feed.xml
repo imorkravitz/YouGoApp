@@ -19,6 +19,9 @@
             android:id="@+id/action_profileFragment_to_editUserFragment"
             app:destination="@id/editUserFragment"
             app:popUpTo="@id/postListFragment" />
+        <action
+            android:id="@+id/action_profileFragment1_to_editUserFragment"
+            app:destination="@id/editUserFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"

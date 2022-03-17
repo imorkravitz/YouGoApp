@@ -1,6 +1,7 @@
 package com.example.project_yougo.model;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -8,6 +9,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,9 +18,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+
 public class UserModelFirebase {
     private FirebaseDatabase db;
     private DatabaseReference usersRef;
+
 
 
     public interface SignUpCompleteListener {
@@ -88,4 +94,21 @@ public class UserModelFirebase {
             public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
+    public void updateUser(String userId,String email,String password,String firstName,String lastName,
+                           String gender,String age,UserModel.UpdateUser listener) {
+        HashMap map=new HashMap();
+        map.put("age",age);
+        map.put("email",email);
+        map.put("firstName",firstName);
+        map.put("lastName",lastName);
+        map.put("password",password);
+        usersRef.child(userId).updateChildren(map).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                listener.onComplete();
+            }
+        });
+
+    }
+
 }

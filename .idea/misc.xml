@@ -6,7 +6,6 @@
         <entry key="../../../../../dev/AppProjects/android/version1/YouGoApp/app/src/main/res/layout/fragment_create_post.xml" value="0.1" />
         <entry key="../../../../../dev/AppProjects/android/version1/YouGoApp/app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="../../../../../dev/AppProjects/android/version1/YouGoApp/app/src/main/res/menu/main_menu.xml" value="0.1" />
-        <entry key="../../../../../dev/AppProjects/android/version1/YouGoApp/app/src/main/res/menu/popup_menu.xml" value="0.1" />
         <entry key="../../../../dev/AppProjects/YouGoProject/Project_Yougo/app/src/main/res/drawable-v24/background_splashscreen.xml" value="0.1" />
         <entry key="../../../../dev/AppProjects/YouGoProject/Project_Yougo/app/src/main/res/drawable-v24/btn_custom.xml" value="0.1" />
         <entry key="../../../../dev/AppProjects/YouGoProject/Project_Yougo/app/src/main/res/drawable-v24/button_bg.xml" value="0.248" />
@@ -29,33 +28,23 @@
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/find_friends_row.xml" value="0.13632246376811594" />
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/fragment_about.xml" value="0.10885416666666667" />
-        <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/fragment_create_post.xml" value="0.24923076923076923" />
+        <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/fragment_create_post.xml" value="0.13632246376811594" />
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/fragment_friend_list.xml" value="0.13632246376811594" />
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/fragment_login.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/fragment_register.xml" value="0.14666666666666667" />
-        <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/layout/postlist_row.xml" value="0.1" />
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/menu/main_menu.xml" value="0.22" />
         <entry key="..\:/Users/itaib/OneDrive/Documents/YouGoApp/app/src/main/res/menu/post_list_menu.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp/app/src/main/res/layout/activity_splash.xml" value="0.19883485309017224" />
         <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp/app/src/main/res/layout/fragment_create_post.xml" value="0.264" />
         <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp/app/src/main/res/layout/fragment_home.xml" value="0.19883485309017224" />
         <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp/app/src/main/res/layout/fragment_profile.xml" value="0.2" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/activity_feed.xml" value="0.19074074074074074" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/activity_intro.xml" value="0.11499493414387031" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/content_intro.xml" value="0.30027173913043476" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/fragment_create_post.xml" value="0.30027173913043476" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/fragment_edit_user.xml" value="0.264" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/fragment_first.xml" value="0.30027173913043476" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/fragment_login.xml" value="0.30027173913043476" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/fragment_profile.xml" value="0.30027173913043476" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/layout/fragment_register.xml" value="0.30027173913043476" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/menu/feed_menu.xml" value="0.19074074074074074" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp16.3B/app/src/main/res/menu/main_menu.xml" value="0.19074074074074074" />
         <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp9.3.22/app/src/main/res/layout/fragment_create_post.xml" value="0.4" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10207700101317123" />
+        <entry key="app/src/main/res/layout/fragment_edit_user.xml" value="0.2056159420289855" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.2056159420289855" />
         <entry key="app/src/main/res/layout/fragment_post_list.xml" value="0.17291666666666666" />
-        <entry key="app/src/main/res/layout/postlist_row.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/postlist_row.xml" value="0.33" />
       </map>
     </option>
   </component>
