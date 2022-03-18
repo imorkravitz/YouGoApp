@@ -59,7 +59,4 @@ public class FeedActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
-
 }
