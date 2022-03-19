@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModel;
+import com.example.project_yougo.model.UserModelFirebase;
 
 
 public class EditUserFragment extends Fragment {
@@ -51,7 +51,7 @@ public class EditUserFragment extends Fragment {
         profileImg=view.findViewById(R.id.editUser_img);
         save=view.findViewById(R.id.editUser_save_btn);
         cancel=view.findViewById(R.id.editUser_cancel_btn);
-        UserModel.getInstance().getUserById(new UserModel.GetUserById() {
+        UserModelFirebase.getInstance().getUserById(UserModelFirebase.getInstance().getUid(), new UserModelFirebase.GetUserCompleteListener() {
             @Override
             public void onComplete(User user) {
                 firstName.setText(user.getFirstName());
@@ -62,6 +62,7 @@ public class EditUserFragment extends Fragment {
                 password.setText(user.getPassword());
             }
         });
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,13 +88,11 @@ public class EditUserFragment extends Fragment {
         String email=this.email.getText().toString();
         String password=this.password.getText().toString();
         String confirmPass=this.confirmPassword.getText().toString();
-        UserModel.getInstance().updateUser(email, password, firstName, lastName, gender, age, new UserModel.UpdateUser() {
+        UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), email, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
             @Override
-            public void onComplete() {
+            public void onComplete(User user) {
                 Toast.makeText(getContext(),"user updated!",Toast.LENGTH_LONG).show();
             }
         });
-
-
     }
 }

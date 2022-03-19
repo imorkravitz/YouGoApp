@@ -25,7 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModel;
+import com.example.project_yougo.model.UserModelFirebase;
+
 import java.io.InputStream;
 
 
@@ -53,7 +54,7 @@ public class profileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profile_frag_user_img);
         profileBtn = view.findViewById(R.id.profile_frag_image_btn);
 
-        UserModel.getInstance().getUserById(new UserModel.GetUserById() {
+        UserModelFirebase.getInstance().getUserById(UserModelFirebase.getInstance().getUid(), new UserModelFirebase.GetUserCompleteListener() {
             @Override
             public void onComplete(User user) {
                 firstName.setText(user.getFirstName());

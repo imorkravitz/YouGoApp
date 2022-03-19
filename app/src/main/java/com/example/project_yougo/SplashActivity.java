@@ -8,17 +8,14 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.project_yougo.login.LoginActivity;
-import com.example.project_yougo.model.UserModel;
+import com.example.project_yougo.model.UserModelFirebase;
 
 public class SplashActivity extends AppCompatActivity {
-    private UserModel userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-        userModel = UserModel.getInstance();
 
         CharSequence text = "loading app..";
         int duration = Toast.LENGTH_SHORT;
@@ -31,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Intent intent;
 
-                if(userModel.isLoggedIn()) {
+                if(UserModelFirebase.getInstance().isLoggedIn()) {
                     intent = new Intent(SplashActivity.this, LoginActivity.class);
                 } else {
                     intent = new Intent(SplashActivity.this, LoginActivity.class);

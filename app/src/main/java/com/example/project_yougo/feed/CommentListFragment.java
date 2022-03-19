@@ -4,8 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,15 +13,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.User;
+import com.example.project_yougo.model.UserModelFirebase;
 import com.example.project_yougo.model.comment.CommentModel;
 import com.example.project_yougo.model.post.Comment;
-import com.example.project_yougo.model.post.Post;
-import com.example.project_yougo.model.post.PostModel;
 
 import java.util.List;
 
@@ -61,7 +57,7 @@ public class CommentListFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static CommentListFragment newInstance(String param1, String param2) {
         CommentListFragment fragment = new CommentListFragment();
-        Bundle args = new Bundle();
+     //   Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
 //        args.putString(ARG_PARAM2, param2);
   //      fragment.setArguments(args);
@@ -133,7 +129,7 @@ public class CommentListFragment extends Fragment {
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
-            userName = itemView.findViewById(R.id.userName_list_row);
+            userName = itemView.findViewById(R.id.userName_comment_row);
             content = itemView.findViewById(R.id.content_comment_row);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +161,7 @@ public class CommentListFragment extends Fragment {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.postlist_row, parent, false);
+            View view = getLayoutInflater().inflate(R.layout.commentlist_row, parent, false);
             MyViewHolder holder = new MyViewHolder(view, listener);
             return holder;
         }
@@ -173,9 +169,19 @@ public class CommentListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Comment comment = commentList.get(position);
-            holder.userName.setText(comment.getPublisherId());
-            holder.content.setText(comment.getContent());
 
+            UserModelFirebase.getInstance().getUserById(comment.getPublisherId(), new UserModelFirebase.GetUserCompleteListener() {
+                @Override
+                public void onComplete(User user) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.userName.setText(user.fullname());
+                            holder.content.setText(comment.getContent());
+                        }
+                    });
+                }
+            });
         }
 
         @Override

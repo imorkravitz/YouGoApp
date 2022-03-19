@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.feed.FeedActivity;
-import com.example.project_yougo.model.UserModel;
 import com.example.project_yougo.model.UserModelFirebase;
 import com.example.project_yougo.login.RegisterFragment;
 import com.google.firebase.auth.FirebaseAuth;

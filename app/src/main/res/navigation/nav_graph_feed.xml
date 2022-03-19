@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_postListFragment_to_commentListFragment2"
             app:destination="@id/commentListFragment" />
+        <action
+            android:id="@+id/action_postListFragment_to_addCommentFragment"
+            app:destination="@id/addCommentFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_postListFragment2"
@@ -73,4 +76,13 @@
         android:id="@+id/action_global_editUserFragment"
         app:destination="@id/editUserFragment"
         app:popUpTo="@id/postListFragment" />
+    <fragment
+        android:id="@+id/addCommentFragment"
+        android:name="com.example.project_yougo.feed.AddCommentFragment"
+        android:label="fragment_add_comment"
+        tools:layout="@layout/fragment_add_comment">
+        <argument
+            android:name="postIdArg"
+            app:argType="string" />
+    </fragment>
 </navigation>

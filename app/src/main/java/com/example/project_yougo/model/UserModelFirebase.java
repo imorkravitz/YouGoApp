@@ -24,12 +24,23 @@ public class UserModelFirebase {
     private FirebaseDatabase db;
     private DatabaseReference usersRef;
 
-
+    public interface SignInCompleteListener {
+        void onSignInSuccessful();
+        void onSignInFailed();
+    }
 
     public interface SignUpCompleteListener {
         // maybe add parameter(s) to specify reason
         void onSignupSuccessful();
         void onSignupFailed();
+    }
+
+    public interface GetUserCompleteListener {
+        void onComplete(User user);
+    }
+
+    public interface UpdateUserCompleteListener {
+        void onComplete(User user);
     }
 
     private static UserModelFirebase instance;
@@ -45,6 +56,10 @@ public class UserModelFirebase {
         }
 
         return instance;
+    }
+
+    public String getUid() {
+        return FirebaseAuth.getInstance().getUid();
     }
 
     public void signUpWithEmailAndPassword(Context context, FirebaseAuth firebaseAuth,
@@ -81,7 +96,7 @@ public class UserModelFirebase {
         return FirebaseDatabase.getInstance("https://yougoapp-50cbe-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
     }
 
-    public void getUserById(String userId,UserModel.GetUserById listener){
+    public void getUserById(String userId,GetUserCompleteListener listener){
         usersRef.child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -94,25 +109,57 @@ public class UserModelFirebase {
             public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
+
     public void updateUser(String userId,String email,String password,String firstName,String lastName,
-                           String gender,String age,UserModel.UpdateUser listener) {
+                           String gender,String age, UpdateUserCompleteListener listener) {
         User user = new User(userId, email, firstName, lastName, age, gender, password);
-//        HashMap map=new HashMap();
-//        map.put("age",age);
-//        map.put("email",email);
-//        map.put("firstName",firstName);
-//        map.put("gender",gender);
-//        map.put("lastName",lastName);
-//        map.put("password",password);
-//        usersRef.child(userId).updateChildren(map).addOnCompleteListener(new OnCompleteListener() {
-//            @Override
-//            public void onComplete(@NonNull Task task) {
-//                listener.onComplete();
-//            }
-//        });
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("users").child(userId).setValue(user);
+        databaseReference.child("users").child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    listener.onComplete(user);
+                } else {
+                    listener.onComplete(null);
+                }
+            }
+        });
+    }
+
+
+    public void login(String email, String password, SignInCompleteListener signInCompleteListener) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    // signed in
+                    signInCompleteListener.onSignInSuccessful();
+                } else {
+                    // not signed in
+                    signInCompleteListener.onSignInFailed();
+                }
+            }
+        });
+    }
+
+
+//    public User getUserById(GetUserById listener){
+//        String userId=firebaseAuth.getCurrentUser().getUid();
+//        userModelFirebase.getUserById(userId,listener);
+//        return null;
+//    }
+//    public interface UpdateUser{
+//        void onComplete();
+//    }
+//    public void updateUser(String email,String password,String firstName,String lastName,
+//                           String gender,String age,UpdateUser listener){
+//        String userId=firebaseAuth.getCurrentUser().getUid();
+//        userModelFirebase.updateUser(userId,email,password,firstName,lastName,gender,age,listener);
+//
+//    }
+    public boolean isLoggedIn() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
 }
