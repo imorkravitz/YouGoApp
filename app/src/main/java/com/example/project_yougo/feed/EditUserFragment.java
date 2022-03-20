@@ -85,12 +85,32 @@ public class EditUserFragment extends Fragment {
         String age=this.age.getText().toString();
         String email=this.email.getText().toString();
         String password=this.password.getText().toString();
-        String confirmPass=this.confirmPassword.getText().toString();
-        UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), email, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
-            @Override
-            public void onComplete(User user) {
-                Toast.makeText(getContext(),"user updated!",Toast.LENGTH_LONG).show();
+        if(!password.equals("")){
+            if(validateConfirmPassword()){
+                UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), email, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
+                    @Override
+                    public void onComplete(User user) {
+                        Toast.makeText(getContext(),"user updated!",Toast.LENGTH_LONG).show();
+                    }
+                });
             }
-        });
+        }
+    }
+    private Boolean validateConfirmPassword(){
+        String val1 = this.password.getText().toString();
+        String val2 = this.confirmPassword.getText().toString();
+
+        if(val2.isEmpty()){
+            this.confirmPassword.setError("Field cannot be empty");
+            return false;
+        }
+        else if(!val2.equals(val1)){
+            this.confirmPassword.setError("Different password");
+            return false;
+        }
+        else{
+            this.confirmPassword.setError(null);
+            return true;
+        }
     }
 }
