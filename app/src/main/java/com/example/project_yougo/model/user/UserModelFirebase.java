@@ -19,7 +19,9 @@ import com.google.firebase.database.ValueEventListener;
 public class UserModelFirebase {
     private FirebaseDatabase db;
     private DatabaseReference usersRef;
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+
+
 
     public interface SignInCompleteListener {
         void onSignInSuccessful();
@@ -108,6 +110,10 @@ public class UserModelFirebase {
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
+    }
+    public void deleteUser() {
+        //FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth.getInstance().getCurrentUser().delete();
     }
     public void updateUserPassword(String password){
         FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();

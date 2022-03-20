@@ -32,7 +32,7 @@ public class EditUserFragment extends Fragment {
     ImageView profileImg;
     ImageButton profileBtn;
     Button save;
-    Button cancel;
+    Button deleteUser;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
     Bitmap imageBitmap;
@@ -49,7 +49,7 @@ public class EditUserFragment extends Fragment {
         confirmPassword=view.findViewById(R.id.editUser_conPassword_et);
         profileImg=view.findViewById(R.id.editUser_img);
         save=view.findViewById(R.id.editUser_save_btn);
-        cancel=view.findViewById(R.id.editUser_cancel_btn);
+        deleteUser=view.findViewById(R.id.editUser_deleteUser_btn);
         UserModelFirebase.getInstance().getUserById(UserModelFirebase.getInstance().getUid(), new UserModelFirebase.GetUserCompleteListener() {
             @Override
             public void onComplete(User user) {
@@ -68,14 +68,19 @@ public class EditUserFragment extends Fragment {
                 //Navigation.findNavController(v).navigateUp();
             }
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
+        deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigateUp();
+                deleteUser();
+                Toast.makeText(getContext(),"User deleted!",Toast.LENGTH_LONG).show();
             }
         });
 
         return view;
+    }
+
+    private void deleteUser() {
+        UserModelFirebase.getInstance().deleteUser();
     }
 
     private void updateUser() {
