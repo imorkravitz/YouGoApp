@@ -10,15 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.User;
+import com.example.project_yougo.model.user.UserModelFirebase;
 
 
 public class EditUserFragment extends Fragment {
@@ -56,10 +55,9 @@ public class EditUserFragment extends Fragment {
             public void onComplete(User user) {
                 firstName.setText(user.getFirstName());
                 lastName.setText(user.getLastName());
-                email.setText(user.getEmail());
+                email.setText(UserModelFirebase.getInstance().getUserEmail());
                 gender.setText(user.getGender());
                 age.setText(user.getAge());
-                password.setText(user.getPassword());
             }
         });
 

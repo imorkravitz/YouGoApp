@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.project_yougo.login.LoginActivity;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModelFirebase;
 
 public class SplashActivity extends AppCompatActivity {
 

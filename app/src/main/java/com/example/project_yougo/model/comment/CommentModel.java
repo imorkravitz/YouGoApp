@@ -4,11 +4,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModelFirebase;
 import com.example.project_yougo.model.local.LocalDatabase;
 import com.example.project_yougo.model.post.Comment;
-import com.example.project_yougo.model.post.Post;
-import com.example.project_yougo.model.post.PostModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;

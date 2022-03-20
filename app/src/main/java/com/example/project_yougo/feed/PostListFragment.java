@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.User;
+import com.example.project_yougo.model.user.UserModelFirebase;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
 
