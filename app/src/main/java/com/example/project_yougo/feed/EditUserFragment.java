@@ -83,18 +83,25 @@ public class EditUserFragment extends Fragment {
         String lastName=this.lastName.getText().toString();
         String gender=this.gender.getText().toString();
         String age=this.age.getText().toString();
-        String email=this.email.getText().toString();
+        String emailNew=this.email.getText().toString();
         String password=this.password.getText().toString();
-        if(!password.equals("")){
-            if(validateConfirmPassword()){
-                UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), email, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
-                    @Override
-                    public void onComplete(User user) {
-                        Toast.makeText(getContext(),"user updated!",Toast.LENGTH_LONG).show();
-                    }
-                });
+        if(!email.equals(emailNew)){
+            if(validateEmail()) {
+                UserModelFirebase.getInstance().updateUserEmail(emailNew);
             }
         }
+        if(!password.equals("")){
+            if(validateConfirmPassword()){
+                UserModelFirebase.getInstance().updateUserPassword(password);
+            }
+        }
+        UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
+            @Override
+            public void onComplete(User user) {
+                Toast.makeText(getContext(),"user updated!",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
     private Boolean validateConfirmPassword(){
         String val1 = this.password.getText().toString();
@@ -110,6 +117,23 @@ public class EditUserFragment extends Fragment {
         }
         else{
             this.confirmPassword.setError(null);
+            return true;
+        }
+    }
+    private Boolean validateEmail(){
+        String val = this.email.getText().toString();
+        String emailPattern = "[a-zA-Z0-9,_-]+@[a-z]+\\.+[a-z]+";
+
+        if(val.isEmpty()){
+            this.email.setError("Field cannot be empty");
+            return false;
+        }
+        else if(!val.matches(emailPattern)){
+            this.email.setError("Invalid email address");
+            return false;
+        }
+        else{
+            this.email.setError(null);
             return true;
         }
     }

@@ -109,22 +109,20 @@ public class UserModelFirebase {
             public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
-
-    public void updateUser(String userId,String email,String password,String firstName,String lastName,
-                           String gender,String age, UpdateUserCompleteListener listener) {
-        User user = new User(userId, email, firstName, lastName, age, gender);
+    public void updateUserPassword(String password){
         FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
-        if(!password.equals("")){
-            userAuth.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
-                        Log.d("TAG","User password is updated");
-                    }
+        userAuth.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.d("TAG","User password is updated");
                 }
-            });
-        }
+            }
+        });
 
+    }
+    public void updateUserEmail(String email){
+        FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
         userAuth.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -133,7 +131,11 @@ public class UserModelFirebase {
                 }
             }
         });
+    }
 
+    public void updateUser(String userId,String email,String password,String firstName,String lastName,
+                           String gender,String age, UpdateUserCompleteListener listener) {
+        User user = new User(userId, email, firstName, lastName, age, gender);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("users").child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
