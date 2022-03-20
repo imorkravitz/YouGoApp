@@ -1,5 +1,6 @@
 package com.example.project_yougo.model.local;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -14,7 +15,7 @@ import java.util.List;
 @Dao
 public interface CommentDao {
     @Query("SELECT * FROM comment")
-    List<Comment> getAll();
+    LiveData<List<Comment>> getAll();
 
     @Query("SELECT * FROM comment where id=:postId")
     List<Comment>  getOfPost(String postId);

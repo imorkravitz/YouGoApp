@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,8 +23,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.User;
+import com.example.project_yougo.model.user.UserModelFirebase;
 
 import java.io.InputStream;
 
@@ -59,7 +58,7 @@ public class profileFragment extends Fragment {
             public void onComplete(User user) {
                 firstName.setText(user.getFirstName());
                 lastName.setText(user.getLastName());
-                email.setText(user.getEmail());
+                email.setText(UserModelFirebase.getInstance().getUserEmail());
             }
         });
         profileBtn.setOnClickListener(new View.OnClickListener() {

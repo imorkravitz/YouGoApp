@@ -10,15 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.project_yougo.MyApplication;
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.User;
+import com.example.project_yougo.model.user.UserModelFirebase;
 
 
 public class EditUserFragment extends Fragment {
@@ -33,7 +33,7 @@ public class EditUserFragment extends Fragment {
     ImageView profileImg;
     ImageButton profileBtn;
     Button save;
-    Button cancel;
+    Button deleteUser;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
     Bitmap imageBitmap;
@@ -50,49 +50,106 @@ public class EditUserFragment extends Fragment {
         confirmPassword=view.findViewById(R.id.editUser_conPassword_et);
         profileImg=view.findViewById(R.id.editUser_img);
         save=view.findViewById(R.id.editUser_save_btn);
-        cancel=view.findViewById(R.id.editUser_cancel_btn);
+        deleteUser=view.findViewById(R.id.editUser_deleteUser_btn);
         UserModelFirebase.getInstance().getUserById(UserModelFirebase.getInstance().getUid(), new UserModelFirebase.GetUserCompleteListener() {
             @Override
             public void onComplete(User user) {
                 firstName.setText(user.getFirstName());
                 lastName.setText(user.getLastName());
-                email.setText(user.getEmail());
+                email.setText(UserModelFirebase.getInstance().getUserEmail());
                 gender.setText(user.getGender());
                 age.setText(user.getAge());
-                password.setText(user.getPassword());
             }
         });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateUser();
-                //Navigation.findNavController(v).navigateUp();
+                if(updateUser()){
+                    getActivity().onBackPressed();
+                    //Navigation.findNavController(v).navigate(R.id.action_global_editUserFragment);
+                }
             }
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
+        deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigateUp();
+                deleteUser();
+                Toast.makeText(getContext(),"User deleted!",Toast.LENGTH_LONG).show();
             }
         });
 
         return view;
     }
 
-    private void updateUser() {
+    private void deleteUser() {
+        UserModelFirebase.getInstance().deleteUser();
+    }
+
+    private boolean updateUser() {
         String firstName=this.firstName.getText().toString();
         String lastName=this.lastName.getText().toString();
         String gender=this.gender.getText().toString();
         String age=this.age.getText().toString();
-        String email=this.email.getText().toString();
+        String emailNew=this.email.getText().toString();
         String password=this.password.getText().toString();
-        String confirmPass=this.confirmPassword.getText().toString();
-        UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), email, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
-            @Override
-            public void onComplete(User user) {
-                Toast.makeText(getContext(),"user updated!",Toast.LENGTH_LONG).show();
+        boolean emailFlag=false;
+        boolean passwordFlag=false;
+        if(!email.equals(emailNew)){
+            if(validateEmail()) {
+                emailFlag=true;
             }
-        });
+        }
+        if(!password.equals("")){
+            if(validateConfirmPassword()){
+                passwordFlag=true;
+            }
+        }
+        if(emailFlag&&passwordFlag){
+            UserModelFirebase.getInstance().updateUserEmail(emailNew);
+            UserModelFirebase.getInstance().updateUserPassword(password);
+            UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
+                @Override
+                public void onComplete(User user) {
+                    Toast.makeText(MyApplication.getContext(),"user updated!",Toast.LENGTH_LONG).show();
+                }
+            });
+            return true;
+        }
+        return false;
+    }
+    private Boolean validateConfirmPassword(){
+        String val1 = this.password.getText().toString();
+        String val2 = this.confirmPassword.getText().toString();
+
+        if(val2.isEmpty()){
+            this.confirmPassword.setError("Field cannot be empty");
+            return false;
+        }
+        else if(!val2.equals(val1)){
+            this.confirmPassword.setError("Different password");
+            return false;
+        }
+        else{
+            this.confirmPassword.setError(null);
+            return true;
+        }
+    }
+    private Boolean validateEmail(){
+        String val = this.email.getText().toString();
+        String emailPattern = "[a-zA-Z0-9,_-]+@[a-z]+\\.+[a-z]+";
+
+        if(val.isEmpty()){
+            this.email.setError("Field cannot be empty");
+            return false;
+        }
+        else if(!val.matches(emailPattern)){
+            this.email.setError("Invalid email address");
+            return false;
+        }
+        else{
+            this.email.setError(null);
+            return true;
+        }
     }
 }

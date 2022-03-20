@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.room.Database;
 
+import com.example.project_yougo.MyApplication;
 import com.example.project_yougo.model.post.Comment;
 import com.example.project_yougo.model.post.Post;
 
@@ -18,9 +19,9 @@ public abstract class LocalDatabase extends RoomDatabase {
     public abstract PostDao postDao();
     public abstract CommentDao commentDao();
 
-    public static LocalDatabase getInstance(Context appContext) {
+    public static LocalDatabase getInstance() {
         if(instance == null) {
-            instance = Room.databaseBuilder(appContext,
+            instance = Room.databaseBuilder(MyApplication.getContext(),
                     LocalDatabase.class, DATABASE_NAME).
                     fallbackToDestructiveMigration().build();
         }

@@ -163,14 +163,14 @@
             app:layout_constraintVertical_bias="0.194" />
 
         <Button
-            android:id="@+id/editUser_cancel_btn"
+            android:id="@+id/editUser_deleteUser_btn"
             android:layout_width="155dp"
             android:layout_height="47dp"
             android:layout_marginStart="40dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/button_bg"
             android:onClick="onRegisterButtonClick"
-            android:text="cancel"
+            android:text="DELETE"
             android:textColor="@color/white"
             android:textSize="16dp"
             android:textStyle="bold"

@@ -8,7 +8,10 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.project_yougo.login.LoginActivity;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModelFirebase;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -16,6 +19,10 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+//        long timestampmillis = 143434344;
+//        Date date = new Date(timestampmillis);
+//        String dateString = new SimpleDateFormat("dd-MM-yyyy HH::mm::ss").format(date);
 
         CharSequence text = "loading app..";
         int duration = Toast.LENGTH_SHORT;

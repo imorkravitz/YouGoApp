@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +15,7 @@ import android.widget.Toast;
 import com.example.project_yougo.R;
 
 import com.example.project_yougo.feed.FeedActivity;
-import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModelFirebase;
 
 
 public class LoginFragment extends Fragment {

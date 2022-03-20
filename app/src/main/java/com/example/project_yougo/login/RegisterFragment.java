@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +14,14 @@ import android.widget.Toast;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.feed.FeedActivity;
-import com.example.project_yougo.model.UserModelFirebase;
-import com.example.project_yougo.login.RegisterFragment;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.project_yougo.model.user.UserModelFirebase;
+
 
 
 public class RegisterFragment extends Fragment {
 
     EditText name, lastname, email, password, confirmPassword,gender,age;
     Button signup;
-    private UserModelFirebase userModelFirebase;
-    private FirebaseAuth firebaseAuth;
 
     public RegisterFragment(){
         //required empty public constructor.
@@ -38,12 +34,8 @@ public class RegisterFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_register,container, false);
-        this.userModelFirebase = UserModelFirebase.getInstance();
-        this.firebaseAuth = FirebaseAuth.getInstance();
 
         this.age = view.findViewById(R.id.editUser_age_et);
         this.gender = view.findViewById(R.id.editUser_gender_et);
@@ -75,21 +67,20 @@ public class RegisterFragment extends Fragment {
         String lastname = this.lastname.getText().toString();
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
-        this.userModelFirebase.signUpWithEmailAndPassword(getContext(), firebaseAuth,
-                email, password, firstname, lastname,gender,age, new UserModelFirebase.SignUpCompleteListener() {
-                    @Override
-                    public void onSignupSuccessful() {
-                        Toast.makeText(getContext(), "oved", Toast.LENGTH_LONG).show();
-                        //Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
-                        toFeedActivity();
-                    }
-
-                    @Override
-                    public void onSignupFailed() {
-                        Toast.makeText(getContext(), "could not sign up", Toast.LENGTH_LONG).show();
-                    }
+        UserModelFirebase.getInstance().signUpWithEmailAndPassword(getContext(),email, password, firstname, lastname,gender,age, new UserModelFirebase.SignUpCompleteListener() {
+            @Override
+            public void onSignupSuccessful() {
+                //Toast.makeText(getContext(), "", Toast.LENGTH_LONG).show();
+                //Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
+                toFeedActivity();
             }
-        );
+
+            @Override
+            public void onSignupFailed() {
+                Toast.makeText(getContext(), "could not sign up", Toast.LENGTH_LONG).show();
+            }
+        });
+
     } //bluestacks
 
     private Boolean validateFirstname(){

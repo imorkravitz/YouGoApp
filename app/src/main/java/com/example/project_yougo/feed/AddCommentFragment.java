@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModelFirebase;
 import com.example.project_yougo.model.comment.CommentModel;
 
 public class AddCommentFragment extends Fragment {

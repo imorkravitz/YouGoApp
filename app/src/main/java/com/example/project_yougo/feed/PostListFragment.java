@@ -4,6 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +25,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModelFirebase;
+import com.example.project_yougo.model.user.User;
+import com.example.project_yougo.model.user.UserModelFirebase;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
 
 import java.util.List;
+import androidx.lifecycle.Observer;
 
 
 public class PostListFragment extends Fragment {
     private RecyclerView postRecyclerView;
-    private RecyclerView commentsRecycleView;
+    private PostListViewModel postListViewModel;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,26 +47,38 @@ public class PostListFragment extends Fragment {
         postRecyclerView = view.findViewById((R.id.postlist_rv));
         postRecyclerView.setHasFixedSize(true);
         postRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        initPostList();
+
 
         setHasOptionsMenu(true);
-        initPostList();
 
         return view;
     }
 
     private void initPostList() {
-        PostModel.getInstance().loadPostList(getActivity().getApplicationContext(), new PostModel.PostListLoadListener() {
+//        PostModel.getInstance().loadPostList(getActivity().getApplicationContext(), new PostModel.PostListLoadListener() {
+//            @Override
+//            public void onPostListLoaded(List<Post> postList) {
+//
+//            }
+//        });
+//        PostModel.getInstance().listenForPostListUpdates(getActivity().getApplicationContext(), new PostModel.PostListUpdateListener() {
+//            @Override
+//            public void onPostListUpdated(List<Post> postList) {
+//                updatePostRecyclerView(postList);
+//            }
+//        });
+
+        postListViewModel = new ViewModelProvider(this).get(PostListViewModel.class);
+        Observer<List<Post>> observer = new Observer<List<Post>>() {
             @Override
-            public void onPostListLoaded(List<Post> postList) {
-                updatePostRecyclerView(postList);
+            public void onChanged(List<Post> posts) {
+                updatePostRecyclerView(posts);
             }
-        });
-        PostModel.getInstance().listenForPostListUpdates(getActivity().getApplicationContext(), new PostModel.PostListUpdateListener() {
-            @Override
-            public void onPostListUpdated(List<Post> postList) {
-                updatePostRecyclerView(postList);
-            }
-        });
+        };
+
+        postListViewModel.getPostListLiveData(getViewLifecycleOwner(), this)
+                .observe(getViewLifecycleOwner(), observer);
     }
 
     private void updatePostRecyclerView(List<Post> postList) {
@@ -180,5 +197,17 @@ public class PostListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class PostListViewModel extends ViewModel {
+        private LiveData<List<Post>> postListLiveData;
+
+        public LiveData<List<Post>> getPostListLiveData(LifecycleOwner lifecycleOwner,
+                                                        ViewModelStoreOwner viewModelStoreOwner) {
+            if(postListLiveData == null)
+                postListLiveData = PostModel.getInstance().getPostListLiveData(viewModelStoreOwner,
+                        lifecycleOwner);
+            return postListLiveData;
+        }
     }
 }
