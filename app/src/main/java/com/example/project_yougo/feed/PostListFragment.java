@@ -38,6 +38,7 @@ public class PostListFragment extends Fragment {
     private RecyclerView postRecyclerView;
     private PostListViewModel postListViewModel;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
