@@ -48,7 +48,7 @@ public class FeedActivity extends AppCompatActivity {
                     navController.navigate(R.id.action_global_postListFragment2);
                     break;
                 case R.id.item_post_menu:
-                    navController.navigate(R.id.action_global_editUserFragment);
+                    navController.navigate(R.id.action_global_create_postFragment);
                     break;
                 case R.id.aboutFragment_menu:
                     navController.navigate(R.id.action_global_aboutFragment);

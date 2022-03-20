@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
@@ -166,18 +167,16 @@
                 android:layout_marginLeft="150dp"
                 android:backgroundTint="#FFFFFF"
                 android:baselineAlignBottom="false"
-                android:src="@drawable/comment" />
+                android:src="@drawable/comment_btn" />
+
             <ImageButton
                 android:id="@+id/add_comment_btn_row"
-                android:layout_width="wrap_content"
+                android:layout_width="38dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFFFFF"
                 android:baselineAlignBottom="false"
-                android:src="@drawable/profile_menu" />
-
+                android:src="@drawable/add_btn" />
         </LinearLayout>
-
-
     </LinearLayout>
-
 </RelativeLayout>
+

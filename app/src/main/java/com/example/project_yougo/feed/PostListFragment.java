@@ -32,6 +32,7 @@ import java.util.List;
 
 public class PostListFragment extends Fragment {
     private RecyclerView postRecyclerView;
+    private RecyclerView commentsRecycleView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
