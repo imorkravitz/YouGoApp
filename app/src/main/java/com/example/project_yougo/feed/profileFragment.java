@@ -25,21 +25,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.User;
-import com.example.project_yougo.model.UserModel;
+import com.example.project_yougo.model.UserModelFirebase;
+
 import java.io.InputStream;
 
 
 
 public class profileFragment extends Fragment {
-    TextView firstName;
-    TextView lastName;
-    TextView email;
-    ImageView profileImg;
-    ImageButton profileBtn;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_IMAGE_GALLERY = 2;
-    Bitmap imageBitmap;
-    Button edit;
+    private TextView firstName;
+    private TextView lastName;
+    private TextView email;
+    private ImageView profileImg;
+    private ImageButton profileBtn;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_GALLERY = 2;
+    private Bitmap imageBitmap;
+    private Button edit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class profileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profile_frag_user_img);
         profileBtn = view.findViewById(R.id.profile_frag_image_btn);
 
-        UserModel.getInstance().getUserById(new UserModel.GetUserById() {
+        UserModelFirebase.getInstance().getUserById(UserModelFirebase.getInstance().getUid(), new UserModelFirebase.GetUserCompleteListener() {
             @Override
             public void onComplete(User user) {
                 firstName.setText(user.getFirstName());

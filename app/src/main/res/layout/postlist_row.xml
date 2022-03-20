@@ -167,6 +167,13 @@
                 android:backgroundTint="#FFFFFF"
                 android:baselineAlignBottom="false"
                 android:src="@drawable/comment" />
+            <ImageButton
+                android:id="@+id/add_comment_btn_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FFFFFF"
+                android:baselineAlignBottom="false"
+                android:src="@drawable/profile_menu" />
 
         </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.User;
+import com.example.project_yougo.model.UserModelFirebase;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
 
@@ -61,16 +64,20 @@ public class PostListFragment extends Fragment {
     }
 
     private void updatePostRecyclerView(List<Post> postList) {
-        MyAdapter adapter = new MyAdapter(postList);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position) {
-                //TODO fixe that
-               // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+            public void run() {
+                MyAdapter adapter = new MyAdapter(postList);
+                adapter.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        //TODO fixe that
+                        // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+                    }
+                });
+                postRecyclerView.setAdapter(adapter);
             }
         });
-
-        //postRecyclerView.setAdapter(adapter);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -81,6 +88,8 @@ public class PostListFragment extends Fragment {
         ImageView userImg;
         ImageButton likeBtn;
         ImageButton commentBtn;
+        ImageButton addCommentBtn;
+
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -91,6 +100,7 @@ public class PostListFragment extends Fragment {
             userImg = itemView.findViewById(R.id.userImg_list_row);
             likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
+            addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,9 +138,36 @@ public class PostListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Post post = postList.get(position);
-            holder.rowPostFreeTextTextView.setText(post.getFreeText());
-            holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
-            holder.rowPostDifficultyTextView.setText(post.getDifficulty());
+
+            UserModelFirebase.getInstance().getUserById(post.getPublisherId(), new UserModelFirebase.GetUserCompleteListener() {
+                @Override
+                public void onComplete(User user) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.userName.setText(user.fullname());
+                            holder.rowPostFreeTextTextView.setText(post.getFreeText());
+                            holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
+                            holder.rowPostDifficultyTextView.setText(post.getDifficulty());
+                        }
+                    });
+                }
+            });
+
+            holder.commentBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavDirections navDirections = PostListFragmentDirections.actionPostListFragmentToCommentListFragment2(post.getId());
+                    Navigation.findNavController(v).navigate(navDirections);
+                }
+            });
+            holder.addCommentBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavDirections navDirections = PostListFragmentDirections.actionPostListFragmentToAddCommentFragment(post.getId());
+                    Navigation.findNavController(v).navigate(navDirections);
+                }
+            });
         }
 
         @Override

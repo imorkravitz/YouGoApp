@@ -65,4 +65,8 @@ public class User {
     public List<String> getFriendIds() {
         return friendIds;
     }
+
+    public String fullname() {
+        return firstName + " " + lastName;
+    }
 }

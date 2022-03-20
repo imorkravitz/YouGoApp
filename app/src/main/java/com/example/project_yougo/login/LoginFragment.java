@@ -13,8 +13,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.UserModel;
+
 import com.example.project_yougo.feed.FeedActivity;
+import com.example.project_yougo.model.User;
+import com.example.project_yougo.model.UserModelFirebase;
 
 
 public class LoginFragment extends Fragment {
@@ -22,7 +24,6 @@ public class LoginFragment extends Fragment {
     EditText email, password;
     Button login;
     boolean log=false;
-    private UserModel userModel;
 
 
     public LoginFragment(){
@@ -40,7 +41,6 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_login, container, false);
 
-        this.userModel = UserModel.getInstance();
 
         this.email = view.findViewById(R.id.login_email);
         this.password = view.findViewById(R.id.login_password);
@@ -57,7 +57,7 @@ public class LoginFragment extends Fragment {
     private void loginApproved(View v) {
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
-        this.userModel.login(email, password, new UserModel.SignInCompleteListener() {
+        UserModelFirebase.getInstance().login(email, password, new UserModelFirebase.SignInCompleteListener() {
             @Override
             public void onSignInSuccessful() {
                 Toast.makeText(getContext(), "login", Toast.LENGTH_LONG).show();
@@ -74,7 +74,7 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void toFeedActivity() {
+    public void toFeedActivity() {
         Intent intent = new Intent(getContext(), FeedActivity.class);
         startActivity(intent);
         getActivity().finish();

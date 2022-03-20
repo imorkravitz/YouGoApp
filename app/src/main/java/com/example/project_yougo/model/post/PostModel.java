@@ -116,9 +116,6 @@ public class PostModel {
             }
         });
         timestampReference.setValue(ServerValue.TIMESTAMP);
-
-
-
     }
 
 //    PostModelFirebase PostModelFirebase = new PostModelFirebase();
