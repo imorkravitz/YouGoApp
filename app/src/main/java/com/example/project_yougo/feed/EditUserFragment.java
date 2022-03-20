@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.project_yougo.MyApplication;
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.user.UserModelFirebase;
@@ -64,8 +65,10 @@ public class EditUserFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateUser();
-                //Navigation.findNavController(v).navigateUp();
+                if(updateUser()){
+                    getActivity().onBackPressed();
+                    //Navigation.findNavController(v).navigate(R.id.action_global_editUserFragment);
+                }
             }
         });
         deleteUser.setOnClickListener(new View.OnClickListener() {
@@ -83,30 +86,37 @@ public class EditUserFragment extends Fragment {
         UserModelFirebase.getInstance().deleteUser();
     }
 
-    private void updateUser() {
+    private boolean updateUser() {
         String firstName=this.firstName.getText().toString();
         String lastName=this.lastName.getText().toString();
         String gender=this.gender.getText().toString();
         String age=this.age.getText().toString();
         String emailNew=this.email.getText().toString();
         String password=this.password.getText().toString();
+        boolean emailFlag=false;
+        boolean passwordFlag=false;
         if(!email.equals(emailNew)){
             if(validateEmail()) {
-                UserModelFirebase.getInstance().updateUserEmail(emailNew);
+                emailFlag=true;
             }
         }
         if(!password.equals("")){
             if(validateConfirmPassword()){
-                UserModelFirebase.getInstance().updateUserPassword(password);
+                passwordFlag=true;
             }
         }
-        UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
-            @Override
-            public void onComplete(User user) {
-                Toast.makeText(getContext(),"user updated!",Toast.LENGTH_LONG).show();
-            }
-        });
-
+        if(emailFlag&&passwordFlag){
+            UserModelFirebase.getInstance().updateUserEmail(emailNew);
+            UserModelFirebase.getInstance().updateUserPassword(password);
+            UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
+                @Override
+                public void onComplete(User user) {
+                    Toast.makeText(MyApplication.getContext(),"user updated!",Toast.LENGTH_LONG).show();
+                }
+            });
+            return true;
+        }
+        return false;
     }
     private Boolean validateConfirmPassword(){
         String val1 = this.password.getText().toString();

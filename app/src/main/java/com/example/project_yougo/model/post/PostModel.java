@@ -3,7 +3,14 @@ package com.example.project_yougo.model.post;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.project_yougo.model.FirebaseQueryLiveData;
 import com.example.project_yougo.model.user.UserModelFirebase;
 import com.example.project_yougo.model.local.LocalDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -11,11 +18,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-
+import androidx.lifecycle.Observer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+
 
 public class PostModel {
     public interface PostCreationListener {
@@ -27,9 +37,23 @@ public class PostModel {
         void onPostListUpdated(List<Post> postList);
     }
 
-    public interface PostListLoadListener {
-        void onPostListLoaded(List<Post> postList);
+    public static class PostListDataSnapshotViewModel extends ViewModel {
+        private final FirebaseQueryLiveData queryLiveData;
+
+        public PostListDataSnapshotViewModel() {
+            queryLiveData = new FirebaseQueryLiveData(
+                    UserModelFirebase.getInstance().getDatabaseReference().child("posts")
+            );
+        }
+
+        public LiveData<DataSnapshot> getSnapshotLiveData() {
+            return queryLiveData;
+        }
     }
+
+//    public interface PostListLoadListener {
+//        void onPostListLoaded(List<Post> postList);
+//    }
 
     public static PostModel instance;
 
@@ -45,45 +69,76 @@ public class PostModel {
         return instance;
     }
 
-    public void loadPostList(Context appContext, PostListLoadListener postListLoadListener) {
-        // cannot access db on UI thread
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<Post> postList = LocalDatabase.getInstance(appContext).postDao().getAll();
-                postListLoadListener.onPostListLoaded(postList);
-            }
-        }).start();
-    }
+//    public void loadPostList(Context appContext, PostListLoadListener postListLoadListener) {
+//        // cannot access db on UI thread
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                List<Post> postList = LocalDatabase.getInstance(appContext).postDao().getAll();
+//                postListLoadListener.onPostListLoaded(postList);
+//            }
+//        }).start();
+//    }
 
-    public void listenForPostListUpdates(Context appContext,
-                                         PostListUpdateListener postListUpdateListener) {
-        DatabaseReference databaseReference = UserModelFirebase.getInstance().getDatabaseReference();;
 
-        databaseReference.child("posts").addValueEventListener(new ValueEventListener() {
+    public LiveData<List<Post>> getPostListLiveData(ViewModelStoreOwner viewModelStoreOwner,
+                                                    LifecycleOwner lifecycleOwner) {
+        PostListDataSnapshotViewModel viewModel
+                = new ViewModelProvider(viewModelStoreOwner)
+                    .get(PostListDataSnapshotViewModel.class);
+        Observer<DataSnapshot> observer = new Observer<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onChanged(DataSnapshot dataSnapshot) {
                 List<Post> postList = new ArrayList<>();
 
-                for(DataSnapshot dsChild : snapshot.getChildren()) {
+                for(DataSnapshot dsChild: dataSnapshot.getChildren()) {
                     postList.add(dsChild.getValue(Post.class));
                 }
 
+                // cannot access db on UI thread
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        LocalDatabase.getInstance(appContext).postDao().insertAll(postList.toArray(new Post[0]));
+                        LocalDatabase.getInstance().postDao().insertAll(postList.toArray(new Post[0]));
                     }
                 }).start();
-                postListUpdateListener.onPostListUpdated(postList);
             }
+        };
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        viewModel.getSnapshotLiveData().observe(lifecycleOwner, observer);
 
-            }
-        });
+        return LocalDatabase.getInstance().postDao().getAll();
     }
+//
+//
+//    public void listenForPostListUpdates(Context appContext,
+//                                         PostListUpdateListener postListUpdateListener) {
+//        DatabaseReference databaseReference = UserModelFirebase.getInstance().getDatabaseReference();;
+//
+//        databaseReference.child("posts").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                List<Post> postList = new ArrayList<>();
+//
+//                for(DataSnapshot dsChild : snapshot.getChildren()) {
+//                    postList.add(dsChild.getValue(Post.class));
+//                }
+//
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        LocalDatabase.getInstance(appContext).postDao().insertAll(postList.toArray(new Post[0]));
+//                    }
+//                }).start();
+//                postListUpdateListener.onPostListUpdated(postList);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
     public void addPost(String freeText, String difficulty, String typeOfWorkout,
                         String publisherId, PostCreationListener creationListener) {

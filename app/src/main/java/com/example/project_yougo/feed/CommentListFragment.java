@@ -4,6 +4,12 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.post.Post;
+import com.example.project_yougo.model.post.PostModel;
 import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.user.UserModelFirebase;
 import com.example.project_yougo.model.comment.CommentModel;
@@ -41,6 +49,7 @@ public class CommentListFragment extends Fragment {
 
     private String postId;
     private RecyclerView commentRecyclerView;
+    private CommentListViewModel commentListViewModel;
 
     public CommentListFragment() {
         // Required empty public constructor
@@ -92,19 +101,33 @@ public class CommentListFragment extends Fragment {
     }
 
     private void initCommentList() {
-        CommentModel.getInstance().loadCommentList(getActivity().getApplicationContext(), postId, new CommentModel.CommentListLoadListener() {
+        commentListViewModel = new ViewModelProvider(this).get(CommentListViewModel.class);
+        Observer<List<Comment>> observer = new Observer<List<Comment>>() {
             @Override
-            public void onCommentListLoaded(List<Comment> commentList) {
-                updateCommentRecyclerView(commentList);
+            public void onChanged(List<Comment> comments) {
+                updateCommentRecyclerView(comments);
             }
-        });
-        CommentModel.getInstance().listenForCommentListUpdates(getActivity().getApplicationContext(), postId, new CommentModel.CommentListUpdateListener()  {
-            @Override
-            public void onCommentListUpdated(List<Comment> commentList){
-                updateCommentRecyclerView(commentList);
-            }
-        });
+        };
+
+        commentListViewModel.getCommentListLiveData(postId, getViewLifecycleOwner(),
+                this)
+                    .observe(getViewLifecycleOwner(), observer);
     }
+
+//    private void initCommentList() {
+//        CommentModel.getInstance().loadCommentList(getActivity().getApplicationContext(), postId, new CommentModel.CommentListLoadListener() {
+//            @Override
+//            public void onCommentListLoaded(List<Comment> commentList) {
+//                updateCommentRecyclerView(commentList);
+//            }
+//        });
+//        CommentModel.getInstance().listenForCommentListUpdates(getActivity().getApplicationContext(), postId, new CommentModel.CommentListUpdateListener()  {
+//            @Override
+//            public void onCommentListUpdated(List<Comment> commentList){
+//                updateCommentRecyclerView(commentList);
+//            }
+//        });
+//    }
 
     private void updateCommentRecyclerView(List<Comment> commentList) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -193,5 +216,21 @@ public class CommentListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class CommentListViewModel extends ViewModel {
+        private LiveData<List<Comment>> commentListLiveData;
+
+        public LiveData<List<Comment>> getCommentListLiveData(
+                                                        String postId,
+                                                        LifecycleOwner lifecycleOwner,
+                                                        ViewModelStoreOwner viewModelStoreOwner) {
+            if(commentListLiveData == null)
+                commentListLiveData = CommentModel.getInstance().getCommentListLiveData(
+                        postId,
+                        viewModelStoreOwner,
+                        lifecycleOwner);
+            return commentListLiveData;
+        }
     }
 }
