@@ -1,57 +1,306 @@
-//package com.example.project_yougo.model;
-//
-//import androidx.annotation.NonNull;
-//
-//import com.example.project_yougo.model.user.User;
-//import com.example.project_yougo.model.user.UserModelFirebase;
-//import com.google.android.gms.tasks.OnCompleteListener;
-//import com.google.android.gms.tasks.Task;
-//import com.google.firebase.auth.AuthResult;
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
-//import com.google.firebase.firestore.FirebaseFirestore;
-//
-//public class UserModel {
-//    public interface SignInCompleteListener {
-//        void onSignInSuccessful();
-//        void onSignInFailed();
+package com.example.project_yougo.model.user;
+
+import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+
+import com.example.project_yougo.model.firebase.FirebaseModel;
+import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
+import com.example.project_yougo.model.local.LocalDatabase;
+import com.example.project_yougo.model.post.Post;
+import com.example.project_yougo.model.post.PostModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserModel {
+    private FirebaseDatabase db;
+    private DatabaseReference usersRef;
+    private FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+
+    public static class UserListDataSnapshotViewModel extends ViewModel {
+        private final FirebaseQueryLiveData queryLiveData;
+
+        public UserListDataSnapshotViewModel() {
+            queryLiveData = new FirebaseQueryLiveData(
+                    FirebaseModel.getInstance().getDatabaseReference().child("users")
+            );
+        }
+
+        public LiveData<DataSnapshot> getSnapshotLiveData() {
+            return queryLiveData;
+        }
+    }
+
+    public interface SignInCompleteListener {
+        void onSignInSuccessful();
+        void onSignInFailed();
+    }
+
+    public interface SignUpCompleteListener {
+        // maybe add parameter(s) to specify reason
+        void onSignupSuccessful();
+        void onSignupFailed();
+    }
+
+    public interface UserDeletionCompleteListener {
+        // maybe add parameter(s) to specify reason
+        void onDeletionSuccessful();
+        void onDeletionFailed();
+    }
+
+//    public interface GetUserCompleteListener {
+//        void onComplete(User user);
 //    }
+
+    public interface UpdateUserCompleteListener {
+        void onUpdateSuccessful();
+        void onUpdateFailed();
+    }
+
+    private static UserModel instance;
+
+    public UserModel() {
+        db=FirebaseDatabase.getInstance();
+        usersRef=db.getReference("users");
+    }
+
+    public static UserModel getInstance() {
+        if(instance == null) {
+            instance = new UserModel();
+        }
+
+        return instance;
+    }
+
+    public String getUid() {
+        return FirebaseAuth.getInstance().getUid();
+    }
+
+    public void signUpWithEmailAndPassword(Context context,String email, String password, String firstName,
+                                                                          String lastName, String gender, String age,
+                                                                          SignUpCompleteListener signUpCompleteListener) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    User user = new User(firebaseAuth.getUid(), email, firstName, lastName, age, gender, true);
+                    DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+                    databaseReference.child("users").child(user.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                // registered in auth database, extra data in database
+                                signUpCompleteListener.onSignupSuccessful();
+                            } else {
+                                firebaseAuth.getCurrentUser().delete(); // remove user from auth database
+                                signUpCompleteListener.onSignupFailed();
+                            }
+                        }
+                    });
+                } else {
+                    signUpCompleteListener.onSignupFailed();
+                    // no internet connection or duplicate email or password length < 6
+
+                }
+            }
+        });
+    }
+
+    public String getUserEmail(){
+        FirebaseUser user= FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser();
+        return user.getEmail();
+    }
+
+    public LiveData<User> getUserLiveData(String uid, ViewModelStoreOwner viewModelStoreOwner,
+                                                    LifecycleOwner lifecycleOwner) {
+        UserListDataSnapshotViewModel viewModel
+                = new ViewModelProvider(viewModelStoreOwner)
+                .get(UserListDataSnapshotViewModel.class);
+        Observer<DataSnapshot> observer = new Observer<DataSnapshot>() {
+            @Override
+            public void onChanged(DataSnapshot dataSnapshot) {
+                List<User> userList = new ArrayList<>();
+
+                for(DataSnapshot dsChild: dataSnapshot.getChildren()) {
+                    userList.add(dsChild.getValue(User.class));
+                }
+
+                // cannot access db on UI thread
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LocalDatabase.getInstance().userDao().insertAll(userList.toArray(new User[0]));
+                    }
+                }).start();
+            }
+        };
+
+        viewModel.getSnapshotLiveData().observe(lifecycleOwner, observer);
+
+        return LocalDatabase.getInstance().userDao().getById(uid);
+    }
 //
-//    private static UserModel instance;
-//
-//    private final FirebaseAuth firebaseAuth;
-//    UserModelFirebase userModelFirebase=new UserModelFirebase();
-//
-//    private UserModel() {
-//        this.firebaseAuth = FirebaseAuth.getInstance();
-//    }
-//
-//    public static UserModel getInstance() {
-//        if(instance == null) {
-//            instance = new UserModel();
-//        }
-//
-//        return instance;
-//    }
-//
-//    public void login(String email, String password, SignInCompleteListener signInCompleteListener) {
-//        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//    public void getUserById(String userId,GetUserCompleteListener listener){
+//        usersRef.child(userId).addValueEventListener(new ValueEventListener() {
 //            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if(snapshot.exists()){
+//                    User user=snapshot.getValue(User.class);
+//                    listener.onComplete(user);
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) { }
+//        });
+//    }
+
+//    public void deleteUser(UserDeletionCompleteListener deletionCompleteListener) {
+//        String uid = FirebaseModel.getInstance().getFirebaseAuthInstance().getUid();
+//        FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
 //                if(task.isSuccessful()) {
-//                    // signed in
-//                    signInCompleteListener.onSignInSuccessful();
+//                    FirebaseModel.getInstance().getDatabaseReference().child("users")
+//                            .child(uid).removeValue();
+//                    deletionCompleteListener.onDeletionSuccessful();
 //                } else {
-//                    // not signed in
-//                    signInCompleteListener.onSignInFailed();
+//                    deletionCompleteListener.onDeletionFailed();
 //                }
 //            }
 //        });
 //    }
-//    public interface GetUserById{
-//        void onComplete(User user);
+//    public void updateUserPassword(String password, UpdateUserCompleteListener completeListener){
+//        FirebaseUser userAuth = FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser();
+//        userAuth.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                if(task.isSuccessful()){
+//                    completeListener.onUpdateSuccessful();
+//                } else {
+//                    completeListener.onUpdateFailed();
+//                }
+//            }
+//        });
 //    }
 //
+//    public void updateUserEmail(String email, UpdateUserCompleteListener completeListener){
+//        FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
+//        userAuth.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                if(task.isSuccessful()){
+//                    completeListener.onUpdateSuccessful();
+//                } else {
+//                    completeListener.onUpdateFailed();
+//                }
+//            }
+//        });
+//    }
+
+    public void updateUser(String userId,String email,String password,String firstName,String lastName,
+                           String gender,String age, boolean active, UpdateUserCompleteListener listener) {
+        User user = new User(userId, email, firstName, lastName, age, gender, active);
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
+        databaseReference.child("users").child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().updatePassword(password).addOnCompleteListener(
+                            new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()) {
+                                                    listener.onUpdateSuccessful();
+                                                }
+                                                else
+                                                {
+                                                    listener.onUpdateFailed();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        listener.onUpdateFailed();
+                                    }
+                                }
+                            }
+                    );
+                    listener.onUpdateSuccessful();
+                } else {
+                    listener.onUpdateFailed();
+                }
+            }
+        });
+    }
+
+
+    public void login(String email, String password, SignInCompleteListener signInCompleteListener) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+        databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean active = true;
+
+                for(DataSnapshot dataSnapshotChild : snapshot.getChildren()) {
+                    User user = dataSnapshotChild.getValue(User.class);
+
+                    if(user.getEmail().equals(email)) {
+                        if (!user.isActive()) {
+                            active = false;
+                        }
+
+                        break;
+                    }
+                }
+
+                if(active) {
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()) {
+                                // signed in
+                                signInCompleteListener.onSignInSuccessful();
+                            } else {
+                                // not signed in
+                                signInCompleteListener.onSignInFailed();
+                            }
+                        }
+                    });
+                } else {
+                    signInCompleteListener.onSignInFailed();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                signInCompleteListener.onSignInFailed();
+            }
+        });
+    }
+
+
 //    public User getUserById(GetUserById listener){
 //        String userId=firebaseAuth.getCurrentUser().getUid();
 //        userModelFirebase.getUserById(userId,listener);
@@ -66,7 +315,12 @@
 //        userModelFirebase.updateUser(userId,email,password,firstName,lastName,gender,age,listener);
 //
 //    }
-//    public boolean isLoggedIn() {
-//        return firebaseAuth.getCurrentUser() != null;
-//    }
-//}
+    public boolean isLoggedIn() {
+        return FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser() != null;
+    }
+
+    public void logOut() {
+        FirebaseModel.getInstance().getFirebaseAuthInstance().signOut();
+    }
+
+}

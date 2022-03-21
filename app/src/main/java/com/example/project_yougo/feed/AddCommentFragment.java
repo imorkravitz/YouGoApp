@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.comment.CommentModel;
 
 public class AddCommentFragment extends Fragment {
@@ -55,7 +55,7 @@ public class AddCommentFragment extends Fragment {
     }
 
     private void onAddCommentButtonClicked() {
-        String publisherId = UserModelFirebase.getInstance().getUid();
+        String publisherId = UserModel.getInstance().getUid();
         String content = contentEditText.getText().toString().trim();
         CommentModel.getInstance().addComment(publisherId, postId, content, new CommentModel.CommentCreationListener() {
             @Override

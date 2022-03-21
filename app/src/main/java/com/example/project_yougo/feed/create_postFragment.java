@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -92,6 +93,8 @@ public class create_postFragment extends Fragment {
                             public void run() {
                                 Toast.makeText(getContext(), "Post Creation success",
                                         Toast.LENGTH_LONG).show();
+                                Navigation.findNavController(getView()).
+                                        navigate(R.id.action_global_postListFragment2);
                             }
                         });
                     }

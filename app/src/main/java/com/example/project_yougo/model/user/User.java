@@ -1,16 +1,39 @@
 package com.example.project_yougo.model.user;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class User {
+    @PrimaryKey
+    @NotNull
     private String uid;
+
+    @ColumnInfo(name = "email")
     private String email;
+
+    @ColumnInfo(name = "firstName")
     private String firstName;
+
+
+    @ColumnInfo(name = "lastName")
     private String lastName;
+
+    @ColumnInfo(name = "gender")
     private String gender;
+
+    @ColumnInfo(name = "age")
     private String age;
-    private List<String> friendIds;
+
+    @ColumnInfo(name = "active")
+    private boolean active;
 
     public String getGender() {
         return gender;
@@ -25,16 +48,17 @@ public class User {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.friendIds = new ArrayList<>();
+        this.active = true;
     }
-    public User(String uid, String email, String firstName, String lastName,String age, String gender) {
+    public User(String uid, String email, String firstName, String lastName,String age, String gender,
+                boolean active) {
         this.uid = uid;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age=age;
         this.gender=gender;
-        this.friendIds = new ArrayList<>();
+        this.active = active;
     }
 
     // for firebase
@@ -57,8 +81,36 @@ public class User {
         return lastName;
     }
 
-    public List<String> getFriendIds() {
-        return friendIds;
+    public void setUid(@NotNull String uid) {
+        this.uid = uid;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String fullname() {

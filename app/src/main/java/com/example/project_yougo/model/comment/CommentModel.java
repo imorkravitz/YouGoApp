@@ -1,7 +1,5 @@
 package com.example.project_yougo.model.comment;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -10,10 +8,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.example.project_yougo.model.FirebaseQueryLiveData;
-import com.example.project_yougo.model.post.Post;
-import com.example.project_yougo.model.post.PostModel;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.firebase.FirebaseModel;
+import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
+import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.local.LocalDatabase;
 import com.example.project_yougo.model.post.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
@@ -48,7 +44,7 @@ public class CommentModel {
         public LiveData<DataSnapshot> getSnapshotLiveData(String postId) {
             if(queryLiveData == null)
                 queryLiveData = new FirebaseQueryLiveData(
-                        UserModelFirebase.getInstance().getDatabaseReference()
+                        FirebaseModel.getInstance().getDatabaseReference()
                                 .child("comments").child(postId));
             return queryLiveData;
         }
@@ -140,7 +136,7 @@ public class CommentModel {
 //    }
 
     public void addComment(String publisherId, String postId, String content, CommentCreationListener creationListener) {
-        DatabaseReference databaseReference = UserModelFirebase.getInstance().getDatabaseReference();
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
 
         DatabaseReference timestampReference = databaseReference.child("timestamp");
         timestampReference.addListenerForSingleValueEvent(new ValueEventListener() {

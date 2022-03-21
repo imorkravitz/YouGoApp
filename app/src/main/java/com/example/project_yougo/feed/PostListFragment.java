@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
 
@@ -94,6 +94,7 @@ public class PostListFragment extends Fragment {
                     }
                 });
                 postRecyclerView.setAdapter(adapter);
+           //     postRecyclerView.invalidate();
             }
         });
     }
@@ -134,8 +135,9 @@ public class PostListFragment extends Fragment {
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
-        OnItemClickListener listener;
+        private OnItemClickListener listener;
         private List<Post> postList;
+        private UserViewModel userViewModel;
 
         public MyAdapter(List<Post> postList) {
             this.postList = postList;
@@ -157,20 +159,43 @@ public class PostListFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Post post = postList.get(position);
 
-            UserModelFirebase.getInstance().getUserById(post.getPublisherId(), new UserModelFirebase.GetUserCompleteListener() {
+            userViewModel = new ViewModelProvider(PostListFragment.this).get(UserViewModel.class);
+
+            Observer<User> observer = new Observer<User>() {
                 @Override
-                public void onComplete(User user) {
+                public void onChanged(User user) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.userName.setText(user.fullname());
-                            holder.rowPostFreeTextTextView.setText(post.getFreeText());
-                            holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
-                            holder.rowPostDifficultyTextView.setText(post.getDifficulty());
+                            // might be null if user has not been downloaded from firebase db into local db
+                            if(user != null) {
+                                holder.userName.setText(user.fullname());
+                                holder.rowPostFreeTextTextView.setText(post.getFreeText());
+                                holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
+                                holder.rowPostDifficultyTextView.setText(post.getDifficulty());
+                            }
                         }
                     });
                 }
-            });
+            };
+
+            userViewModel.getUserLiveData(post.getPublisherId(), getViewLifecycleOwner(), PostListFragment.this)
+                    .observe(getViewLifecycleOwner(), observer);
+
+//            UserModel.getInstance().getUserById(post.getPublisherId(), new UserModel.GetUserCompleteListener() {
+//                @Override
+//                public void onComplete(User user) {
+//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            holder.userName.setText(user.fullname());
+//                            holder.rowPostFreeTextTextView.setText(post.getFreeText());
+//                            holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
+//                            holder.rowPostDifficultyTextView.setText(post.getDifficulty());
+//                        }
+//                    });
+//                }
+//            });
 
             holder.commentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

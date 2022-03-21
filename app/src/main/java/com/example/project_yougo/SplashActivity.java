@@ -7,11 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.example.project_yougo.feed.FeedActivity;
 import com.example.project_yougo.login.LoginActivity;
-import com.example.project_yougo.model.user.UserModelFirebase;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.example.project_yougo.model.user.UserModel;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -35,8 +33,8 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Intent intent;
 
-                if(UserModelFirebase.getInstance().isLoggedIn()) {
-                    intent = new Intent(SplashActivity.this, LoginActivity.class);
+                if(UserModel.getInstance().isLoggedIn()) {
+                    intent = new Intent(SplashActivity.this, FeedActivity.class);
                 } else {
                     intent = new Intent(SplashActivity.this, LoginActivity.class);
                 }
