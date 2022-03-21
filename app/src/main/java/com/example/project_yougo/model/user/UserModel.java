@@ -270,7 +270,6 @@ public class UserModel {
                         if (!user.isActive()) {
                             active = false;
                         }
-
                         break;
                     }
                 }
@@ -299,8 +298,6 @@ public class UserModel {
             }
         });
     }
-
-
 //    public User getUserById(GetUserById listener){
 //        String userId=firebaseAuth.getCurrentUser().getUid();
 //        userModelFirebase.getUserById(userId,listener);
@@ -320,7 +317,7 @@ public class UserModel {
     }
 
     public void logOut() {
-        FirebaseModel.getInstance().getFirebaseAuthInstance().signOut();
+            FirebaseModel.getInstance().getFirebaseAuthInstance().signOut();
     }
 
 }

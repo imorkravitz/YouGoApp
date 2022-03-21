@@ -164,7 +164,7 @@
                 android:id="@+id/comment_btn_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="150dp"
+                android:layout_marginLeft="115dp"
                 android:backgroundTint="#FFFFFF"
                 android:baselineAlignBottom="false"
                 android:src="@drawable/comment_btn" />
@@ -176,6 +176,17 @@
                 android:backgroundTint="#FFFFFF"
                 android:baselineAlignBottom="false"
                 android:src="@drawable/add_btn" />
+
+            <ImageButton
+                android:id="@+id/delete_post_btn"
+                android:layout_width="40dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="0dp"
+                android:backgroundTint="#FFFFFF"
+                android:baselineAlignBottom="false"
+                android:src="@android:drawable/ic_menu_delete" />
+
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

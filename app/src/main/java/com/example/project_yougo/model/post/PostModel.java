@@ -1,5 +1,8 @@
 package com.example.project_yougo.model.post;
 
+import android.util.Log;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -16,9 +19,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+
 import androidx.lifecycle.Observer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +33,7 @@ import java.util.List;
 public class PostModel {
     public interface PostCreationListener {
         void onCreationSuccess();
+
         void onCreationFailed();
     }
 
@@ -58,14 +66,14 @@ public class PostModel {
     }
 
     public static PostModel getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new PostModel();
         }
 
         return instance;
     }
 
-//    public void loadPostList(Context appContext, PostListLoadListener postListLoadListener) {
+    //    public void loadPostList(Context appContext, PostListLoadListener postListLoadListener) {
 //        // cannot access db on UI thread
 //        new Thread(new Runnable() {
 //            @Override
@@ -75,19 +83,17 @@ public class PostModel {
 //            }
 //        }).start();
 //    }
-
-
     public LiveData<List<Post>> getPostListLiveData(ViewModelStoreOwner viewModelStoreOwner,
                                                     LifecycleOwner lifecycleOwner) {
         PostListDataSnapshotViewModel viewModel
                 = new ViewModelProvider(viewModelStoreOwner)
-                    .get(PostListDataSnapshotViewModel.class);
+                .get(PostListDataSnapshotViewModel.class);
         Observer<DataSnapshot> observer = new Observer<DataSnapshot>() {
             @Override
             public void onChanged(DataSnapshot dataSnapshot) {
                 List<Post> postList = new ArrayList<>();
 
-                for(DataSnapshot dsChild: dataSnapshot.getChildren()) {
+                for (DataSnapshot dsChild : dataSnapshot.getChildren()) {
                     postList.add(dsChild.getValue(Post.class));
                 }
 
@@ -105,7 +111,8 @@ public class PostModel {
 
         return LocalDatabase.getInstance().postDao().getAll();
     }
-//
+
+    //
 //
 //    public void listenForPostListUpdates(Context appContext,
 //                                         PostListUpdateListener postListUpdateListener) {
@@ -135,6 +142,24 @@ public class PostModel {
 //            }
 //        });
 //    }
+    public void DeletePost(View view) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+        Query query = databaseReference.child("posts").orderByChild("id");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("TAG", "Deleted", databaseError.toException());
+            }
+        });
+
+    }
 
     public void addPost(String freeText, String difficulty, String typeOfWorkout,
                         String publisherId, PostCreationListener creationListener) {
@@ -151,7 +176,7 @@ public class PostModel {
                 databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             creationListener.onCreationSuccess();
                         } else {
                             creationListener.onCreationFailed();

@@ -1,5 +1,7 @@
 package com.example.project_yougo.feed;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,12 +26,19 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 import androidx.lifecycle.Observer;
@@ -37,6 +47,8 @@ import androidx.lifecycle.Observer;
 public class PostListFragment extends Fragment {
     private RecyclerView postRecyclerView;
     private PostListViewModel postListViewModel;
+    private boolean active;
+
 
 
     @Override
@@ -89,7 +101,8 @@ public class PostListFragment extends Fragment {
                 adapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int position) {
-                        //TODO fixe that
+
+                        //TODO fix that
                         // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
                     }
                 });
@@ -108,6 +121,7 @@ public class PostListFragment extends Fragment {
         ImageButton likeBtn;
         ImageButton commentBtn;
         ImageButton addCommentBtn;
+        ImageButton deletePostBtn;
 
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -120,6 +134,8 @@ public class PostListFragment extends Fragment {
             likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
             addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
+            deletePostBtn = itemView.findViewById(R.id.delete_post_btn);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -139,6 +155,7 @@ public class PostListFragment extends Fragment {
         private List<Post> postList;
         private UserViewModel userViewModel;
 
+
         public MyAdapter(List<Post> postList) {
             this.postList = postList;
         }
@@ -156,7 +173,7 @@ public class PostListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
             Post post = postList.get(position);
 
             userViewModel = new ViewModelProvider(PostListFragment.this).get(UserViewModel.class);
@@ -181,7 +198,6 @@ public class PostListFragment extends Fragment {
 
             userViewModel.getUserLiveData(post.getPublisherId(), getViewLifecycleOwner(), PostListFragment.this)
                     .observe(getViewLifecycleOwner(), observer);
-
 //            UserModel.getInstance().getUserById(post.getPublisherId(), new UserModel.GetUserCompleteListener() {
 //                @Override
 //                public void onComplete(User user) {
@@ -196,7 +212,6 @@ public class PostListFragment extends Fragment {
 //                    });
 //                }
 //            });
-
             holder.commentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -211,12 +226,36 @@ public class PostListFragment extends Fragment {
                     Navigation.findNavController(v).navigate(navDirections);
                 }
             });
+            holder.deletePostBtn.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    PostModel.getInstance().DeletePost(v);
+
+//                    postList.remove(position);
+//                    notifyItemRemoved(position);
+                    toFeedActivity();
+                    Toast.makeText(getContext(),"Post deleted!",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        public void toFeedActivity() {
+            Intent intent = new Intent(getContext(), FeedActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         }
 
         @Override
         public int getItemCount() {
             return postList.size();
         }
+    }
+    private static ItemClickListener itemClickListener;
+
+    public interface ItemClickListener {
+        void onItemClick(int position, View v);
+    }
+    public void setOnItemClickListener(ItemClickListener myClickListener) {
     }
 
     @Override

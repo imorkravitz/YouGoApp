@@ -43,5 +43,6 @@
     <action android:id="@+id/action_global_profileFragment"
         app:destination="@id/profileFragment1"
         app:popUpTo="@+id/postListFragment1"/>
+    <action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" />
 
 </navigation>

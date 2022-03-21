@@ -11,6 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.firebase.FirebaseModel;
+import com.example.project_yougo.model.user.UserModel;
+
 public class FeedActivity extends AppCompatActivity {
 
     private NavHost navHost;
@@ -52,6 +55,10 @@ public class FeedActivity extends AppCompatActivity {
                     break;
                 case R.id.aboutFragment_menu:
                     navController.navigate(R.id.action_global_aboutFragment);
+                    break;
+                case R.id.logout_menu:
+                    UserModel.getInstance().logOut();
+                    navController.navigate(R.id.action_global_loginFragment);
                     break;
             }
         }else{

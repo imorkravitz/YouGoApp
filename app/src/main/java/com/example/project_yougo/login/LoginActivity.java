@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.project_yougo.R;
+import com.example.project_yougo.model.user.UserModel;
 
 public class LoginActivity extends AppCompatActivity {
     NavController navController;
@@ -51,6 +52,10 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 case R.id.aboutFragment_menu:
                     navController.navigate(R.id.action_global_aboutFragment);
+                    break;
+                case R.id.logout_menu:
+                    UserModel.getInstance().logOut();
+                    navController.navigate(R.id.action_global_loginFragment);
                     break;
             }
         }else{
