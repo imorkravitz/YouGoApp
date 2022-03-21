@@ -22,10 +22,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
-import com.example.project_yougo.model.post.Post;
-import com.example.project_yougo.model.post.PostModel;
 import com.example.project_yougo.model.user.User;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.comment.CommentModel;
 import com.example.project_yougo.model.post.Comment;
 
@@ -139,8 +137,9 @@ public class CommentListFragment extends Fragment {
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
-        OnItemClickListener listener;
+        private OnItemClickListener listener;
         private List<Comment> commentList;
+        private UserViewModel userViewModel;
 
         public MyAdapter(List<Comment> commentList) {
             this.commentList = commentList;
@@ -162,18 +161,39 @@ public class CommentListFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Comment comment = commentList.get(position);
 
-            UserModelFirebase.getInstance().getUserById(comment.getPublisherId(), new UserModelFirebase.GetUserCompleteListener() {
+            userViewModel = new ViewModelProvider(CommentListFragment.this).get(UserViewModel.class);
+
+            Observer<User> observer = new Observer<User>() {
                 @Override
-                public void onComplete(User user) {
+                public void onChanged(User user) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.userName.setText(user.fullname());
-                            holder.content.setText(comment.getContent());
+                            // might be null if user has not been downloaded from firebase db into local db
+                            if(user != null) {
+                                holder.userName.setText(user.fullname());
+                                holder.content.setText(comment.getContent());
+                            }
                         }
                     });
                 }
-            });
+            };
+
+            userViewModel.getUserLiveData(comment.getPublisherId(), getViewLifecycleOwner(), CommentListFragment.this)
+                    .observe(getViewLifecycleOwner(), observer);
+//
+//            UserModel.getInstance().getUserById(comment.getPublisherId(), new UserModel.GetUserCompleteListener() {
+//                @Override
+//                public void onComplete(User user) {
+//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            holder.userName.setText(user.fullname());
+//                            holder.content.setText(comment.getContent());
+//                        }
+//                    });
+//                }
+//            });
         }
 
         @Override

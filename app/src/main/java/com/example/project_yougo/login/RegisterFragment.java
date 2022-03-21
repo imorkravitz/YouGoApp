@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.feed.FeedActivity;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModel;
 
 
 
@@ -67,7 +67,7 @@ public class RegisterFragment extends Fragment {
         String lastname = this.lastname.getText().toString();
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
-        UserModelFirebase.getInstance().signUpWithEmailAndPassword(getContext(),email, password, firstname, lastname,gender,age, new UserModelFirebase.SignUpCompleteListener() {
+        UserModel.getInstance().signUpWithEmailAndPassword(getContext(),email, password, firstname, lastname,gender,age, new UserModel.SignUpCompleteListener() {
             @Override
             public void onSignupSuccessful() {
                 //Toast.makeText(getContext(), "", Toast.LENGTH_LONG).show();

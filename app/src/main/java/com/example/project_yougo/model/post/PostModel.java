@@ -1,30 +1,26 @@
 package com.example.project_yougo.model.post;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.example.project_yougo.model.FirebaseQueryLiveData;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.firebase.FirebaseModel;
+import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
+import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.local.LocalDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import androidx.lifecycle.Observer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 
 public class PostModel {
@@ -33,16 +29,16 @@ public class PostModel {
         void onCreationFailed();
     }
 
-    public interface PostListUpdateListener {
-        void onPostListUpdated(List<Post> postList);
-    }
+//    public interface PostListUpdateListener {
+//        void onPostListUpdated(List<Post> postList);
+//    }
 
     public static class PostListDataSnapshotViewModel extends ViewModel {
         private final FirebaseQueryLiveData queryLiveData;
 
         public PostListDataSnapshotViewModel() {
             queryLiveData = new FirebaseQueryLiveData(
-                    UserModelFirebase.getInstance().getDatabaseReference().child("posts")
+                    FirebaseModel.getInstance().getDatabaseReference().child("posts")
             );
         }
 
@@ -142,7 +138,7 @@ public class PostModel {
 
     public void addPost(String freeText, String difficulty, String typeOfWorkout,
                         String publisherId, PostCreationListener creationListener) {
-        DatabaseReference databaseReference = UserModelFirebase.getInstance().getDatabaseReference();
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
 
         DatabaseReference timestampReference = databaseReference.child("timestamp");
         timestampReference.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -1,11 +1,17 @@
 package com.example.project_yougo.feed;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,26 +23,29 @@ import android.widget.Toast;
 
 import com.example.project_yougo.MyApplication;
 import com.example.project_yougo.R;
+import com.example.project_yougo.login.LoginActivity;
 import com.example.project_yougo.model.user.User;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModel;
 
 
 public class EditUserFragment extends Fragment {
+    private TextView firstName;
+    private TextView lastName;
+    private TextView email;
+    private TextView gender;
+    private TextView age;
+    private TextView password;
+    private TextView confirmPassword;
+    private ImageView profileImg;
+    private ImageButton profileBtn;
+    private Button save;
+    private Button deleteUser;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_GALLERY = 2;
+    private Bitmap imageBitmap;
+    private UserViewModel userViewModel;
+    private boolean active;
 
-    TextView firstName;
-    TextView lastName;
-    TextView email;
-    TextView gender;
-    TextView age;
-    TextView password;
-    TextView confirmPassword;
-    ImageView profileImg;
-    ImageButton profileBtn;
-    Button save;
-    Button deleteUser;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_IMAGE_GALLERY = 2;
-    Bitmap imageBitmap;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -51,31 +60,55 @@ public class EditUserFragment extends Fragment {
         profileImg=view.findViewById(R.id.editUser_img);
         save=view.findViewById(R.id.editUser_save_btn);
         deleteUser=view.findViewById(R.id.editUser_deleteUser_btn);
-        UserModelFirebase.getInstance().getUserById(UserModelFirebase.getInstance().getUid(), new UserModelFirebase.GetUserCompleteListener() {
+
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+        Observer<User> observer = new Observer<User>() {
             @Override
-            public void onComplete(User user) {
-                firstName.setText(user.getFirstName());
-                lastName.setText(user.getLastName());
-                email.setText(UserModelFirebase.getInstance().getUserEmail());
-                gender.setText(user.getGender());
-                age.setText(user.getAge());
+            public void onChanged(User user) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // might be null if user has not been downloaded from firebase db into local db
+                        if(user != null) {
+                            firstName.setText(user.getFirstName());
+                            lastName.setText(user.getLastName());
+                            email.setText(UserModel.getInstance().getUserEmail());
+                            gender.setText(user.getGender());
+                            age.setText(user.getAge());
+                            active = user.isActive();
+                        }
+                    }
+                });
             }
-        });
+        };
+
+        userViewModel.getUserLiveData(UserModel.getInstance().getUid(), getViewLifecycleOwner(), this)
+                .observe(getViewLifecycleOwner(), observer);
+
+
+//        UserModel.getInstance().getUserById(UserModel.getInstance().getUid(), new UserModel.GetUserCompleteListener() {
+//            @Override
+//            public void onComplete(User user) {
+//                firstName.setText(user.getFirstName());
+//                lastName.setText(user.getLastName());
+//                email.setText(UserModel.getInstance().getUserEmail());
+//                gender.setText(user.getGender());
+//                age.setText(user.getAge());
+//            }
+//        });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(updateUser()){
-                    getActivity().onBackPressed();
-                    //Navigation.findNavController(v).navigate(R.id.action_global_editUserFragment);
-                }
+                updateUser();
             }
         });
         deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteUser();
-                Toast.makeText(getContext(),"User deleted!",Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -83,10 +116,46 @@ public class EditUserFragment extends Fragment {
     }
 
     private void deleteUser() {
-        UserModelFirebase.getInstance().deleteUser();
+        String firstName=this.firstName.getText().toString();
+        String lastName=this.lastName.getText().toString();
+        String gender=this.gender.getText().toString();
+        String age=this.age.getText().toString();
+        String emailNew=this.email.getText().toString();
+        String password=this.password.getText().toString();
+
+        UserModel.getInstance().updateUser(UserModel.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age,
+                false, new UserModel.UpdateUserCompleteListener() {
+                    @Override
+                    public void onUpdateSuccessful() {
+                        Toast.makeText(getContext(),"User deleted!",Toast.LENGTH_LONG).show();
+                        UserModel.getInstance().logOut();
+                        startActivity(new Intent(getContext(), LoginActivity.class));
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onUpdateFailed() {
+                        Toast.makeText(getContext(),"User cannot be deleted at this time, please try again later",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+
+//
+//        UserModel.getInstance().deleteUser(new UserModel.UserDeletionCompleteListener() {
+//            @Override
+//            public void onDeletionSuccessful() {
+//                Toast.makeText(getContext(),"User deleted!",Toast.LENGTH_LONG).show();
+//            }
+//
+//            @Override
+//            public void onDeletionFailed() {
+//                Toast.makeText(getContext(),"User cannot be deleted at this time, please try again later",
+//                        Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
-    private boolean updateUser() {
+    private void updateUser() {
         String firstName=this.firstName.getText().toString();
         String lastName=this.lastName.getText().toString();
         String gender=this.gender.getText().toString();
@@ -106,18 +175,22 @@ public class EditUserFragment extends Fragment {
             }
         }
         if(emailFlag&&passwordFlag){
-            UserModelFirebase.getInstance().updateUserEmail(emailNew);
-            UserModelFirebase.getInstance().updateUserPassword(password);
-            UserModelFirebase.getInstance().updateUser(UserModelFirebase.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age, new UserModelFirebase.UpdateUserCompleteListener() {
-                @Override
-                public void onComplete(User user) {
-                    Toast.makeText(MyApplication.getContext(),"user updated!",Toast.LENGTH_LONG).show();
-                }
-            });
-            return true;
+            UserModel.getInstance().updateUser(UserModel.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age,
+                    active, new UserModel.UpdateUserCompleteListener() {
+                        @Override
+                        public void onUpdateSuccessful() {
+                            Toast.makeText(MyApplication.getContext(),"user updated!",Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onUpdateFailed() {
+                            Toast.makeText(getContext(),"User cannot be deleted at this time, please try again later",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
         }
-        return false;
     }
+
     private Boolean validateConfirmPassword(){
         String val1 = this.password.getText().toString();
         String val2 = this.confirmPassword.getText().toString();

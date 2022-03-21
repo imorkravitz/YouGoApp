@@ -1,4 +1,4 @@
-package com.example.project_yougo.model;
+package com.example.project_yougo.model.firebase;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

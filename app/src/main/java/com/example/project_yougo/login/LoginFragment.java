@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.example.project_yougo.R;
 
 import com.example.project_yougo.feed.FeedActivity;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModel;
 
 
 public class LoginFragment extends Fragment {
@@ -56,7 +56,7 @@ public class LoginFragment extends Fragment {
     private void loginApproved(View v) {
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
-        UserModelFirebase.getInstance().login(email, password, new UserModelFirebase.SignInCompleteListener() {
+        UserModel.getInstance().login(email, password, new UserModel.SignInCompleteListener() {
             @Override
             public void onSignInSuccessful() {
                 Toast.makeText(getContext(), "login", Toast.LENGTH_LONG).show();

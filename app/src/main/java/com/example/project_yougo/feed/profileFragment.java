@@ -9,8 +9,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,7 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
-import com.example.project_yougo.model.user.UserModelFirebase;
+import com.example.project_yougo.model.user.UserModel;
 
 import java.io.InputStream;
 
@@ -40,6 +44,7 @@ public class profileFragment extends Fragment {
     private static final int REQUEST_IMAGE_GALLERY = 2;
     private Bitmap imageBitmap;
     private Button edit;
+    private UserViewModel userViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -53,14 +58,37 @@ public class profileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profile_frag_user_img);
         profileBtn = view.findViewById(R.id.profile_frag_image_btn);
 
-        UserModelFirebase.getInstance().getUserById(UserModelFirebase.getInstance().getUid(), new UserModelFirebase.GetUserCompleteListener() {
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+        Observer<User> observer = new Observer<User>() {
             @Override
-            public void onComplete(User user) {
-                firstName.setText(user.getFirstName());
-                lastName.setText(user.getLastName());
-                email.setText(UserModelFirebase.getInstance().getUserEmail());
+            public void onChanged(User user) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // might be null if user has not been downloaded from firebase db into local db
+                        if(user != null) {
+                            firstName.setText(user.getFirstName());
+                            lastName.setText(user.getLastName());
+                            email.setText(UserModel.getInstance().getUserEmail());
+                        }
+                    }
+                });
             }
-        });
+        };
+
+        userViewModel.getUserLiveData(UserModel.getInstance().getUid(), getViewLifecycleOwner(), this)
+                .observe(getViewLifecycleOwner(), observer);
+
+//        UserModel.getInstance().getUserById(UserModel.getInstance().getUid(), new UserModel.GetUserCompleteListener() {
+//            @Override
+//            public void onComplete(User user) {
+//                firstName.setText(user.getFirstName());
+//                lastName.setText(user.getLastName());
+//                email.setText(UserModel.getInstance().getUserEmail());
+//            }
+//        });
+
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
