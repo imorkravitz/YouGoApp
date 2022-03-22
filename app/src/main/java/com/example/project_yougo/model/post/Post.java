@@ -33,6 +33,9 @@ public class Post {
     @ColumnInfo(name = "timestamp")
     private long timestamp; // server timestamp in milliseconds
 
+    @ColumnInfo(name = "postImgUrl")
+    private String postImgUrl;
+
     public Post() { }
 
     public Post(String id, String publisherId, String freeText,
@@ -43,6 +46,17 @@ public class Post {
         this.difficulty = difficulty;
         this.typeOfWorkout = typeOfWorkout;
         this.timestamp = timestamp;
+    }
+
+    public Post(String id, String publisherId, String freeText,
+                String difficulty, String typeOfWorkout, long timestamp, String url) {
+        this.id = id;
+        this.publisherId = publisherId;
+        this.freeText = freeText;
+        this.difficulty = difficulty;
+        this.typeOfWorkout = typeOfWorkout;
+        this.timestamp = timestamp;
+        this.postImgUrl = url;
     }
 
     public static String getCollectionName() {
@@ -96,6 +110,15 @@ public class Post {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+    public String getPostImgUrl() {
+        return postImgUrl;
+    }
+
+    public void setPostImgUrl(String postImgUrl) {
+        this.postImgUrl = postImgUrl;
+    }
+
 
     //
 //    public Map<String, Object> toJson() {

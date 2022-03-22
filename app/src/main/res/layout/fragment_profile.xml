@@ -18,8 +18,8 @@
 
     <ImageView
         android:id="@+id/profile_frag_user_img"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:src="@drawable/profile_avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,13 +93,5 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/editUser_save_btn"
         app:layout_constraintWidth_percent=".8" />
-
-    <ImageButton
-        android:id="@+id/profile_frag_image_btn"
-        android:layout_width="30dp"
-        android:layout_height="25dp"
-        android:src="@android:drawable/ic_menu_camera"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_fragment_layout_img"
-        app:layout_constraintEnd_toEndOf="@+id/profile_frag_user_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -151,8 +151,8 @@
 
         <ImageView
             android:id="@+id/editUser_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:contentDescription="createPost_frag_img"
             android:src="@drawable/profile_avatar"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -176,6 +176,14 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editUser_conPassword_et" />
+
+        <ImageButton
+            android:id="@+id/editUser_camera_btn"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
+            app:layout_constraintBottom_toTopOf="@+id/editUser_name_et"
+            app:layout_constraintEnd_toEndOf="@+id/editUser_img"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

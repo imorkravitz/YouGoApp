@@ -1,6 +1,8 @@
 package com.example.project_yougo.model.user;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -26,7 +28,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -255,6 +261,46 @@ public class UserModel {
         });
     }
 
+    public void updateUserWithUrl(String userId,String email,String password,String firstName,String lastName,
+                           String gender,String age, String url,boolean active, UpdateUserCompleteListener listener) {
+        User user = new User(userId, email, firstName, lastName, age, gender,url,active);
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
+        databaseReference.child("users").child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().updatePassword(password).addOnCompleteListener(
+                            new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()) {
+                                                    listener.onUpdateSuccessful();
+                                                }
+                                                else
+                                                {
+                                                    listener.onUpdateFailed();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        listener.onUpdateFailed();
+                                    }
+                                }
+                            }
+                    );
+                    listener.onUpdateSuccessful();
+                } else {
+                    listener.onUpdateFailed();
+                }
+            }
+        });
+    }
+
 
     public void login(String email, String password, SignInCompleteListener signInCompleteListener) {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
@@ -321,6 +367,35 @@ public class UserModel {
 
     public void logOut() {
         FirebaseModel.getInstance().getFirebaseAuthInstance().signOut();
+    }
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    public void saveImage1(Bitmap imageBitmap, String imageName, saveImageListener listener) {
+        // Create a storage reference from our app
+        StorageReference storageRef = storage.getReference();
+
+        // Create a reference to "mountains.jpg"
+        StorageReference imgUserRef = storageRef.child("/user_avatars/" + imageName);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imgUserRef.putBytes(data);
+        uploadTask.addOnFailureListener(exception -> {
+            listener.onComplete(null);
+        }).addOnSuccessListener(taskSnapshot -> {
+            imgUserRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Uri downloadUrl = uri;
+                listener.onComplete(downloadUrl.toString());
+            });
+        });
+    }
+
+    public interface saveImageListener{
+        void onComplete(String url);
+    }
+    public void saveImage(Bitmap imageBitmap, String imageName,saveImageListener listener) {
+        saveImage1(imageBitmap,imageName,listener);
     }
 
 }

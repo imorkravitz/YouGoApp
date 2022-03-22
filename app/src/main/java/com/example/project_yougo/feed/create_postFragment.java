@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -41,6 +42,8 @@ public class create_postFragment extends Fragment {
     private EditText freeTexEditText;
     private EditText difficultyEditText;
     private EditText typeOfWorkoutEditText;
+    private ImageView postImg;
+    Bitmap imageBitmap;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,6 +69,7 @@ public class create_postFragment extends Fragment {
         freeTexEditText = view.findViewById(R.id.create_post_frag_freeText_PL);
         difficultyEditText = view.findViewById(R.id.create_post_frag_difficulty);
         typeOfWorkoutEditText = view.findViewById(R.id.create_post_frag_TOW_PT);
+        postImg = view.findViewById(R.id.post_camera_img);
 
         return view;
 
@@ -82,28 +86,54 @@ public class create_postFragment extends Fragment {
         String difficulty = difficultyEditText.getText().toString();
         String typeOfWorkout = typeOfWorkoutEditText.getText().toString();
         String publisherId = FirebaseAuth.getInstance().getUid();
-
-        PostModel.getInstance().addPost(freeText, difficulty, typeOfWorkout,
-                publisherId, new PostModel.PostCreationListener() {
-                    @Override
-                    public void onCreationSuccess() {
-                        // TODO: navigate to different frag?
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        String nameOfImg = publisherId + freeText + difficulty + typeOfWorkout;
+        if(imageBitmap != null){
+            PostModel.getInstance().saveImage(imageBitmap,  nameOfImg + ".jpg", url->{
+                PostModel.getInstance().addPostWithImg(freeText, difficulty, typeOfWorkout,
+                        publisherId,url,new PostModel.PostCreationListener() {
                             @Override
-                            public void run() {
-                                Toast.makeText(getContext(), "Post Creation success",
-                                        Toast.LENGTH_LONG).show();
-                                Navigation.findNavController(getView()).
-                                        navigate(R.id.action_global_postListFragment2);
+                            public void onCreationSuccess() {
+                                // TODO: navigate to different frag?
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "Post Creation success",
+                                                Toast.LENGTH_LONG).show();
+                                        Navigation.findNavController(getView()).
+                                                navigate(R.id.action_global_postListFragment2);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCreationFailed() {
+
                             }
                         });
-                    }
+            });
+        }else {
+            PostModel.getInstance().addPost(freeText, difficulty, typeOfWorkout,
+                    publisherId, new PostModel.PostCreationListener() {
+                        @Override
+                        public void onCreationSuccess() {
+                            // TODO: navigate to different frag?
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), "Post Creation success",
+                                            Toast.LENGTH_LONG).show();
+                                    Navigation.findNavController(getView()).
+                                            navigate(R.id.action_global_postListFragment2);
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onCreationFailed() {
+                        @Override
+                        public void onCreationFailed() {
 
-                    }
-                });
+                        }
+                    });
+        }
     }
 
     @Override
@@ -111,9 +141,6 @@ public class create_postFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * TODO: Add the image to database
-     */
     public void showPopup(View v){
         PopupMenu popupMenu = new PopupMenu(getContext(), v);
         popupMenu.inflate(R.menu.popup_menu);
@@ -147,8 +174,7 @@ public class create_postFragment extends Fragment {
             if(resultCode == RESULT_OK){
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                // TODO : Insert the image to object
-                //profileImg.setImageBitmap(imageBitmap);
+                postImg.setImageBitmap(imageBitmap);
             }
         }else if(requestCode == REQUEST_IMAGE_GALLERY){
             if(resultCode == RESULT_OK){
@@ -156,8 +182,7 @@ public class create_postFragment extends Fragment {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                     final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    //TODO : Insert the image to object
-                    //image_view.setImageBitmap(selectedImage);
+                    postImg.setImageBitmap(selectedImage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
