@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,8 +30,12 @@ import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
+
+import com.google.firebase.Timestamp;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import androidx.lifecycle.Observer;
 
@@ -109,7 +114,10 @@ public class PostListFragment extends Fragment {
         ImageButton likeBtn;
         ImageButton commentBtn;
         ImageButton addCommentBtn;
+        TextView postDate;
+        TextView postTime;
         ImageView postImg;
+
 
 
 
@@ -123,6 +131,9 @@ public class PostListFragment extends Fragment {
             likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
             addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
+
+            postDate=itemView.findViewById(R.id.post_date);
+            postTime=itemView.findViewById(R.id.time_row);
             postImg = itemView.findViewById(R.id.post_img_row);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +194,9 @@ public class PostListFragment extends Fragment {
             Post post = postList.get(position);
 
             userViewModel = new ViewModelProvider(PostListFragment.this).get(UserViewModel.class);
+            SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
+            SimpleDateFormat timeFormat=new SimpleDateFormat("HH:mm");
+            Date date=new Date(post.getTimestamp());
 
             Observer<User> observer = new Observer<User>() {
                 @Override
@@ -192,7 +206,15 @@ public class PostListFragment extends Fragment {
                         public void run() {
                             // might be null if user has not been downloaded from firebase db into local db
                             if(user != null) {
+                                holder.userName.setText(user.fullname());
+                                holder.rowPostFreeTextTextView.setText(post.getFreeText());
+                                holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
+                                holder.rowPostDifficultyTextView.setText(post.getDifficulty());
+                                holder.postDate.setText(dateFormat.format(date));
+                                holder.postTime.setText(timeFormat.format(date));
+
                                 holder.bind(user,post);
+
                             }
                         }
                     });
