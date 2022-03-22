@@ -1,5 +1,7 @@
 package com.example.project_yougo.feed;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -79,7 +81,15 @@ public class EditPostFragment extends Fragment {
         deletePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deletePost();
+                new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
+                        .setTitle("Delete post")
+                        .setMessage("Are you sure you?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deletePost();
+                            }
+                        }).setNegativeButton("NO",null).show();
             }
         });
         return view;

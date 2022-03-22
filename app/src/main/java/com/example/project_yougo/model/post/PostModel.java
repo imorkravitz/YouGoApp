@@ -214,6 +214,7 @@ public class PostModel {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
         String currentUser=FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
         if(publisherId.equals(currentUser)){
+            databaseReference.child("comments").child(postId).removeValue();
             databaseReference.child("posts").child(postId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
