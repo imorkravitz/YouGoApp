@@ -92,7 +92,7 @@ public class CommentModel {
 
         viewModel.getSnapshotLiveData(postId).observe(lifecycleOwner, observer);
 
-        return LocalDatabase.getInstance().commentDao().getAll();
+        return LocalDatabase.getInstance().commentDao().getOfPost(postId);
     }
 //
 //    public void loadCommentList(Context appContext, String postId, CommentListLoadListener commentListLoadListener) {

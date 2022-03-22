@@ -3,7 +3,6 @@ package com.example.project_yougo.model.user;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
@@ -16,8 +15,6 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import com.example.project_yougo.model.firebase.FirebaseModel;
 import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
 import com.example.project_yougo.model.local.LocalDatabase;
-import com.example.project_yougo.model.post.Post;
-import com.example.project_yougo.model.post.PostModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,12 +31,15 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserModel {
     private FirebaseDatabase db;
     private DatabaseReference usersRef;
     private FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+    private Set<Integer> userListLivedataLifeCycleOwnerSet;
 
     public static class UserListDataSnapshotViewModel extends ViewModel {
         private final FirebaseQueryLiveData queryLiveData;
@@ -83,9 +83,11 @@ public class UserModel {
 
     private static UserModel instance;
 
+
     public UserModel() {
         db=FirebaseDatabase.getInstance();
         usersRef=db.getReference("users");
+        userListLivedataLifeCycleOwnerSet = new HashSet<>();
     }
 
     public static UserModel getInstance() {
@@ -137,31 +139,70 @@ public class UserModel {
 
     public LiveData<User> getUserLiveData(String uid, ViewModelStoreOwner viewModelStoreOwner,
                                                     LifecycleOwner lifecycleOwner) {
-        UserListDataSnapshotViewModel viewModel
-                = new ViewModelProvider(viewModelStoreOwner)
-                .get(UserListDataSnapshotViewModel.class);
-        Observer<DataSnapshot> observer = new Observer<DataSnapshot>() {
-            @Override
-            public void onChanged(DataSnapshot dataSnapshot) {
-                List<User> userList = new ArrayList<>();
 
-                for(DataSnapshot dsChild: dataSnapshot.getChildren()) {
-                    userList.add(dsChild.getValue(User.class));
-                }
+        if(!userListLivedataLifeCycleOwnerSet.contains(lifecycleOwner.hashCode())) {
+            userListLivedataLifeCycleOwnerSet.add(lifecycleOwner.hashCode());
 
-                // cannot access db on UI thread
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        LocalDatabase.getInstance().userDao().insertAll(userList.toArray(new User[0]));
+
+            UserListDataSnapshotViewModel viewModel
+                    = new ViewModelProvider(viewModelStoreOwner)
+                    .get(UserListDataSnapshotViewModel.class);
+            Observer<DataSnapshot> observer = new Observer<DataSnapshot>() {
+                @Override
+                public void onChanged(DataSnapshot dataSnapshot) {
+                    List<User> userList = new ArrayList<>();
+
+                    for(DataSnapshot dsChild: dataSnapshot.getChildren()) {
+                        userList.add(dsChild.getValue(User.class));
                     }
-                }).start();
-            }
-        };
 
-        viewModel.getSnapshotLiveData().observe(lifecycleOwner, observer);
+                    // cannot access db on UI thread
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LocalDatabase.getInstance().userDao().insertAll(userList.toArray(new User[0]));
+                        }
+                    }).start();
+                }
+            };
+
+            viewModel.getSnapshotLiveData().observe(lifecycleOwner, observer);
+        }
 
         return LocalDatabase.getInstance().userDao().getById(uid);
+    }
+
+    public LiveData<List<User>> getUserListLiveData(ViewModelStoreOwner viewModelStoreOwner,
+                                          LifecycleOwner lifecycleOwner) {
+        if(!userListLivedataLifeCycleOwnerSet.contains(lifecycleOwner.hashCode())) {
+            userListLivedataLifeCycleOwnerSet.add(lifecycleOwner.hashCode());
+
+            UserListDataSnapshotViewModel viewModel
+                    = new ViewModelProvider(viewModelStoreOwner)
+                    .get(UserListDataSnapshotViewModel.class);
+            Observer<DataSnapshot> observer = new Observer<DataSnapshot>() {
+                @Override
+                public void onChanged(DataSnapshot dataSnapshot) {
+                    List<User> userList = new ArrayList<>();
+
+                    for(DataSnapshot dsChild: dataSnapshot.getChildren()) {
+                        userList.add(dsChild.getValue(User.class));
+                    }
+
+                    // cannot access db on UI thread
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LocalDatabase.getInstance().userDao().insertAll(userList.toArray(new User[0]));
+                        }
+                    }).start();
+                }
+            };
+
+            viewModel.getSnapshotLiveData().observe(lifecycleOwner, observer);
+        }
+
+        return LocalDatabase.getInstance().userDao().getAll();
     }
 //
 //    public void getUserById(String userId,GetUserCompleteListener listener){

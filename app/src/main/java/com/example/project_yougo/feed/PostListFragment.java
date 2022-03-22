@@ -20,23 +20,25 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
-import com.example.project_yougo.model.user.UserModel;
-import com.example.project_yougo.model.post.Post;
+import com.example.project_yougo.model.comment.Post;
 import com.example.project_yougo.model.post.PostModel;
 
-import com.google.firebase.Timestamp;
+import com.example.project_yougo.model.user.UserModel;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import androidx.lifecycle.Observer;
 
 
@@ -118,9 +120,6 @@ public class PostListFragment extends Fragment {
         TextView postTime;
         ImageView postImg;
 
-
-
-
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             userName = itemView.findViewById(R.id.userName_list_row);
@@ -171,7 +170,6 @@ public class PostListFragment extends Fragment {
     private class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         private OnItemClickListener listener;
         private List<Post> postList;
-        private UserViewModel userViewModel;
 
         public MyAdapter(List<Post> postList) {
             this.postList = postList;
@@ -193,51 +191,41 @@ public class PostListFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Post post = postList.get(position);
 
-            userViewModel = new ViewModelProvider(PostListFragment.this).get(UserViewModel.class);
             SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
             SimpleDateFormat timeFormat=new SimpleDateFormat("HH:mm");
             Date date=new Date(post.getTimestamp());
 
+            UserModel.getInstance().getUserLiveData(post.getPublisherId(),PostListFragment.this, getViewLifecycleOwner()).observe(getViewLifecycleOwner(), new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    holder.postDate.setText(dateFormat.format(date));
+                    holder.postTime.setText(timeFormat.format(date));
+                    holder.bind(user,post);
+                }
+            });
+
+         //   UserViewModel userViewModel = new ViewModelProvider(holder).get(UserViewModel.class);
+
             Observer<User> observer = new Observer<User>() {
                 @Override
                 public void onChanged(User user) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // might be null if user has not been downloaded from firebase db into local db
-                            if(user != null) {
-                                holder.userName.setText(user.fullname());
-                                holder.rowPostFreeTextTextView.setText(post.getFreeText());
-                                holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
-                                holder.rowPostDifficultyTextView.setText(post.getDifficulty());
-                                holder.postDate.setText(dateFormat.format(date));
-                                holder.postTime.setText(timeFormat.format(date));
-
-                                holder.bind(user,post);
-
-                            }
-                        }
-                    });
-                }
-            };
-
-            userViewModel.getUserLiveData(post.getPublisherId(), getViewLifecycleOwner(), PostListFragment.this)
-                    .observe(getViewLifecycleOwner(), observer);
-
-//            UserModel.getInstance().getUserById(post.getPublisherId(), new UserModel.GetUserCompleteListener() {
-//                @Override
-//                public void onComplete(User user) {
-//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                        @Override
-//                        public void run() {
+                    holder.postDate.setText(dateFormat.format(date));
+                    holder.postTime.setText(timeFormat.format(date));
+                    holder.bind(user,post);
+                    // might be null if user has not been downloaded from firebase db into local db
 //                            holder.userName.setText(user.fullname());
 //                            holder.rowPostFreeTextTextView.setText(post.getFreeText());
 //                            holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
 //                            holder.rowPostDifficultyTextView.setText(post.getDifficulty());
-//                        }
-//                    });
-//                }
-//            });
+
+                }
+            };
+
+//
+//
+//            userViewModel.getUserLiveData(post.getPublisherId(), getViewLifecycleOwner(), PostListFragment.this)
+//                    .observe(getViewLifecycleOwner(), observer);
+
 
             holder.commentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -259,6 +247,8 @@ public class PostListFragment extends Fragment {
         public int getItemCount() {
             return postList.size();
         }
+
+
     }
 
     @Override
@@ -276,6 +266,10 @@ public class PostListFragment extends Fragment {
                         lifecycleOwner);
             return postListLiveData;
         }
+    }
+
+    private interface UserListAvailableListener {
+        void onUserListAvailable(List<User> userList);
     }
 
 }
