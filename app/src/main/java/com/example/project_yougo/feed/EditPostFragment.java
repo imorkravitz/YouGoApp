@@ -88,22 +88,31 @@ public class EditPostFragment extends Fragment {
         String freeText=FreeText.getText().toString();
         String two=TypeOfWorkout.getText().toString();
         String diff=Difficulty.getText().toString();
-        //
-        PostModel.getInstance().updatePost(post.getId(),post.getPublisherId(),freeText,two,diff,new PostModel.UpdatePostCompleteListener(){
 
+        PostModel.getInstance().updatePost(post.getId(),post.getPublisherId(),freeText,two,diff,new PostModel.UpdatePostCompleteListener(){
             @Override
             public void onUpdateSuccessful() {
                 Toast.makeText(getContext(),"post updated!",Toast.LENGTH_LONG).show();
             }
-
             @Override
             public void onUpdateFailed() {
-                Toast.makeText(getContext(),"cant update post",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"You are not allowed to edit this post",Toast.LENGTH_LONG).show();
             }
         });
     }
     private void deletePost() {
+        PostModel.getInstance().deletePost(post.getId(),post.getPublisherId(),new PostModel.DeletePostCompleteListener(){
 
+            @Override
+            public void onDeleteSuccessful() {
+                Toast.makeText(getContext(),"post deleted!",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onDeleteFailed() {
+                Toast.makeText(getContext(),"You are not allowed to delete this post",Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
