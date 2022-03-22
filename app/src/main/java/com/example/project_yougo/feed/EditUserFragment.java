@@ -1,5 +1,7 @@
 package com.example.project_yougo.feed;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -107,8 +109,15 @@ public class EditUserFragment extends Fragment {
         deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteUser();
-
+               new AlertDialog.Builder(getContext())
+                       .setTitle("Delete user")
+                       .setMessage("This is it?")
+                       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               deleteUser();
+                           }
+                       }).setNegativeButton("NO",null).show();
             }
         });
 
