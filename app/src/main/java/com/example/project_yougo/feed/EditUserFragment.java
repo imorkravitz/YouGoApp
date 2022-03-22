@@ -109,7 +109,7 @@ public class EditUserFragment extends Fragment {
         deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               new AlertDialog.Builder(getContext())
+               new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
                        .setTitle("Delete user")
                        .setMessage("This is it?")
                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
