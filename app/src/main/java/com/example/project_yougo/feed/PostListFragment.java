@@ -138,12 +138,13 @@ public class PostListFragment extends Fragment {
             rowPostFreeTextTextView.setText(post.getFreeText());
             rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
             rowPostDifficultyTextView.setText(post.getDifficulty());
-//            userImg.setImageResource(R..userImg);
+            userImg.setImageResource(R.drawable.avatar);
             if(user.getImageUrl() != null) {
                 Picasso.get()
                         .load(user.getImageUrl())
                         .into(userImg);
             }
+            postImg.setImageResource(R.drawable.demo_map);
             if(post.getPostImgUrl() != null) {
                 Picasso.get()
                         .load(post.getPostImgUrl())
