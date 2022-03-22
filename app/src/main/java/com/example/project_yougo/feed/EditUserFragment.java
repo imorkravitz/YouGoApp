@@ -89,9 +89,11 @@ public class EditUserFragment extends Fragment {
                             gender.setText(user.getGender());
                             age.setText(user.getAge());
                             active = user.isActive();
-                            Picasso.get()
-                                    .load(user.getImageUrl())
-                                    .into(profileImg);
+                            if(user.getImageUrl() != null) {
+                                Picasso.get()
+                                        .load(user.getImageUrl())
+                                        .into(profileImg);
+                            }
                         }
                     }
                 });

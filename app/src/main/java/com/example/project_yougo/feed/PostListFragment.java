@@ -124,6 +124,7 @@ public class PostListFragment extends Fragment {
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
             addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
             postImg = itemView.findViewById(R.id.post_img_row);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

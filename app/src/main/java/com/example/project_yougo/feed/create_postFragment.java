@@ -44,6 +44,7 @@ public class create_postFragment extends Fragment {
     private EditText typeOfWorkoutEditText;
     private ImageView postImg;
     Bitmap imageBitmap;
+    Bitmap selectedImage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,9 +89,12 @@ public class create_postFragment extends Fragment {
         String publisherId = FirebaseAuth.getInstance().getUid();
         String nameOfImg = publisherId + freeText + difficulty + typeOfWorkout;
         if(imageBitmap != null){
+            Toast.makeText(getContext(), "Post with Bitmap Creation success",
+                    Toast.LENGTH_LONG).show();
             PostModel.getInstance().saveImage(imageBitmap,  nameOfImg + ".jpg", url->{
+
                 PostModel.getInstance().addPostWithImg(freeText, difficulty, typeOfWorkout,
-                        publisherId,url,new PostModel.PostCreationListener() {
+                        publisherId, url, new PostModel.PostCreationListener() {
                             @Override
                             public void onCreationSuccess() {
                                 // TODO: navigate to different frag?
@@ -173,7 +177,7 @@ public class create_postFragment extends Fragment {
         if(requestCode == REQUEST_IMAGE_CAPTURE){
             if(resultCode == RESULT_OK){
                 Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                imageBitmap = (Bitmap) extras.get("data");
                 postImg.setImageBitmap(imageBitmap);
             }
         }else if(requestCode == REQUEST_IMAGE_GALLERY){
@@ -181,7 +185,8 @@ public class create_postFragment extends Fragment {
                 try {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
-                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    selectedImage = BitmapFactory.decodeStream(imageStream);
                     postImg.setImageBitmap(selectedImage);
                 } catch (Exception e) {
                     e.printStackTrace();

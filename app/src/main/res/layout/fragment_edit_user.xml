@@ -149,7 +149,15 @@
             app:layout_constraintWidth_percent=".5" />
 
 
-        <ImageView
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:id="@+id/userImg_list_row"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginLeft="4dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/avatar" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/editUser_img"
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -160,7 +168,8 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.194" />
+            app:layout_constraintVertical_bias="0.194"
+            android:scaleType="centerCrop" />
 
         <Button
             android:id="@+id/editUser_deleteUser_btn"

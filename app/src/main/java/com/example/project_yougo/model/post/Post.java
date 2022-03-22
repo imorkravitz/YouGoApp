@@ -112,7 +112,7 @@ public class Post {
     }
 
     public String getPostImgUrl() {
-        return postImgUrl;
+        return this.postImgUrl;
     }
 
     public void setPostImgUrl(String postImgUrl) {
