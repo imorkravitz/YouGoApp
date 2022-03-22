@@ -35,6 +35,9 @@ public class User {
     @ColumnInfo(name = "active")
     private boolean active;
 
+    @ColumnInfo(name = "imageUrl")
+    private String imageUrl;
+
     public String getGender() {
         return gender;
     }
@@ -59,6 +62,18 @@ public class User {
         this.age=age;
         this.gender=gender;
         this.active = active;
+    }
+
+    public User(String uid, String email, String firstName, String lastName,String age, String gender,
+                String imageUrl,boolean active) {
+        this.uid = uid;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age=age;
+        this.gender=gender;
+        this.active = active;
+        this.imageUrl = imageUrl;
     }
 
     // for firebase
@@ -116,4 +131,13 @@ public class User {
     public String fullname() {
         return firstName + " " + lastName;
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 }

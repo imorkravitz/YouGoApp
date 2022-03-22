@@ -29,6 +29,7 @@ import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import androidx.lifecycle.Observer;
@@ -108,6 +109,8 @@ public class PostListFragment extends Fragment {
         ImageButton likeBtn;
         ImageButton commentBtn;
         ImageButton addCommentBtn;
+        ImageView postImg;
+
 
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -120,6 +123,7 @@ public class PostListFragment extends Fragment {
             likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
             addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
+            postImg = itemView.findViewById(R.id.post_img_row);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,6 +131,23 @@ public class PostListFragment extends Fragment {
                     listener.onItemClick(v, pos);
                 }
             });
+        }
+        public void bind(User user,Post post){
+            userName.setText(user.fullname());
+            rowPostFreeTextTextView.setText(post.getFreeText());
+            rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
+            rowPostDifficultyTextView.setText(post.getDifficulty());
+//            userImg.setImageResource(R..userImg);
+            if(user.getImageUrl() != null) {
+                Picasso.get()
+                        .load(user.getImageUrl())
+                        .into(userImg);
+            }
+            if(post.getPostImgUrl() != null) {
+                Picasso.get()
+                        .load(post.getPostImgUrl())
+                        .into(postImg);
+            }
         }
     }
 
@@ -169,10 +190,7 @@ public class PostListFragment extends Fragment {
                         public void run() {
                             // might be null if user has not been downloaded from firebase db into local db
                             if(user != null) {
-                                holder.userName.setText(user.fullname());
-                                holder.rowPostFreeTextTextView.setText(post.getFreeText());
-                                holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
-                                holder.rowPostDifficultyTextView.setText(post.getDifficulty());
+                                holder.bind(user,post);
                             }
                         }
                     });
@@ -235,4 +253,5 @@ public class PostListFragment extends Fragment {
             return postListLiveData;
         }
     }
+
 }
