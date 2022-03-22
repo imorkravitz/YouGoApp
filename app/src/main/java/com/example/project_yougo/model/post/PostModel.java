@@ -24,6 +24,10 @@ import java.util.List;
 
 
 public class PostModel {
+
+
+
+
     public interface PostCreationListener {
         void onCreationSuccess();
         void onCreationFailed();
@@ -32,6 +36,10 @@ public class PostModel {
 //    public interface PostListUpdateListener {
 //        void onPostListUpdated(List<Post> postList);
 //    }
+    public interface UpdatePostCompleteListener {
+        void onUpdateSuccessful();
+        void onUpdateFailed();
+    }
 
     public static class PostListDataSnapshotViewModel extends ViewModel {
         private final FirebaseQueryLiveData queryLiveData;
@@ -155,6 +163,34 @@ public class PostModel {
                             creationListener.onCreationSuccess();
                         } else {
                             creationListener.onCreationFailed();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        timestampReference.setValue(ServerValue.TIMESTAMP);
+    }
+    public void updatePost(String postId,String publisherId ,String freeText, String two, String diff, UpdatePostCompleteListener updatePostCompleteListener) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
+        DatabaseReference timestampReference = databaseReference.child("timestamp");
+        timestampReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long timestamp = Long.parseLong(snapshot.getValue().toString());
+                Post post=new Post(postId,publisherId,freeText,two,diff,timestamp);
+                databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            updatePostCompleteListener.onUpdateSuccessful();
+                        }else{
+                            updatePostCompleteListener.onUpdateFailed();
                         }
                     }
                 });
