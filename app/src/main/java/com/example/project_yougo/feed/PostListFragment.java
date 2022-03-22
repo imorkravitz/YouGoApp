@@ -30,7 +30,9 @@ import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
+
 import com.google.firebase.Timestamp;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -114,6 +116,9 @@ public class PostListFragment extends Fragment {
         ImageButton addCommentBtn;
         TextView postDate;
         TextView postTime;
+        ImageView postImg;
+
+
 
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -126,8 +131,11 @@ public class PostListFragment extends Fragment {
             likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
             addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
+
             postDate=itemView.findViewById(R.id.post_date);
             postTime=itemView.findViewById(R.id.time_row);
+            postImg = itemView.findViewById(R.id.post_img_row);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -135,6 +143,24 @@ public class PostListFragment extends Fragment {
                     listener.onItemClick(v, pos);
                 }
             });
+        }
+        public void bind(User user,Post post){
+            userName.setText(user.fullname());
+            rowPostFreeTextTextView.setText(post.getFreeText());
+            rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
+            rowPostDifficultyTextView.setText(post.getDifficulty());
+            userImg.setImageResource(R.drawable.avatar);
+            if(user.getImageUrl() != null) {
+                Picasso.get()
+                        .load(user.getImageUrl())
+                        .into(userImg);
+            }
+            postImg.setImageResource(R.drawable.demo_map);
+            if(post.getPostImgUrl() != null) {
+                Picasso.get()
+                        .load(post.getPostImgUrl())
+                        .into(postImg);
+            }
         }
     }
 
@@ -186,6 +212,9 @@ public class PostListFragment extends Fragment {
                                 holder.rowPostDifficultyTextView.setText(post.getDifficulty());
                                 holder.postDate.setText(dateFormat.format(date));
                                 holder.postTime.setText(timeFormat.format(date));
+
+                                holder.bind(user,post);
+
                             }
                         }
                     });
@@ -248,4 +277,5 @@ public class PostListFragment extends Fragment {
             return postListLiveData;
         }
     }
+
 }

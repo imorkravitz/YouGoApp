@@ -2,10 +2,14 @@ package com.example.project_yougo.feed;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,12 +18,15 @@ import androidx.navigation.Navigation;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +35,9 @@ import com.example.project_yougo.R;
 import com.example.project_yougo.login.LoginActivity;
 import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.user.UserModel;
+import com.squareup.picasso.Picasso;
+
+import java.io.InputStream;
 
 
 public class EditUserFragment extends Fragment {
@@ -62,6 +72,7 @@ public class EditUserFragment extends Fragment {
         profileImg=view.findViewById(R.id.editUser_img);
         save=view.findViewById(R.id.editUser_save_btn);
         deleteUser=view.findViewById(R.id.editUser_deleteUser_btn);
+        profileBtn=view.findViewById(R.id.editUser_camera_btn);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
@@ -79,6 +90,11 @@ public class EditUserFragment extends Fragment {
                             gender.setText(user.getGender());
                             age.setText(user.getAge());
                             active = user.isActive();
+                            if(user.getImageUrl() != null) {
+                                Picasso.get()
+                                        .load(user.getImageUrl())
+                                        .into(profileImg);
+                            }
                         }
                     }
                 });
@@ -120,6 +136,13 @@ public class EditUserFragment extends Fragment {
                        }).setNegativeButton("NO",null).show();
             }
         });
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
+
 
         return view;
     }
@@ -171,6 +194,7 @@ public class EditUserFragment extends Fragment {
         String age=this.age.getText().toString();
         String emailNew=this.email.getText().toString();
         String password=this.password.getText().toString();
+
         boolean emailFlag=false;
         boolean passwordFlag=false;
         if(!email.equals(emailNew)){
@@ -183,20 +207,39 @@ public class EditUserFragment extends Fragment {
                 passwordFlag=true;
             }
         }
-        if(emailFlag&&passwordFlag){
+        if(emailFlag&&passwordFlag) {
+            if (imageBitmap != null) {
+                UserModel.getInstance().saveImage(imageBitmap, firstName + lastName + emailNew + ".jpg",url -> {
+                    UserModel.getInstance().updateUserWithUrl(UserModel.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age,
+                            url,active, new UserModel.UpdateUserCompleteListener() {
+                                @Override
+                                public void onUpdateSuccessful() {
+                                    Toast.makeText(MyApplication.getContext(), "user updated!", Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onUpdateFailed() {
+                                    Toast.makeText(getContext(), "User cannot be deleted at this time, please try again later",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                    });
+                });
+
+            }else{
             UserModel.getInstance().updateUser(UserModel.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age,
                     active, new UserModel.UpdateUserCompleteListener() {
                         @Override
                         public void onUpdateSuccessful() {
-                            Toast.makeText(MyApplication.getContext(),"user updated!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MyApplication.getContext(), "user updated!", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onUpdateFailed() {
-                            Toast.makeText(getContext(),"User cannot be deleted at this time, please try again later",
+                            Toast.makeText(getContext(), "User cannot be deleted at this time, please try again later",
                                     Toast.LENGTH_LONG).show();
                         }
                     });
+            }
         }
     }
 
@@ -234,4 +277,59 @@ public class EditUserFragment extends Fragment {
             return true;
         }
     }
+
+    public void showPopup(View v){
+        PopupMenu popupMenu = new PopupMenu(getContext(), v);
+        popupMenu.inflate(R.menu.popup_menu);
+        popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.camera_popup_menu:
+                        openCamera(v);
+                        break;
+                    case R.id.gallery_popup_menu:
+                        openGallery(v);
+                        Toast.makeText(getContext(), "Gallery", Toast.LENGTH_LONG).show();
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+    private void openCamera(View v){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE){
+            if(resultCode == RESULT_OK){
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+                profileImg.setImageBitmap(imageBitmap);
+            }
+        }else if(requestCode == REQUEST_IMAGE_GALLERY){
+            if(resultCode == RESULT_OK){
+                try {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                    imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    profileImg.setImageBitmap(imageBitmap);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void openGallery(View v){
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
+    }
+
 }

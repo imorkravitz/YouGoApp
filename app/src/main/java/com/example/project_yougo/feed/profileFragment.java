@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.user.UserModel;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 
@@ -39,10 +40,6 @@ public class profileFragment extends Fragment {
     private TextView lastName;
     private TextView email;
     private ImageView profileImg;
-    private ImageButton profileBtn;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int REQUEST_IMAGE_GALLERY = 2;
-    private Bitmap imageBitmap;
     private Button edit;
     private UserViewModel userViewModel;
 
@@ -56,7 +53,7 @@ public class profileFragment extends Fragment {
         lastName=view.findViewById(R.id.profile_frag_Last_name_tv);
         email=view.findViewById(R.id.profile_frag_e_mail_tv);
         profileImg = view.findViewById(R.id.profile_frag_user_img);
-        profileBtn = view.findViewById(R.id.profile_frag_image_btn);
+
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
@@ -71,6 +68,9 @@ public class profileFragment extends Fragment {
                             firstName.setText(user.getFirstName());
                             lastName.setText(user.getLastName());
                             email.setText(UserModel.getInstance().getUserEmail());
+                            Picasso.get()
+                                    .load(user.getImageUrl())
+                                    .into(profileImg);
                         }
                     }
                 });
@@ -89,12 +89,6 @@ public class profileFragment extends Fragment {
 //            }
 //        });
 
-        profileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopup(v);
-            }
-        });
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,63 +99,5 @@ public class profileFragment extends Fragment {
 
         return view;
     }
-    public void showPopup(View v){
-        PopupMenu popupMenu = new PopupMenu(getContext(), v);
-        popupMenu.inflate(R.menu.popup_menu);
-        popupMenu.show();
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.camera_popup_menu:
-                        openCamera(v);
-                        break;
-                    case R.id.gallery_popup_menu:
-                        openGallery(v);
-                        Toast.makeText(getContext(), "Gallery", Toast.LENGTH_LONG).show();
-                        break;
-                }
-                return false;
-            }
-        });
-    }
-
-    private void openCamera(View v){
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
-    }
-
-    /**
-     * TODO: Add the image to profile and to database
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_IMAGE_CAPTURE){
-            if(resultCode == RESULT_OK){
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                profileImg.setImageBitmap(imageBitmap);
-            }
-        }else if(requestCode == REQUEST_IMAGE_GALLERY){
-            if(resultCode == RESULT_OK){
-                try {
-                    final Uri imageUri = data.getData();
-                    final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
-                    imageBitmap = BitmapFactory.decodeStream(imageStream);
-                    profileImg.setImageBitmap(imageBitmap);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void openGallery(View v){
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
-    }
-
 
 }
