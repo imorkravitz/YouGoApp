@@ -111,12 +111,15 @@ public class PostListFragment extends Fragment {
                     public void onItemClick(View v, int position) {
                         //TODO fixe that
                         // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+                        String postId=postList.get(position).getId();
+                        Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToEditPostFragment(postId));
                     }
                 });
                 postRecyclerView.setAdapter(adapter);
            //     postRecyclerView.invalidate();
             }
         });
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
@@ -300,17 +303,17 @@ public class PostListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class PostListViewModel extends ViewModel {
-        private LiveData<List<Post>> postListLiveData;
-
-        public LiveData<List<Post>> getPostListLiveData(LifecycleOwner lifecycleOwner,
-                                                        ViewModelStoreOwner viewModelStoreOwner) {
-            if(postListLiveData == null)
-                postListLiveData = PostModel.getInstance().getPostListLiveData(viewModelStoreOwner,
-                        lifecycleOwner);
-            return postListLiveData;
-        }
-    }
+//    public static class PostListViewModel extends ViewModel {
+//        private LiveData<List<Post>> postListLiveData;
+//
+//        public LiveData<List<Post>> getPostListLiveData(LifecycleOwner lifecycleOwner,
+//                                                        ViewModelStoreOwner viewModelStoreOwner) {
+//            if(postListLiveData == null)
+//                postListLiveData = PostModel.getInstance().getPostListLiveData(viewModelStoreOwner,
+//                        lifecycleOwner);
+//            return postListLiveData;
+//        }
+//    }
 
     private interface UserListAvailableListener {
         void onUserListAvailable(List<User> userList);

@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.project_yougo.feed.EditPostFragment;
+import com.example.project_yougo.feed.PostListViewModel;
 import com.example.project_yougo.model.comment.CommentModel;
 import com.example.project_yougo.model.firebase.FirebaseModel;
 import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
@@ -33,6 +35,7 @@ import java.util.List;
 
 
 public class PostModel {
+    PostListViewModel postListViewModel;
     public interface PostCreationListener {
         void onCreationSuccess();
         void onCreationFailed();
@@ -41,6 +44,14 @@ public class PostModel {
     public interface PostDeletionListener {
         void onDeletionSuccess();
         void onDeletionFailed();
+    }
+    public interface UpdatePostCompleteListener {
+        void onUpdateSuccessful();
+        void onUpdateFailed();
+    }
+    public interface DeletePostCompleteListener{
+        void onDeleteSuccessful();
+        void onDeleteFailed();
     }
 
 //    public interface PostListUpdateListener {
@@ -120,7 +131,7 @@ public class PostModel {
         return LocalDatabase.getInstance().postDao().getAll();
     }
 
-    public void deletePostById(String postId, PostDeletionListener listener) {
+    public void deletePostById(String postId,String publisherId, PostDeletionListener listener) {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
 
         databaseReference.child("posts").child(postId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -131,6 +142,7 @@ public class PostModel {
                     CommentModel.getInstance().deleteCommentsByPostId(postId, new CommentModel.CommentDeletionListener() {
                         @Override
                         public void onDeletionSuccess() {
+
                             listener.onDeletionSuccess();
                         }
 
@@ -270,6 +282,84 @@ public class PostModel {
     }
     public void saveImage(Bitmap imageBitmap, String imageName, saveImageListener listener) {
         saveImagePost(imageBitmap,imageName,listener);
+    }
+    public void updatePost(String postId,String publisherId ,String freeText, String two, String diff, double longitude, double latitude, UpdatePostCompleteListener updatePostCompleteListener) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
+        DatabaseReference timestampReference = databaseReference.child("timestamp");
+        timestampReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long timestamp = Long.parseLong(snapshot.getValue().toString());
+                Post post=new Post(postId,publisherId,freeText,two,diff,longitude,latitude,timestamp);
+                String currentUser=FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
+                if(publisherId.equals(currentUser)){
+                    databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                updatePostCompleteListener.onUpdateSuccessful();
+                            }
+                        }
+                    });
+                }else{
+                    updatePostCompleteListener.onUpdateFailed();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        timestampReference.setValue(ServerValue.TIMESTAMP);
+    }
+
+    public void deletePost(String postId,String publisherId,Post post, DeletePostCompleteListener deletePostCompleteListener) {
+        List<Post> newPosts=new ArrayList<>();
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+        String currentUser=FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
+        if(publisherId.equals(currentUser)){
+            databaseReference.child("comments").child(postId).removeValue();
+            databaseReference.child("posts").child(postId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        deletePostCompleteListener.onDeleteSuccessful();
+                    }
+                }
+            });
+            databaseReference.child("posts").getDatabase().getReference().addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot ds: snapshot.getChildren()){
+                            LocalDatabase.getInstance().postDao().insertAll(ds.getValue(Post.class));
+                       }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+//            databaseReference.child("posts").addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    for(DataSnapshot ds: snapshot.getChildren()){
+//                        newPosts.add(ds.getValue(Post.class));
+//                    }
+//                }
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+
+        }else {
+            deletePostCompleteListener.onDeleteFailed();
+        }
+
     }
 
 //    PostModelFirebase PostModelFirebase = new PostModelFirebase();
