@@ -80,21 +80,6 @@ public class CommentListFragment extends Fragment {
                     .observe(getViewLifecycleOwner(), observer);
     }
 
-//    private void initCommentList() {
-//        CommentModel.getInstance().loadCommentList(getActivity().getApplicationContext(), postId, new CommentModel.CommentListLoadListener() {
-//            @Override
-//            public void onCommentListLoaded(List<Comment> commentList) {
-//                updateCommentRecyclerView(commentList);
-//            }
-//        });
-//        CommentModel.getInstance().listenForCommentListUpdates(getActivity().getApplicationContext(), postId, new CommentModel.CommentListUpdateListener()  {
-//            @Override
-//            public void onCommentListUpdated(List<Comment> commentList){
-//                updateCommentRecyclerView(commentList);
-//            }
-//        });
-//    }
-
     private void updateCommentRecyclerView(List<Comment> commentList) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -180,19 +165,6 @@ public class CommentListFragment extends Fragment {
 
             userViewModel.getUserLiveData(comment.getPublisherId(), getViewLifecycleOwner(), CommentListFragment.this)
                     .observe(getViewLifecycleOwner(), observer);
-//
-//            UserModel.getInstance().getUserById(comment.getPublisherId(), new UserModel.GetUserCompleteListener() {
-//                @Override
-//                public void onComplete(User user) {
-//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            holder.userName.setText(user.fullname());
-//                            holder.content.setText(comment.getContent());
-//                        }
-//                    });
-//                }
-//            });
         }
 
         @Override

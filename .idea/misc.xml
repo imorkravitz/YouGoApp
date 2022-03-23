@@ -38,18 +38,24 @@
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/drawable-v24/edit_text_bg.xml" value="0.3625" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/drawable/edittext_button_style_rounded.xml" value="0.4197916666666667" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/activity_feed.xml" value="0.1" />
+        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/commentlist_row.xml" value="0.1" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/content_intro.xml" value="0.24003623188405798" />
+        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/delete_pop_up.xml" value="0.22327898550724637" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/find_friends_row.xml" value="0.24003623188405798" />
+        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_about.xml" value="0.14814814814814814" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_add_comment.xml" value="0.24003623188405798" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_comment_list.xml" value="0.24003623188405798" />
-        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_create_post.xml" value="0.10833333333333334" />
+        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_create_post.xml" value="0.25" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_edit_user.xml" value="0.24003623188405798" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_first.xml" value="0.24003623188405798" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_friend_list.xml" value="0.19444444444444445" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_home.xml" value="0.24003623188405798" />
+        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_login.xml" value="0.22327898550724637" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_post_list.xml" value="0.18161094224924013" />
-        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/postlist_row.xml" value="0.12" />
+        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/fragment_profile.xml" value="0.17603850050658562" />
+        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/map_fragment_dialog.xml" value="0.22327898550724637" />
+        <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/layout/postlist_row.xml" value="0.41450777202072536" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/menu/feed_menu.xml" value="0.33" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/menu/main_menu.xml" value="0.4036458333333333" />
         <entry key="../../../../dev/AppProjects/android/YouGoApp/app/src/main/res/menu/popup_menu.xml" value="0.4036458333333333" />
@@ -72,7 +78,6 @@
         <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp19.3/app/src/main/res/layout/fragment_add_comment.xml" value="0.409375" />
         <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp19.3/app/src/main/res/layout/postlist_row.xml" value="0.409375" />
         <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp9.3.22/app/src/main/res/layout/fragment_create_post.xml" value="0.4" />
-        <entry key="..\:/Users/me/AndroidStudioProjects/YouGoApp_voiko2_from_git/app/src/main/res/menu/feed_menu.xml" value="0.4025641025641026" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10207700101317123" />
         <entry key="app/src/main/res/layout/delete_pop_up.xml" value="0.22" />
         <entry key="app/src/main/res/layout/edit_post_fragemnt.xml" value="0.2776268115942029" />

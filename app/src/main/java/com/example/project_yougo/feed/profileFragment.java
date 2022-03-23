@@ -33,14 +33,12 @@ import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 
-
-
 public class profileFragment extends Fragment {
     private TextView firstName;
     private TextView lastName;
     private TextView email;
     private ImageView profileImg;
-    private Button edit;
+    private Button edit, backBtn;
     private UserViewModel userViewModel;
 
     @Override
@@ -53,8 +51,7 @@ public class profileFragment extends Fragment {
         lastName=view.findViewById(R.id.profile_frag_Last_name_tv);
         email=view.findViewById(R.id.profile_frag_e_mail_tv);
         profileImg = view.findViewById(R.id.profile_frag_user_img);
-
-
+        backBtn = view.findViewById(R.id.profile_back_btn);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         Observer<User> observer = new Observer<User>() {
@@ -80,15 +77,13 @@ public class profileFragment extends Fragment {
         userViewModel.getUserLiveData(UserModel.getInstance().getUid(), getViewLifecycleOwner(), this)
                 .observe(getViewLifecycleOwner(), observer);
 
-//        UserModel.getInstance().getUserById(UserModel.getInstance().getUid(), new UserModel.GetUserCompleteListener() {
-//            @Override
-//            public void onComplete(User user) {
-//                firstName.setText(user.getFirstName());
-//                lastName.setText(user.getLastName());
-//                email.setText(UserModel.getInstance().getUserEmail());
-//            }
-//        });
 
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,5 +94,4 @@ public class profileFragment extends Fragment {
 
         return view;
     }
-
 }

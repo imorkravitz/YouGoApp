@@ -18,10 +18,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-//        long timestampmillis = 143434344;
-//        Date date = new Date(timestampmillis);
-//        String dateString = new SimpleDateFormat("dd-MM-yyyy HH::mm::ss").format(date);
-
         CharSequence text = "loading app..";
         int duration = Toast.LENGTH_SHORT;
 
@@ -44,7 +40,6 @@ public class SplashActivity extends AppCompatActivity {
         }, 3000);
 
     }
-
 
     private void toLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);

@@ -144,7 +144,6 @@ public class PostListFragment extends Fragment {
             rowPostDifficultyTextView = itemView.findViewById(R.id.rowPostDifficultyTextView);
             rowPostTypeOfWorkoutTextView = itemView.findViewById(R.id.rowPostTypeOfWorkoutTextView);
             userImg = itemView.findViewById(R.id.userImg_list_row);
-            likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
             addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
 
