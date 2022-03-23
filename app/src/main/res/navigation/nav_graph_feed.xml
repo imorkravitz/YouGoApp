@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/create_postFragment"
         android:name="com.example.project_yougo.feed.create_postFragment"
-        android:label="create_postFragment" />
+        android:label="Create Post" />
     <action
         android:id="@+id/action_global_profileFragment"
         app:destination="@id/profileFragment1"
@@ -67,6 +67,9 @@
         <action
             android:id="@+id/action_postListFragment_to_addCommentFragment"
             app:destination="@id/addCommentFragment" />
+        <action
+            android:id="@+id/action_postListFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_postListFragment2"
@@ -79,10 +82,19 @@
     <fragment
         android:id="@+id/addCommentFragment"
         android:name="com.example.project_yougo.feed.AddCommentFragment"
-        android:label="fragment_add_comment"
+        android:label="Add Command"
         tools:layout="@layout/fragment_add_comment">
         <argument
             android:name="postIdArg"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.example.project_yougo.feed.EditPostFragment"
+        android:label="Edit Post"
+        tools:layout="@layout/fragment_edit_post">
+        <argument
+            android:name="postId"
             app:argType="string" />
     </fragment>
 </navigation>

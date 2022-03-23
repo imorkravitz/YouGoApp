@@ -10,7 +10,7 @@ import com.example.project_yougo.model.user.User;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Post.class, Comment.class, User.class}, version=3)
+@Database(entities = {Post.class, Comment.class, User.class}, version=2)
 public abstract class LocalDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "LOCAL_DATABASE";
     private static LocalDatabase instance;

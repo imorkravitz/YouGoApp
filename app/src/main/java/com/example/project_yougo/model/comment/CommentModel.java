@@ -7,10 +7,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
-
 import com.example.project_yougo.model.firebase.FirebaseModel;
 import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
-import com.example.project_yougo.model.local.CommentDao;
 import com.example.project_yougo.model.local.LocalDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,14 +31,6 @@ public class CommentModel {
         void onDeletionSuccess();
         void onDeletionFailed();
     }
-
-//    public interface CommentListUpdateListener {
-//        void onCommentListUpdated(List<Comment> commentList);
-//    }
-//
-//    public interface CommentListLoadListener {
-//        void onCommentListLoaded(List<Comment> commentList);
-//    }
 
     public static class CommentListDataSnapshotViewModel extends ViewModel {
         private FirebaseQueryLiveData queryLiveData;
@@ -129,46 +119,6 @@ public class CommentModel {
             }
         });
     }
-//
-//    public void loadCommentList(Context appContext, String postId, CommentListLoadListener commentListLoadListener) {
-//        // cannot access db on UI thread
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                List<Comment> commentList = LocalDatabase.getInstance().commentDao().getOfPost(postId);
-//                commentListLoadListener.onCommentListLoaded(commentList);
-//            }
-//        }).start();
-//    }
-//
-//    public void listenForCommentListUpdates(Context appContext, String postId,
-//                                         CommentListUpdateListener commentListUpdateListener) {
-//        DatabaseReference databaseReference = UserModelFirebase.getInstance().getDatabaseReference();;
-//
-//        databaseReference.child("comments").child(postId).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                List<Comment> commentList = new ArrayList<>();
-//
-//                for(DataSnapshot dsChild : snapshot.getChildren()) {
-//                    commentList.add(dsChild.getValue(Comment.class));
-//                }
-//
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        LocalDatabase.getInstance().commentDao().insertAll(commentList.toArray(new Comment[0]));
-//                    }
-//                }).start();
-//                commentListUpdateListener.onCommentListUpdated(commentList);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
 
     public void addComment(String publisherId, String postId, String content, CommentCreationListener creationListener) {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();

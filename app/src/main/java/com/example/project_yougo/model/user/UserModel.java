@@ -72,10 +72,6 @@ public class UserModel {
         void onDeletionFailed();
     }
 
-//    public interface GetUserCompleteListener {
-//        void onComplete(User user);
-//    }
-
     public interface UpdateUserCompleteListener {
         void onUpdateSuccessful();
         void onUpdateFailed();
@@ -204,63 +200,6 @@ public class UserModel {
 
         return LocalDatabase.getInstance().userDao().getAll();
     }
-//
-//    public void getUserById(String userId,GetUserCompleteListener listener){
-//        usersRef.child(userId).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if(snapshot.exists()){
-//                    User user=snapshot.getValue(User.class);
-//                    listener.onComplete(user);
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) { }
-//        });
-//    }
-
-//    public void deleteUser(UserDeletionCompleteListener deletionCompleteListener) {
-//        String uid = FirebaseModel.getInstance().getFirebaseAuthInstance().getUid();
-//        FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if(task.isSuccessful()) {
-//                    FirebaseModel.getInstance().getDatabaseReference().child("users")
-//                            .child(uid).removeValue();
-//                    deletionCompleteListener.onDeletionSuccessful();
-//                } else {
-//                    deletionCompleteListener.onDeletionFailed();
-//                }
-//            }
-//        });
-//    }
-//    public void updateUserPassword(String password, UpdateUserCompleteListener completeListener){
-//        FirebaseUser userAuth = FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser();
-//        userAuth.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if(task.isSuccessful()){
-//                    completeListener.onUpdateSuccessful();
-//                } else {
-//                    completeListener.onUpdateFailed();
-//                }
-//            }
-//        });
-//    }
-//
-//    public void updateUserEmail(String email, UpdateUserCompleteListener completeListener){
-//        FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
-//        userAuth.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if(task.isSuccessful()){
-//                    completeListener.onUpdateSuccessful();
-//                } else {
-//                    completeListener.onUpdateFailed();
-//                }
-//            }
-//        });
-//    }
 
     public void updateUser(String userId,String email,String password,String firstName,String lastName,
                            String gender,String age, boolean active, UpdateUserCompleteListener listener) {
@@ -391,21 +330,6 @@ public class UserModel {
         });
     }
 
-
-//    public User getUserById(GetUserById listener){
-//        String userId=firebaseAuth.getCurrentUser().getUid();
-//        userModelFirebase.getUserById(userId,listener);
-//        return null;
-//    }
-//    public interface UpdateUser{
-//        void onComplete();
-//    }
-//    public void updateUser(String email,String password,String firstName,String lastName,
-//                           String gender,String age,UpdateUser listener){
-//        String userId=firebaseAuth.getCurrentUser().getUid();
-//        userModelFirebase.updateUser(userId,email,password,firstName,lastName,gender,age,listener);
-//
-//    }
     public boolean isLoggedIn() {
         return FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser() != null;
     }

@@ -70,8 +70,6 @@ public class RegisterFragment extends Fragment {
         UserModel.getInstance().signUpWithEmailAndPassword(getContext(),email, password, firstname, lastname,gender,age, new UserModel.SignUpCompleteListener() {
             @Override
             public void onSignupSuccessful() {
-                //Toast.makeText(getContext(), "", Toast.LENGTH_LONG).show();
-                //Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_postListFragment);
                 toFeedActivity();
             }
 

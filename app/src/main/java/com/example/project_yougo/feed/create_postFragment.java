@@ -9,14 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -30,8 +28,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.post.PostModel;
 import com.example.project_yougo.model.user.User;
@@ -45,7 +43,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
-
 import java.io.InputStream;
 
 
@@ -100,9 +97,7 @@ public class create_postFragment extends Fragment {
         typeOfWorkoutEditText = view.findViewById(R.id.create_post_frag_TOW_PT);
         postImg = view.findViewById(R.id.post_camera_img);
         userImg = view.findViewById(R.id.editUser_img);
-
         return view;
-
     }
 
     private void onSelectMapLocationButtonClicked() {
@@ -111,21 +106,19 @@ public class create_postFragment extends Fragment {
     }
 
     public void onCreatePostButtonClicked() {
-        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             // not signed in
             return;
         }
-        // TODO: add validation
-        // TODO: + add GPS fields in Post + PostModel
         String freeText = freeTexEditText.getText().toString();
         String difficulty = difficultyEditText.getText().toString();
         String typeOfWorkout = typeOfWorkoutEditText.getText().toString();
         String publisherId = FirebaseAuth.getInstance().getUid();
         String nameOfImg = publisherId + freeText + difficulty + typeOfWorkout;
-        if(imageBitmap != null){
+        if (imageBitmap != null) {
             Toast.makeText(getContext(), "Post with Bitmap Creation success",
                     Toast.LENGTH_LONG).show();
-            PostModel.getInstance().saveImage(imageBitmap,  nameOfImg + ".jpg", url->{
+            PostModel.getInstance().saveImage(imageBitmap, nameOfImg + ".jpg", url -> {
 
                 PostModel.getInstance().addPostWithImg(freeText, difficulty, typeOfWorkout,
                         publisherId, url, selectedLongitude, selectedLatitude, new PostModel.PostCreationListener() {
@@ -149,7 +142,7 @@ public class create_postFragment extends Fragment {
                             }
                         });
             });
-        }else {
+        } else {
             PostModel.getInstance().addPost(freeText, difficulty, typeOfWorkout,
                     publisherId, selectedLongitude, selectedLatitude, new PostModel.PostCreationListener() {
                         @Override
@@ -179,7 +172,7 @@ public class create_postFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showPopup(View v){
+    public void showPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(getContext(), v);
         popupMenu.inflate(R.menu.popup_menu);
         popupMenu.show();
@@ -192,7 +185,7 @@ public class create_postFragment extends Fragment {
                         break;
                     case R.id.gallery_popup_menu:
                         openGallery(v);
-                        Toast.makeText(getContext(), "gallery oved", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Camera Gallery", Toast.LENGTH_LONG).show();
                         break;
                 }
                 return false;
@@ -200,28 +193,28 @@ public class create_postFragment extends Fragment {
         });
     }
 
-    private void openCamera(View v){
+    private void openCamera(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_IMAGE_CAPTURE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
                 postImg.setImageBitmap(imageBitmap);
             }
-        }else if(requestCode == REQUEST_IMAGE_GALLERY){
-            if(resultCode == RESULT_OK){
+        } else if (requestCode == REQUEST_IMAGE_GALLERY) {
+            if (resultCode == RESULT_OK) {
                 try {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                     //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    selectedImage = BitmapFactory.decodeStream(imageStream);
-                    postImg.setImageBitmap(selectedImage);
+                    imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    postImg.setImageBitmap(imageBitmap);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -230,7 +223,7 @@ public class create_postFragment extends Fragment {
         }
     }
 
-    private void openGallery(View v){
+    private void openGallery(View v) {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
@@ -254,7 +247,7 @@ public class create_postFragment extends Fragment {
             setContentView(R.layout.map_fragment_dialog);
 
             supportMapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().
-                            findFragmentById(R.id.mapFragment);
+                    findFragmentById(R.id.mapFragment);
             supportMapFragment.getMapAsync(this);
 
             button = findViewById(R.id.mapFragmentDialogDoneButton);
@@ -270,8 +263,6 @@ public class create_postFragment extends Fragment {
 
         @Override
         public void onMapClick(@NonNull LatLng latLng) {
-//            Toast.makeText(getContext(), "onclick " + latLng.latitude + " : " + latLng.longitude,
-//                    Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -279,7 +270,7 @@ public class create_postFragment extends Fragment {
             selectedLongitude = latLng.longitude;
             selectedLatitude = latLng.latitude;
 
-            if(lastMarker != null) {
+            if (lastMarker != null) {
                 lastMarker.remove();
             }
 
@@ -287,9 +278,6 @@ public class create_postFragment extends Fragment {
             MarkerOptions markerOptions =
                     new MarkerOptions().position(latLng).title(latLng.toString());
             lastMarker = this.googleMap.addMarker(markerOptions);
-
-//            Toast.makeText(getContext(), "long click " + latLng.latitude + " : " + latLng.longitude,
-//                    Toast.LENGTH_LONG).show();
         }
 
         @Override
