@@ -91,8 +91,8 @@
     <fragment
         android:id="@+id/editPostFragment"
         android:name="com.example.project_yougo.feed.EditPostFragment"
-        android:label="fragment_edit_post"
-        tools:layout="@layout/fragment_edit_post" >
+        android:label="Edit Post"
+        tools:layout="@layout/fragment_edit_post">
         <argument
             android:name="postId"
             app:argType="string" />

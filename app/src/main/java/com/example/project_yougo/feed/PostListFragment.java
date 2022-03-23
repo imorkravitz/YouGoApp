@@ -160,7 +160,7 @@ public class PostListFragment extends Fragment {
                         .load(user.getImageUrl())
                         .into(userImg);
             }
-            postImg.setImageResource(R.drawable.empty_photo);
+            postImg.setImageResource(R.drawable.main_logo);
             if(post.getPostImgUrl() != null) {
                 Picasso.get()
                         .load(post.getPostImgUrl())

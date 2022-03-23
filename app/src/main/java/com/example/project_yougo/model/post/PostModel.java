@@ -36,27 +36,30 @@ import java.util.List;
 
 public class PostModel {
     PostListViewModel postListViewModel;
+
     public interface PostCreationListener {
         void onCreationSuccess();
+
         void onCreationFailed();
     }
 
     public interface PostDeletionListener {
         void onDeletionSuccess();
+
         void onDeletionFailed();
     }
+
     public interface UpdatePostCompleteListener {
         void onUpdateSuccessful();
+
         void onUpdateFailed();
     }
-    public interface DeletePostCompleteListener{
+
+    public interface DeletePostCompleteListener {
         void onDeleteSuccessful();
+
         void onDeleteFailed();
     }
-
-//    public interface PostListUpdateListener {
-//        void onPostListUpdated(List<Post> postList);
-//    }
 
     public static class PostListDataSnapshotViewModel extends ViewModel {
         private final FirebaseQueryLiveData queryLiveData;
@@ -72,9 +75,6 @@ public class PostModel {
         }
     }
 
-//    public interface PostListLoadListener {
-//        void onPostListLoaded(List<Post> postList);
-//    }
 
     public static PostModel instance;
 
@@ -83,36 +83,24 @@ public class PostModel {
     }
 
     public static PostModel getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new PostModel();
         }
 
         return instance;
     }
 
-//    public void loadPostList(Context appContext, PostListLoadListener postListLoadListener) {
-//        // cannot access db on UI thread
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                List<Post> postList = LocalDatabase.getInstance(appContext).postDao().getAll();
-//                postListLoadListener.onPostListLoaded(postList);
-//            }
-//        }).start();
-//    }
-
-
     public LiveData<List<Post>> getPostListLiveData(ViewModelStoreOwner viewModelStoreOwner,
                                                     LifecycleOwner lifecycleOwner) {
         PostListDataSnapshotViewModel viewModel
                 = new ViewModelProvider(viewModelStoreOwner)
-                    .get(PostListDataSnapshotViewModel.class);
+                .get(PostListDataSnapshotViewModel.class);
         Observer<DataSnapshot> observer = new Observer<DataSnapshot>() {
             @Override
             public void onChanged(DataSnapshot dataSnapshot) {
                 List<Post> postList = new ArrayList<>();
 
-                for(DataSnapshot dsChild: dataSnapshot.getChildren()) {
+                for (DataSnapshot dsChild : dataSnapshot.getChildren()) {
                     postList.add(dsChild.getValue(Post.class));
                 }
 
@@ -131,13 +119,13 @@ public class PostModel {
         return LocalDatabase.getInstance().postDao().getAll();
     }
 
-    public void deletePostById(String postId,String publisherId, PostDeletionListener listener) {
+    public void deletePostById(String postId, String publisherId, PostDeletionListener listener) {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
 
         databaseReference.child("posts").child(postId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     LocalDatabase.getInstance().postDao().deleteById(postId);
                     CommentModel.getInstance().deleteCommentsByPostId(postId, new CommentModel.CommentDeletionListener() {
                         @Override
@@ -152,41 +140,13 @@ public class PostModel {
                         }
                     });
                 } else {
-                    listener.onDeletionFailed();;
+                    listener.onDeletionFailed();
+                    ;
                 }
             }
         });
     }
-//
-//
-//    public void listenForPostListUpdates(Context appContext,
-//                                         PostListUpdateListener postListUpdateListener) {
-//        DatabaseReference databaseReference = UserModelFirebase.getInstance().getDatabaseReference();;
-//
-//        databaseReference.child("posts").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                List<Post> postList = new ArrayList<>();
-//
-//                for(DataSnapshot dsChild : snapshot.getChildren()) {
-//                    postList.add(dsChild.getValue(Post.class));
-//                }
-//
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        LocalDatabase.getInstance(appContext).postDao().insertAll(postList.toArray(new Post[0]));
-//                    }
-//                }).start();
-//                postListUpdateListener.onPostListUpdated(postList);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
+
 
     public void addPost(String freeText, String difficulty, String typeOfWorkout,
                         String publisherId, double longitude, double latitude, PostCreationListener creationListener) {
@@ -203,7 +163,7 @@ public class PostModel {
                 databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             creationListener.onCreationSuccess();
                         } else {
                             creationListener.onCreationFailed();
@@ -221,7 +181,7 @@ public class PostModel {
     }
 
     public void addPostWithImg(String freeText, String difficulty, String typeOfWorkout,
-                               String publisherId,String url, double longitude, double latitude, PostCreationListener creationListener) {
+                               String publisherId, String url, double longitude, double latitude, PostCreationListener creationListener) {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
 
         DatabaseReference timestampReference = databaseReference.child("timestamp");
@@ -231,11 +191,11 @@ public class PostModel {
                 // timestamp set
                 long timestamp = Long.parseLong(snapshot.getValue().toString());
                 String postId = databaseReference.child("posts").push().getKey();
-                Post post = new Post(postId, publisherId, freeText, difficulty, typeOfWorkout, timestamp,longitude, latitude, url);
+                Post post = new Post(postId, publisherId, freeText, difficulty, typeOfWorkout, timestamp, longitude, latitude, url);
                 databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             creationListener.onCreationSuccess();
                         } else {
                             creationListener.onCreationFailed();
@@ -256,6 +216,7 @@ public class PostModel {
      * Storage implementation
      */
     FirebaseStorage storage = FirebaseStorage.getInstance();
+
     public void saveImagePost(Bitmap imageBitmap, String imageName, saveImageListener listener) {
         // Create a storage reference from our app
         StorageReference storageRef = storage.getReference();
@@ -277,13 +238,15 @@ public class PostModel {
         });
     }
 
-    public interface saveImageListener{
+    public interface saveImageListener {
         void onComplete(String url);
     }
+
     public void saveImage(Bitmap imageBitmap, String imageName, saveImageListener listener) {
-        saveImagePost(imageBitmap,imageName,listener);
+        saveImagePost(imageBitmap, imageName, listener);
     }
-    public void updatePost(String postId,String publisherId ,String freeText, String two, String diff, double longitude, double latitude, UpdatePostCompleteListener updatePostCompleteListener) {
+
+    public void updatePost(String postId, String publisherId, String freeText, String two, String diff, double longitude, double latitude, UpdatePostCompleteListener updatePostCompleteListener) {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
 
         DatabaseReference timestampReference = databaseReference.child("timestamp");
@@ -291,18 +254,18 @@ public class PostModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long timestamp = Long.parseLong(snapshot.getValue().toString());
-                Post post=new Post(postId,publisherId,freeText,two,diff,longitude,latitude,timestamp);
-                String currentUser=FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
-                if(publisherId.equals(currentUser)){
+                Post post = new Post(postId, publisherId, freeText, two, diff, longitude, latitude, timestamp);
+                String currentUser = FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
+                if (publisherId.equals(currentUser)) {
                     databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 updatePostCompleteListener.onUpdateSuccessful();
                             }
                         }
                     });
-                }else{
+                } else {
                     updatePostCompleteListener.onUpdateFailed();
                 }
             }
@@ -315,77 +278,22 @@ public class PostModel {
         timestampReference.setValue(ServerValue.TIMESTAMP);
     }
 
-    public void deletePost(String postId,String publisherId,Post post, DeletePostCompleteListener deletePostCompleteListener) {
-        List<Post> newPosts=new ArrayList<>();
+    public void deletePost(String postId, String publisherId, Post post, DeletePostCompleteListener deletePostCompleteListener) {
+        List<Post> newPosts = new ArrayList<>();
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
-        String currentUser=FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
-        if(publisherId.equals(currentUser)){
+        String currentUser = FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
+        if (publisherId.equals(currentUser)) {
             databaseReference.child("comments").child(postId).removeValue();
             databaseReference.child("posts").child(postId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         deletePostCompleteListener.onDeleteSuccessful();
                     }
                 }
             });
-            databaseReference.child("posts").getDatabase().getReference().addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot ds: snapshot.getChildren()){
-                            LocalDatabase.getInstance().postDao().insertAll(ds.getValue(Post.class));
-                       }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-//            databaseReference.child("posts").addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    for(DataSnapshot ds: snapshot.getChildren()){
-//                        newPosts.add(ds.getValue(Post.class));
-//                    }
-//                }
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//
-//                }
-//            });
-
-        }else {
+        } else {
             deletePostCompleteListener.onDeleteFailed();
         }
-
     }
-
-//    PostModelFirebase PostModelFirebase = new PostModelFirebase();
-//    private PostModel(){ }
-//
-//    public interface GetAllPostsListener{
-//        void onComplete(List<Post> list);
-//    }
-//
-//    public void getAllPosts(PostModel.GetAllPostsListener listener){
-//        PostModelFirebase.getAllPosts(listener);
-//    }
-//
-//    public interface AddPostListener{
-//        void onComplete();
-//    }
-//
-//    public void addPost(Post post, PostModel.AddPostListener listener){
-//        PostModelFirebase.addPost( post,  listener);
-//    }
-//
-//    public interface GetPostByPublisherId{
-//        void onComplete(Post post);
-//    }
-//    public Post GetPostByPublisherId(String publisherId, PostModel.GetPostByPublisherId listener) {
-//        PostModelFirebase.GetPostByPublisherId(publisherId,listener);
-//        return null;
-//    }
 }

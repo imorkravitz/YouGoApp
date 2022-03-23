@@ -71,8 +71,10 @@
             android:text="Difficulty:"
             android:textSize="18dp"
             android:textStyle="bold"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/create_post_frag_freeText_PL" />
+            app:layout_constraintTop_toBottomOf="@+id/create_post_frag_freeText_PL"
+             />
 
         <TextView
             android:id="@+id/create_post_frag_addImageg_tv"
@@ -198,7 +200,8 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/button_bg"
             android:text="Save"
-            android:textSize="24sp"
+            android:textSize="16sp"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.923"
@@ -208,11 +211,12 @@
 
         <Button
             android:id="@+id/edit_post_delete_btn"
-            android:layout_width="179dp"
-            android:layout_height="44dp"
+            android:layout_width="164dp"
+            android:layout_height="42dp"
             android:background="@drawable/button_bg"
             android:text="Delete post"
-            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/edit_post_save_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.068"

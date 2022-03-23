@@ -145,25 +145,5 @@ public class Post {
         this.latitude = latitude;
     }
 
-    //
-//    public Map<String, Object> toJson() {
-//        Map<String, Object> json=new HashMap<String, Object>();
-//        json.put("publisher id",publisherId);
-//        json.put("description",description);
-//   //     json.put("likes",likes);
-//        return json;
-//    }
-
-//    public static Post create(Map<String, Object> json) {
-//        String publisherId= (String) json.get("publisher id");
-//        String description=(String) json.get("description");
-//        String date=(String) json.get("date");
-//        String time=(String) json.get("time");
-//        String id=(String) json.get("id");
-//        List<Comment> commentList= (List<Comment>) json.get("comment list");
-//        int likes= (int) json.get("likes");
-//      //  Post post=new Post(publisherId,description,date,time,likes);
-//        return null;
-//    }
 }
 
