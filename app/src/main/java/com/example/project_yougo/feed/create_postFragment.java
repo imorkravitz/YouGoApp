@@ -9,13 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -31,9 +30,10 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.post.PostModel;
+import com.example.project_yougo.model.user.User;
+import com.example.project_yougo.model.user.UserModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -42,7 +42,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-
+import com.squareup.picasso.Picasso;
 import java.io.InputStream;
 
 
@@ -58,6 +58,7 @@ public class create_postFragment extends Fragment {
     private ImageView postImg;
     private Bitmap imageBitmap;
     private Bitmap selectedImage;
+    private ImageView userImg;
     private double selectedLongitude = 34.781769, selectedLatitude = 32.085300;
 
     @Override
@@ -95,8 +96,8 @@ public class create_postFragment extends Fragment {
         difficultyEditText = view.findViewById(R.id.create_post_frag_difficulty);
         typeOfWorkoutEditText = view.findViewById(R.id.create_post_frag_TOW_PT);
         postImg = view.findViewById(R.id.post_camera_img);
+        userImg = view.findViewById(R.id.editUser_img);
         return view;
-
     }
 
     private void onSelectMapLocationButtonClicked() {
@@ -109,8 +110,6 @@ public class create_postFragment extends Fragment {
             // not signed in
             return;
         }
-        // TODO: add validation
-        // TODO: + add GPS fields in Post + PostModel
         String freeText = freeTexEditText.getText().toString();
         String difficulty = difficultyEditText.getText().toString();
         String typeOfWorkout = typeOfWorkoutEditText.getText().toString();
