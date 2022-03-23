@@ -4,12 +4,16 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -19,21 +23,25 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
-import com.example.project_yougo.model.comment.Post;
-import com.example.project_yougo.model.post.PostModel;
-import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
-import com.google.firebase.Timestamp;
+
+import com.example.project_yougo.model.user.UserModel;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.lifecycle.Observer;
 
@@ -52,6 +60,7 @@ public class PostListFragment extends Fragment {
         postRecyclerView.setHasFixedSize(true);
         postRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         initPostList();
+
 
         setHasOptionsMenu(true);
 
@@ -93,7 +102,7 @@ public class PostListFragment extends Fragment {
                     @Override
                     public void onItemClick(View v, int position) {
                         //TODO fixe that
-                        Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToEditPostFragment(position));
+                        // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
                     }
                 });
                 postRecyclerView.setAdapter(adapter);
@@ -102,7 +111,7 @@ public class PostListFragment extends Fragment {
         });
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
         TextView userName;
         TextView rowPostFreeTextTextView;
         TextView rowPostDifficultyTextView;
@@ -113,7 +122,9 @@ public class PostListFragment extends Fragment {
         ImageButton addCommentBtn;
         TextView postDate;
         TextView postTime;
-        ImageView postImg;
+ //       ImageView postImg;
+        MapView mapView;
+        GoogleMap googleMap;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -128,7 +139,10 @@ public class PostListFragment extends Fragment {
 
             postDate=itemView.findViewById(R.id.post_date);
             postTime=itemView.findViewById(R.id.time_row);
-            postImg = itemView.findViewById(R.id.post_img_row);
+           // postImg = itemView.findViewById(R.id.post_img_row);
+            mapView = itemView.findViewById(R.id.rowPostMapFragment);
+            mapView.getMapAsync(this);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -138,7 +152,20 @@ public class PostListFragment extends Fragment {
                 }
             });
         }
-        public void bind(User user,Post post){
+
+        @Override
+        public void onMapReady(@NonNull GoogleMap googleMap) {
+            this.googleMap = googleMap;
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(32.085300,
+                    34.781769)));
+            MarkerOptions markerOptions =
+                    new MarkerOptions().position(new LatLng(32.085300,
+                     34.781769)).title("My Workout");
+            Marker marker = googleMap.addMarker(markerOptions);
+            googleMap.setMinZoomPreference(15); // max zoom is 20, min is 1
+        }
+
+        public void bind(User user, Post post){
             userName.setText(user.fullname());
             rowPostFreeTextTextView.setText(post.getFreeText());
             rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
@@ -149,12 +176,12 @@ public class PostListFragment extends Fragment {
                         .load(user.getImageUrl())
                         .into(userImg);
             }
-            postImg.setImageResource(R.drawable.demo_map);
-            if(post.getPostImgUrl() != null) {
-                Picasso.get()
-                        .load(post.getPostImgUrl())
-                        .into(postImg);
-            }
+//            postImg.setImageResource(R.drawable.demo_map);
+//            if(post.getPostImgUrl() != null) {
+//                Picasso.get()
+//                        .load(post.getPostImgUrl())
+//                        .into(postImg);
+//            }
         }
     }
 
@@ -179,6 +206,8 @@ public class PostListFragment extends Fragment {
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.postlist_row, parent, false);
             MyViewHolder holder = new MyViewHolder(view, listener);
+            holder.mapView.onCreate(null);
+            holder.mapView.onResume();
             return holder;
         }
 
@@ -193,9 +222,12 @@ public class PostListFragment extends Fragment {
             UserModel.getInstance().getUserLiveData(post.getPublisherId(),PostListFragment.this, getViewLifecycleOwner()).observe(getViewLifecycleOwner(), new Observer<User>() {
                 @Override
                 public void onChanged(User user) {
-                    holder.postDate.setText(dateFormat.format(date));
-                    holder.postTime.setText(timeFormat.format(date));
-                    holder.bind(user,post);
+                    if(user != null) {
+                        holder.postDate.setText(dateFormat.format(date));
+                        holder.postTime.setText(timeFormat.format(date));
+                        holder.bind(user,post);
+                    }
+
                 }
             });
 
@@ -250,17 +282,6 @@ public class PostListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-//    public static class PostListViewModel extends ViewModel {
-//        private LiveData<List<Post>> postListLiveData;
-//
-//        public LiveData<List<Post>> getPostListLiveData(LifecycleOwner lifecycleOwner,
-//                                                        ViewModelStoreOwner viewModelStoreOwner) {
-//            if(postListLiveData == null)
-//                postListLiveData = PostModel.getInstance().getPostListLiveData(viewModelStoreOwner,
-//                        lifecycleOwner);
-//            return postListLiveData;
-//        }
-//    }
 
     public static class PostListViewModel extends ViewModel {
         private LiveData<List<Post>> postListLiveData;

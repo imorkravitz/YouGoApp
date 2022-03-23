@@ -1,4 +1,4 @@
-//package com.example.project_yougo.model;
+package com.example.project_yougo.model.user;//package com.example.project_yougo.model;
 //
 //import androidx.annotation.NonNull;
 //
