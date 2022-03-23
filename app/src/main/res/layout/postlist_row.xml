@@ -151,39 +151,23 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/like_btn_row"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#FFFFFF"
-                android:src="@drawable/dislike" />
-
-            <TextView
-                android:id="@+id/numberoflikes_row"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="0 Likes"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <ImageButton
                 android:id="@+id/comment_btn_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="150dp"
+                android:layout_marginLeft="265dp"
                 android:backgroundTint="#FFFFFF"
                 android:baselineAlignBottom="false"
                 android:src="@drawable/comment_btn" />
 
             <ImageButton
                 android:id="@+id/add_comment_btn_row"
-                android:layout_width="38dp"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="43dp"
                 android:backgroundTint="#FFFFFF"
                 android:baselineAlignBottom="false"
                 android:src="@drawable/add_btn" />
         </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>
 

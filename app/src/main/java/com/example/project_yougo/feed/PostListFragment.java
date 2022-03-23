@@ -1,5 +1,6 @@
 package com.example.project_yougo.feed;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,8 @@ import androidx.lifecycle.Observer;
 public class PostListFragment extends Fragment {
     private RecyclerView postRecyclerView;
     private PostListViewModel postListViewModel;
+    private static final int PICK_IMAGE_REQUEST = 1;
+
 
 
     @Override
@@ -141,7 +144,6 @@ public class PostListFragment extends Fragment {
             rowPostDifficultyTextView = itemView.findViewById(R.id.rowPostDifficultyTextView);
             rowPostTypeOfWorkoutTextView = itemView.findViewById(R.id.rowPostTypeOfWorkoutTextView);
             userImg = itemView.findViewById(R.id.userImg_list_row);
-            likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
             addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
 
@@ -192,6 +194,8 @@ public class PostListFragment extends Fragment {
             Marker marker = googleMap.addMarker(markerOptions);
             googleMap.setMinZoomPreference(15); // max zoom is 20, min is 1
         }
+
+
     }
 
     interface OnItemClickListener {
@@ -291,8 +295,6 @@ public class PostListFragment extends Fragment {
         public int getItemCount() {
             return postList.size();
         }
-
-
     }
 
     @Override
@@ -315,5 +317,4 @@ public class PostListFragment extends Fragment {
     private interface UserListAvailableListener {
         void onUserListAvailable(List<User> userList);
     }
-
 }
