@@ -206,6 +206,21 @@
             app:layout_constraintTop_toBottomOf="@+id/create_post_frag_addImageg_tv"
             app:layout_constraintVertical_bias="1.0" />
 
+        <ImageView
+            android:id="@+id/post_camera_img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/create_post_frag_post_btn"
+            app:layout_constraintEnd_toStartOf="@+id/create_post_frag_addImage_btn"
+            app:layout_constraintHorizontal_bias="0.221"
+            app:layout_constraintStart_toEndOf="@+id/create_post_frag_addImageg_tv"
+            app:layout_constraintTop_toBottomOf="@+id/create_post_frag_ahare_tv"
+            app:layout_constraintVertical_bias="0.272"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

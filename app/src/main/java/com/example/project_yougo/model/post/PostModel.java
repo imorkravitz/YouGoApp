@@ -1,5 +1,8 @@
 package com.example.project_yougo.model.post;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -18,7 +21,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import androidx.lifecycle.Observer;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -227,6 +236,70 @@ public class PostModel {
             deletePostCompleteListener.onDeleteFailed();
         }
 
+    }
+
+    public void addPostWithImg(String freeText, String difficulty, String typeOfWorkout,
+                               String publisherId,String url ,PostCreationListener creationListener) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
+        DatabaseReference timestampReference = databaseReference.child("timestamp");
+        timestampReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // timestamp set
+                long timestamp = Long.parseLong(snapshot.getValue().toString());
+                String postId = databaseReference.child("posts").push().getKey();
+                Post post = new Post(postId, publisherId, freeText, difficulty, typeOfWorkout, timestamp,url);
+                databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            creationListener.onCreationSuccess();
+                        } else {
+                            creationListener.onCreationFailed();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        timestampReference.setValue(ServerValue.TIMESTAMP);
+    }
+
+    /**
+     * Storage implementation
+     */
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    public void saveImagePost(Bitmap imageBitmap, String imageName, saveImageListener listener) {
+        // Create a storage reference from our app
+        StorageReference storageRef = storage.getReference();
+
+        // Create a reference to "mountains.jpg"
+        StorageReference imgPostRef = storageRef.child("/post_images/" + imageName);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imgPostRef.putBytes(data);
+        uploadTask.addOnFailureListener(exception -> {
+            listener.onComplete(null);
+        }).addOnSuccessListener(taskSnapshot -> {
+            imgPostRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Uri downloadUrl = uri;
+                listener.onComplete(downloadUrl.toString());
+            });
+        });
+    }
+
+    public interface saveImageListener{
+        void onComplete(String url);
+    }
+    public void saveImage(Bitmap imageBitmap, String imageName, saveImageListener listener) {
+        saveImagePost(imageBitmap,imageName,listener);
     }
 
 //    PostModelFirebase PostModelFirebase = new PostModelFirebase();

@@ -149,10 +149,18 @@
             app:layout_constraintWidth_percent=".5" />
 
 
-        <ImageView
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:id="@+id/userImg_list_row"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginLeft="4dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/avatar" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/editUser_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:contentDescription="createPost_frag_img"
             android:src="@drawable/profile_avatar"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -160,7 +168,8 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.194" />
+            app:layout_constraintVertical_bias="0.194"
+            android:scaleType="centerCrop" />
 
         <Button
             android:id="@+id/editUser_deleteUser_btn"
@@ -176,6 +185,14 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editUser_conPassword_et" />
+
+        <ImageButton
+            android:id="@+id/editUser_camera_btn"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
+            app:layout_constraintBottom_toTopOf="@+id/editUser_name_et"
+            app:layout_constraintEnd_toEndOf="@+id/editUser_img"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
