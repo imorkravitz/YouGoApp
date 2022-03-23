@@ -67,6 +67,9 @@
         <action
             android:id="@+id/action_postListFragment_to_addCommentFragment"
             app:destination="@id/addCommentFragment" />
+        <action
+            android:id="@+id/action_postListFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_postListFragment2"
@@ -84,5 +87,14 @@
         <argument
             android:name="postIdArg"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.example.project_yougo.feed.EditPostFragment"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" >
+        <argument
+            android:name="postId"
+            app:argType="reference" />
     </fragment>
 </navigation>

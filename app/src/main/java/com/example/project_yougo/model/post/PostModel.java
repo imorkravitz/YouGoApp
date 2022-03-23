@@ -33,6 +33,10 @@ import java.util.List;
 
 
 public class PostModel {
+
+
+
+
     public interface PostCreationListener {
         void onCreationSuccess();
         void onCreationFailed();
@@ -41,6 +45,14 @@ public class PostModel {
 //    public interface PostListUpdateListener {
 //        void onPostListUpdated(List<Post> postList);
 //    }
+    public interface UpdatePostCompleteListener {
+        void onUpdateSuccessful();
+        void onUpdateFailed();
+    }
+    public interface DeletePostCompleteListener{
+        void onDeleteSuccessful();
+        void onDeleteFailed();
+    }
 
     public static class PostListDataSnapshotViewModel extends ViewModel {
         private final FirebaseQueryLiveData queryLiveData;
@@ -175,6 +187,55 @@ public class PostModel {
             }
         });
         timestampReference.setValue(ServerValue.TIMESTAMP);
+    }
+    public void updatePost(String postId,String publisherId ,String freeText, String two, String diff, UpdatePostCompleteListener updatePostCompleteListener) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
+        DatabaseReference timestampReference = databaseReference.child("timestamp");
+        timestampReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long timestamp = Long.parseLong(snapshot.getValue().toString());
+                Post post=new Post(postId,publisherId,freeText,two,diff,timestamp);
+                String currentUser=FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
+                if(publisherId.equals(currentUser)){
+                    databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                updatePostCompleteListener.onUpdateSuccessful();
+                            }
+                        }
+                    });
+                }else{
+                    updatePostCompleteListener.onUpdateFailed();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        timestampReference.setValue(ServerValue.TIMESTAMP);
+    }
+    public void deletePost(String postId,String publisherId, DeletePostCompleteListener deletePostCompleteListener) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+        String currentUser=FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().getUid();
+        if(publisherId.equals(currentUser)){
+            databaseReference.child("comments").child(postId).removeValue();
+            databaseReference.child("posts").child(postId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        deletePostCompleteListener.onDeleteSuccessful();
+                    }
+                }
+            });
+        }else {
+            deletePostCompleteListener.onDeleteFailed();
+        }
+
     }
 
     public void addPostWithImg(String freeText, String difficulty, String typeOfWorkout,

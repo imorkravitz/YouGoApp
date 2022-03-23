@@ -4,36 +4,27 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
-import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
-
 import com.google.firebase.Timestamp;
 import com.squareup.picasso.Picasso;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +45,6 @@ public class PostListFragment extends Fragment {
         postRecyclerView.setHasFixedSize(true);
         postRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         initPostList();
-
 
         setHasOptionsMenu(true);
 
@@ -96,7 +86,7 @@ public class PostListFragment extends Fragment {
                     @Override
                     public void onItemClick(View v, int position) {
                         //TODO fixe that
-                        // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+                        Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToEditPostFragment(position));
                     }
                 });
                 postRecyclerView.setAdapter(adapter);
@@ -265,6 +255,17 @@ public class PostListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+//    public static class PostListViewModel extends ViewModel {
+//        private LiveData<List<Post>> postListLiveData;
+//
+//        public LiveData<List<Post>> getPostListLiveData(LifecycleOwner lifecycleOwner,
+//                                                        ViewModelStoreOwner viewModelStoreOwner) {
+//            if(postListLiveData == null)
+//                postListLiveData = PostModel.getInstance().getPostListLiveData(viewModelStoreOwner,
+//                        lifecycleOwner);
+//            return postListLiveData;
+//        }
+//    }
 
     public static class PostListViewModel extends ViewModel {
         private LiveData<List<Post>> postListLiveData;
@@ -277,5 +278,4 @@ public class PostListFragment extends Fragment {
             return postListLiveData;
         }
     }
-
 }
