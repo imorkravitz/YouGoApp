@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.project_yougo.model.firebase.FirebaseModel;
 import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
+import com.example.project_yougo.model.local.CommentDao;
 import com.example.project_yougo.model.local.LocalDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +27,11 @@ public class CommentModel {
     public interface CommentCreationListener {
         void onCreationSuccess();
         void onCreationFailed();
+    }
+
+    public interface CommentDeletionListener {
+        void onDeletionSuccess();
+        void onDeletionFailed();
     }
 
 //    public interface CommentListUpdateListener {
@@ -91,6 +97,37 @@ public class CommentModel {
         viewModel.getSnapshotLiveData(postId).observe(lifecycleOwner, observer);
 
         return LocalDatabase.getInstance().commentDao().getOfPost(postId);
+    }
+
+    public void deleteCommentsByPostId(String postId, CommentDeletionListener listener) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
+        databaseReference.child("comments").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<DatabaseReference> commentRefsToDelete = new ArrayList<>();
+
+                for(DataSnapshot child : snapshot.getChildren()) {
+                    Comment c = child.getValue(Comment.class);
+                    if(c.getPostId().equals(postId)) {
+                        commentRefsToDelete.add(child.getRef());
+                    }
+                }
+
+                for(DatabaseReference ref : commentRefsToDelete) {
+                    ref.removeValue();
+                }
+
+                LocalDatabase.getInstance().commentDao().deleteByPostId(postId);
+                listener.onDeletionSuccess();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                listener.onDeletionFailed();
+            }
+        });
     }
 //
 //    public void loadCommentList(Context appContext, String postId, CommentListLoadListener commentListLoadListener) {

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.project_yougo.model.comment.CommentModel;
 import com.example.project_yougo.model.firebase.FirebaseModel;
 import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
 import com.example.project_yougo.model.local.LocalDatabase;
@@ -35,6 +36,11 @@ public class PostModel {
     public interface PostCreationListener {
         void onCreationSuccess();
         void onCreationFailed();
+    }
+
+    public interface PostDeletionListener {
+        void onDeletionSuccess();
+        void onDeletionFailed();
     }
 
 //    public interface PostListUpdateListener {
@@ -113,6 +119,32 @@ public class PostModel {
 
         return LocalDatabase.getInstance().postDao().getAll();
     }
+
+    public void deletePostById(String postId, PostDeletionListener listener) {
+        DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
+        databaseReference.child("posts").child(postId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    LocalDatabase.getInstance().postDao().deleteById(postId);
+                    CommentModel.getInstance().deleteCommentsByPostId(postId, new CommentModel.CommentDeletionListener() {
+                        @Override
+                        public void onDeletionSuccess() {
+                            listener.onDeletionSuccess();
+                        }
+
+                        @Override
+                        public void onDeletionFailed() {
+                            listener.onDeletionFailed();
+                        }
+                    });
+                } else {
+                    listener.onDeletionFailed();;
+                }
+            }
+        });
+    }
 //
 //
 //    public void listenForPostListUpdates(Context appContext,
@@ -145,7 +177,7 @@ public class PostModel {
 //    }
 
     public void addPost(String freeText, String difficulty, String typeOfWorkout,
-                        String publisherId, PostCreationListener creationListener) {
+                        String publisherId, double longitude, double latitude, PostCreationListener creationListener) {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
 
         DatabaseReference timestampReference = databaseReference.child("timestamp");
@@ -155,7 +187,7 @@ public class PostModel {
                 // timestamp set
                 long timestamp = Long.parseLong(snapshot.getValue().toString());
                 String postId = databaseReference.child("posts").push().getKey();
-                Post post = new Post(postId, publisherId, freeText, difficulty, typeOfWorkout, timestamp);
+                Post post = new Post(postId, publisherId, freeText, difficulty, typeOfWorkout, longitude, latitude, timestamp);
                 databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -177,7 +209,7 @@ public class PostModel {
     }
 
     public void addPostWithImg(String freeText, String difficulty, String typeOfWorkout,
-                               String publisherId,String url ,PostCreationListener creationListener) {
+                               String publisherId,String url, double longitude, double latitude, PostCreationListener creationListener) {
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
 
         DatabaseReference timestampReference = databaseReference.child("timestamp");
@@ -187,7 +219,7 @@ public class PostModel {
                 // timestamp set
                 long timestamp = Long.parseLong(snapshot.getValue().toString());
                 String postId = databaseReference.child("posts").push().getKey();
-                Post post = new Post(postId, publisherId, freeText, difficulty, typeOfWorkout, timestamp,url);
+                Post post = new Post(postId, publisherId, freeText, difficulty, typeOfWorkout, timestamp,longitude, latitude, url);
                 databaseReference.child("posts").child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

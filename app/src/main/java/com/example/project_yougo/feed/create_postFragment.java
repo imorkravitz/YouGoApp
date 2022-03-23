@@ -57,7 +57,7 @@ public class create_postFragment extends Fragment {
     private ImageView postImg;
     private Bitmap imageBitmap;
     private Bitmap selectedImage;
-    private double selectedLongitude, selectedLatitude;
+    private double selectedLongitude = 34.781769, selectedLatitude = 32.085300;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,7 +122,7 @@ public class create_postFragment extends Fragment {
             PostModel.getInstance().saveImage(imageBitmap,  nameOfImg + ".jpg", url->{
 
                 PostModel.getInstance().addPostWithImg(freeText, difficulty, typeOfWorkout,
-                        publisherId, url, new PostModel.PostCreationListener() {
+                        publisherId, url, selectedLongitude, selectedLatitude, new PostModel.PostCreationListener() {
                             @Override
                             public void onCreationSuccess() {
                                 // TODO: navigate to different frag?
@@ -145,7 +145,7 @@ public class create_postFragment extends Fragment {
             });
         }else {
             PostModel.getInstance().addPost(freeText, difficulty, typeOfWorkout,
-                    publisherId, new PostModel.PostCreationListener() {
+                    publisherId, selectedLongitude, selectedLatitude, new PostModel.PostCreationListener() {
                         @Override
                         public void onCreationSuccess() {
                             // TODO: navigate to different frag?

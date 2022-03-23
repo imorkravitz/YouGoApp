@@ -40,6 +40,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -97,6 +99,12 @@ public class PostListFragment extends Fragment {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+                Collections.sort(postList, new Comparator<Post>() {
+                    @Override
+                    public int compare(Post p1, Post p2) {
+                        return -1 * Long.compare(p1.getTimestamp(), p2.getTimestamp());
+                    }
+                });
                 MyAdapter adapter = new MyAdapter(postList);
                 adapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
@@ -156,13 +164,6 @@ public class PostListFragment extends Fragment {
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
             this.googleMap = googleMap;
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(32.085300,
-                    34.781769)));
-            MarkerOptions markerOptions =
-                    new MarkerOptions().position(new LatLng(32.085300,
-                     34.781769)).title("My Workout");
-            Marker marker = googleMap.addMarker(markerOptions);
-            googleMap.setMinZoomPreference(15); // max zoom is 20, min is 1
         }
 
         public void bind(User user, Post post){
@@ -182,6 +183,14 @@ public class PostListFragment extends Fragment {
 //                        .load(post.getPostImgUrl())
 //                        .into(postImg);
 //            }
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(post.getLatitude(),
+                    post.getLongitude())));
+            MarkerOptions markerOptions =
+                    new MarkerOptions().position(new LatLng(post.getLatitude(),
+                            post.getLongitude())).title(user.fullname());
+            Marker marker = googleMap.addMarker(markerOptions);
+            googleMap.setMinZoomPreference(15); // max zoom is 20, min is 1
         }
     }
 
@@ -236,9 +245,17 @@ public class PostListFragment extends Fragment {
             Observer<User> observer = new Observer<User>() {
                 @Override
                 public void onChanged(User user) {
-                    holder.postDate.setText(dateFormat.format(date));
-                    holder.postTime.setText(timeFormat.format(date));
-                    holder.bind(user,post);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(user != null) {
+                                holder.postDate.setText(dateFormat.format(date));
+                                holder.postTime.setText(timeFormat.format(date));
+                                holder.bind(user,post);
+                            }
+                        }
+                    });
+
                     // might be null if user has not been downloaded from firebase db into local db
 //                            holder.userName.setText(user.fullname());
 //                            holder.rowPostFreeTextTextView.setText(post.getFreeText());
