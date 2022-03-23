@@ -3,8 +3,8 @@ package com.example.project_yougo.model.local;
 import androidx.room.Database;
 
 import com.example.project_yougo.MyApplication;
-import com.example.project_yougo.model.post.Comment;
-import com.example.project_yougo.model.comment.Post;
+import com.example.project_yougo.model.comment.Comment;
+import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.user.User;
 
 import androidx.room.Room;

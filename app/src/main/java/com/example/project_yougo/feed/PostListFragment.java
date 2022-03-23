@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
-import com.example.project_yougo.model.comment.Post;
+import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
 
 import com.example.project_yougo.model.user.UserModel;
@@ -34,19 +34,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.lifecycle.Observer;
 

@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.project_yougo.model.comment.Post;
+import com.example.project_yougo.model.post.Post;
 
 import java.util.List;
 
