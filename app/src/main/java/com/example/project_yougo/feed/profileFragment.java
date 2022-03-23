@@ -68,9 +68,12 @@ public class profileFragment extends Fragment {
                             firstName.setText(user.getFirstName());
                             lastName.setText(user.getLastName());
                             email.setText(UserModel.getInstance().getUserEmail());
-                            Picasso.get()
-                                    .load(user.getImageUrl())
-                                    .into(profileImg);
+                            profileImg.setImageResource(R.drawable.profile_avatar);
+                            if(user.getImageUrl() != null) {
+                                Picasso.get()
+                                        .load(user.getImageUrl())
+                                        .into(profileImg);
+                            }
                         }
                     }
                 });

@@ -19,12 +19,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.comment.CommentModel;
 import com.example.project_yougo.model.comment.Comment;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -34,6 +36,9 @@ public class CommentListFragment extends Fragment {
     private String postId;
     private RecyclerView commentRecyclerView;
     private CommentListViewModel commentListViewModel;
+    private TextView userName;
+    private TextView userComment;
+    private ImageView profileUser;
 
     public CommentListFragment() {
         // Required empty public constructor
@@ -115,11 +120,13 @@ public class CommentListFragment extends Fragment {
     private class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName;
         TextView content;
+        ImageView imgUser;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
-            userName = itemView.findViewById(R.id.userName_comment_row);
-            content = itemView.findViewById(R.id.content_comment_row);
+            userName = itemView.findViewById(R.id.comment_name_user);
+            content = itemView.findViewById(R.id.comment_user);
+            imgUser = itemView.findViewById(R.id.comment_img_user);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,6 +179,12 @@ public class CommentListFragment extends Fragment {
                             if(user != null) {
                                 holder.userName.setText(user.fullname());
                                 holder.content.setText(comment.getContent());
+                                holder.imgUser.setImageResource(R.drawable.avatar);
+                                if(user.getImageUrl() != null) {
+                                    Picasso.get()
+                                            .load(user.getImageUrl())
+                                            .into(holder.imgUser);
+                                }
                             }
                         }
                     });

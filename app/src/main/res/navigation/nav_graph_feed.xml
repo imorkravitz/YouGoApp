@@ -50,8 +50,8 @@
     <fragment
         android:id="@+id/commentListFragment"
         android:name="com.example.project_yougo.feed.CommentListFragment"
-        android:label="fragment_comment_list"
-        tools:layout="@layout/fragment_comment_list" >
+        android:label="Comments"
+        tools:layout="@layout/fragment_comment_list">
         <argument
             android:name="postIdArg"
             app:argType="string" />
