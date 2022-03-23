@@ -104,18 +104,6 @@ public class EditUserFragment extends Fragment {
         userViewModel.getUserLiveData(UserModel.getInstance().getUid(), getViewLifecycleOwner(), this)
                 .observe(getViewLifecycleOwner(), observer);
 
-
-//        UserModel.getInstance().getUserById(UserModel.getInstance().getUid(), new UserModel.GetUserCompleteListener() {
-//            @Override
-//            public void onComplete(User user) {
-//                firstName.setText(user.getFirstName());
-//                lastName.setText(user.getLastName());
-//                email.setText(UserModel.getInstance().getUserEmail());
-//                gender.setText(user.getGender());
-//                age.setText(user.getAge());
-//            }
-//        });
-
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,7 +130,6 @@ public class EditUserFragment extends Fragment {
                 showPopup(v);
             }
         });
-
 
         return view;
     }
@@ -171,20 +158,6 @@ public class EditUserFragment extends Fragment {
                                 Toast.LENGTH_LONG).show();
                     }
                 });
-
-//
-//        UserModel.getInstance().deleteUser(new UserModel.UserDeletionCompleteListener() {
-//            @Override
-//            public void onDeletionSuccessful() {
-//                Toast.makeText(getContext(),"User deleted!",Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onDeletionFailed() {
-//                Toast.makeText(getContext(),"User cannot be deleted at this time, please try again later",
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        });
     }
 
     private void updateUser() {

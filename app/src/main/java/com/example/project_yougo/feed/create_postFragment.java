@@ -58,7 +58,6 @@ public class create_postFragment extends Fragment {
     private ImageView postImg;
     private Bitmap imageBitmap;
     private Bitmap selectedImage;
-    private ProgressBar mProgressBar;
     private double selectedLongitude = 34.781769, selectedLatitude = 32.085300;
 
     @Override
@@ -96,9 +95,6 @@ public class create_postFragment extends Fragment {
         difficultyEditText = view.findViewById(R.id.create_post_frag_difficulty);
         typeOfWorkoutEditText = view.findViewById(R.id.create_post_frag_TOW_PT);
         postImg = view.findViewById(R.id.post_camera_img);
-        mProgressBar = view.findViewById(R.id.progress_bar);
-
-
         return view;
 
     }
@@ -218,8 +214,8 @@ public class create_postFragment extends Fragment {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                     //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    selectedImage = BitmapFactory.decodeStream(imageStream);
-                    postImg.setImageBitmap(selectedImage);
+                    imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    postImg.setImageBitmap(imageBitmap);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
