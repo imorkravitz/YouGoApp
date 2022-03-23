@@ -10,7 +10,9 @@ import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.project_yougo.model.firebase.FirebaseModel;
 import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
+import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.local.LocalDatabase;
+import com.example.project_yougo.model.post.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;

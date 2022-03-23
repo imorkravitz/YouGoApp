@@ -1,4 +1,4 @@
-package com.example.project_yougo.model.comment;
+package com.example.project_yougo.model.post;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

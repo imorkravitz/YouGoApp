@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.project_yougo.model.comment.Post;
 import com.example.project_yougo.model.firebase.FirebaseModel;
 import com.example.project_yougo.model.firebase.FirebaseQueryLiveData;
 import com.example.project_yougo.model.local.LocalDatabase;
