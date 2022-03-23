@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/edit_user_frag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feed.create_postFragment">
+
+        <!-- TODO: Update blank fragment layout -->
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-40dp"
+            android:src="@drawable/logo_bar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editUser_name_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_bg"
+            android:hint="Name"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_img"
+            app:layout_constraintWidth_percent=".8" />
+
+        <EditText
+            android:id="@+id/editUser_lastname_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:hint="Last Name"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_name_et"
+            app:layout_constraintWidth_percent=".8" />
+
+        <EditText
+            android:id="@+id/editUser_gender_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:hint="Gender"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_lastname_et"
+            app:layout_constraintWidth_percent=".8" />
+
+        <EditText
+            android:id="@+id/editUser_age_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:hint="Age"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_gender_et"
+            app:layout_constraintWidth_percent=".8" />
+
+        <EditText
+            android:id="@+id/editUser_email_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_bg"
+
+            android:hint="Email"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_age_et"
+            app:layout_constraintWidth_percent=".8" />
+
+        <EditText
+            android:id="@+id/editUser_password_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:hint="Password"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_email_et"
+            app:layout_constraintWidth_percent=".8" />
+
+        <EditText
+            android:id="@+id/editUser_conPassword_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:hint="Confirm-Password"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_password_et"
+            app:layout_constraintWidth_percent=".8" />
+
+
+        <Button
+            android:id="@+id/editUser_save_btn"
+            android:layout_width="155dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/button_bg"
+            android:onClick="onRegisterButtonClick"
+            android:text="save"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_conPassword_et"
+            app:layout_constraintWidth_percent=".5" />
+
+
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:id="@+id/userImg_list_row"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginLeft="4dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/avatar" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/editUser_img"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:contentDescription="createPost_frag_img"
+            android:src="@drawable/profile_avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.194"
+            android:scaleType="centerCrop" />
+
+        <Button
+            android:id="@+id/editUser_deleteUser_btn"
+            android:layout_width="155dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_bg"
+            android:onClick="onRegisterButtonClick"
+            android:text="DELETE USER"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editUser_conPassword_et" />
+
+        <ImageButton
+            android:id="@+id/editUser_camera_btn"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
+            app:layout_constraintBottom_toTopOf="@+id/editUser_name_et"
+            app:layout_constraintEnd_toEndOf="@+id/editUser_img"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

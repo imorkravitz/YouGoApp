@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.project_yougo.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login"/>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.project_yougo.login.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.project_yougo.login.HomeFragment"
+        android:label="Yougo"
+        tools:layout="@layout/fragment_home"/>
+    <fragment
+        android:id="@+id/profileFragment1"
+        android:name="com.example.project_yougo.feed.profileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/create_postFragment"
+        android:name="com.example.project_yougo.feed.create_postFragment"
+        android:label="Create Post"
+        tools:layout="@layout/fragment_create_post" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.project_yougo.common.AboutFragment"
+        android:label="About Us"
+        tools:layout="@layout/fragment_about"/>
+
+    <action android:id="@+id/action_global_aboutFragment"
+        app:destination="@id/aboutFragment"
+        app:popUpTo="@+id/postListFragment1"/>
+
+    <action android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment1"
+        app:popUpTo="@+id/postListFragment1"/>
+
+</navigation>
