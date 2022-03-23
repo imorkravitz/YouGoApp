@@ -37,6 +37,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -53,8 +55,10 @@ public class create_postFragment extends Fragment {
     private EditText difficultyEditText;
     private EditText typeOfWorkoutEditText;
     private ImageView postImg;
-    Bitmap imageBitmap;
-    Bitmap selectedImage;
+    private Bitmap imageBitmap;
+    private Bitmap selectedImage;
+    private double selectedLongitude = 34.781769, selectedLatitude = 32.085300;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -118,7 +122,7 @@ public class create_postFragment extends Fragment {
             PostModel.getInstance().saveImage(imageBitmap,  nameOfImg + ".jpg", url->{
 
                 PostModel.getInstance().addPostWithImg(freeText, difficulty, typeOfWorkout,
-                        publisherId, url, new PostModel.PostCreationListener() {
+                        publisherId, url, selectedLongitude, selectedLatitude, new PostModel.PostCreationListener() {
                             @Override
                             public void onCreationSuccess() {
                                 // TODO: navigate to different frag?
@@ -141,7 +145,7 @@ public class create_postFragment extends Fragment {
             });
         }else {
             PostModel.getInstance().addPost(freeText, difficulty, typeOfWorkout,
-                    publisherId, new PostModel.PostCreationListener() {
+                    publisherId, selectedLongitude, selectedLatitude, new PostModel.PostCreationListener() {
                         @Override
                         public void onCreationSuccess() {
                             // TODO: navigate to different frag?
@@ -229,6 +233,9 @@ public class create_postFragment extends Fragment {
     private class MapDialog extends Dialog implements OnMapReadyCallback,
             GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
         private GoogleMap googleMap;
+        private Button button;
+        private SupportMapFragment supportMapFragment;
+        private Marker lastMarker;
 
         public MapDialog(Context context) {
             super(context);
@@ -237,31 +244,46 @@ public class create_postFragment extends Fragment {
         @Override
         protected void onCreate(Bundle bundle) {
             super.onCreate(bundle);
-            try {
-                setContentView(R.layout.map_fragment_dialog);
-            } catch(Exception e) {
-                int a=  5;
-            }
-
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            FragmentManager fragmentManager = getChildFragmentManager();
+            setContentView(R.layout.map_fragment_dialog);
 
-            SupportMapFragment supportMapFragment =
-                    (SupportMapFragment) fragmentManager.
+            supportMapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().
                             findFragmentById(R.id.mapFragment);
             supportMapFragment.getMapAsync(this);
+
+            button = findViewById(R.id.mapFragmentDialogDoneButton);
+            button.setOnClickListener((v) -> onDoneButtonClicked());
+        }
+
+        private void onDoneButtonClicked() {
+            // remove fragment otherwise dialog cannot be recreated when closed and opened again
+            // due to duplicate fragment id
+            getActivity().getSupportFragmentManager().beginTransaction().remove(supportMapFragment).commit();
+            dismiss();
         }
 
         @Override
         public void onMapClick(@NonNull LatLng latLng) {
-            Toast.makeText(getContext(), "onclick " + latLng.latitude + " : " + latLng.longitude,
-                    Toast.LENGTH_LONG).show();
+//            Toast.makeText(getContext(), "onclick " + latLng.latitude + " : " + latLng.longitude,
+//                    Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onMapLongClick(@NonNull LatLng latLng) {
-            Toast.makeText(getContext(), "long click " + latLng.latitude + " : " + latLng.longitude,
-                    Toast.LENGTH_LONG).show();
+            selectedLongitude = latLng.longitude;
+            selectedLatitude = latLng.latitude;
+
+            if(lastMarker != null) {
+                lastMarker.remove();
+            }
+
+            // add marker
+            MarkerOptions markerOptions =
+                    new MarkerOptions().position(latLng).title(latLng.toString());
+            lastMarker = this.googleMap.addMarker(markerOptions);
+
+//            Toast.makeText(getContext(), "long click " + latLng.latitude + " : " + latLng.longitude,
+//                    Toast.LENGTH_LONG).show();
         }
 
         @Override

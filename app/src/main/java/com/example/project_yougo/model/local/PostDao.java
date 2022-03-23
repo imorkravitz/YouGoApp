@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.project_yougo.model.comment.Post;
+import com.example.project_yougo.model.post.Post;
 
 import java.util.List;
 
@@ -21,6 +21,9 @@ public interface PostDao {
 
     @Delete
     void delete(Post post);
+
+    @Query("DELETE FROM post where id=:postId")
+    void deleteById(String postId);
 
     @Query("DELETE FROM post")
     void deleteAll();

@@ -219,26 +219,28 @@ public class EditUserFragment extends Fragment {
 
                                 @Override
                                 public void onUpdateFailed() {
-                                    Toast.makeText(getContext(), "User cannot be deleted at this time, please try again later",
+                                    Toast.makeText(getContext(), "User cannot be deleted at this time, please try again later_img",
                                             Toast.LENGTH_LONG).show();
                                 }
                     });
                 });
-
+                getActivity().onBackPressed();
             }else{
             UserModel.getInstance().updateUser(UserModel.getInstance().getUid(), emailNew, password, firstName, lastName, gender, age,
                     active, new UserModel.UpdateUserCompleteListener() {
                         @Override
                         public void onUpdateSuccessful() {
-                            Toast.makeText(MyApplication.getContext(), "user updated!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MyApplication.getContext(), "user updated!_NON", Toast.LENGTH_LONG).show();
+
                         }
 
                         @Override
                         public void onUpdateFailed() {
-                            Toast.makeText(getContext(), "User cannot be deleted at this time, please try again later",
+                            Toast.makeText(getContext(), "User cannot be deleted at this time, please try again later_NON",
                                     Toast.LENGTH_LONG).show();
                         }
                     });
+                getActivity().onBackPressed();
             }
         }
     }

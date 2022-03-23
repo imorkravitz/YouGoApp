@@ -1,4 +1,4 @@
-package com.example.project_yougo.model.comment;
+package com.example.project_yougo.model.post;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -36,20 +36,28 @@ public class Post {
     @ColumnInfo(name = "postImgUrl")
     private String postImgUrl;
 
+    @ColumnInfo(name = "longitude")
+    private double longitude;
+
+    @ColumnInfo(name = "latitude")
+    private double latitude;
+
     public Post() { }
 
     public Post(String id, String publisherId, String freeText,
-                String difficulty, String typeOfWorkout, long timestamp) {
+                String difficulty, String typeOfWorkout,  double longitude, double latitude, long timestamp) {
         this.id = id;
         this.publisherId = publisherId;
         this.freeText = freeText;
         this.difficulty = difficulty;
         this.typeOfWorkout = typeOfWorkout;
         this.timestamp = timestamp;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public Post(String id, String publisherId, String freeText,
-                String difficulty, String typeOfWorkout, long timestamp, String url) {
+                String difficulty, String typeOfWorkout, long timestamp, double longitude, double latitude, String url) {
         this.id = id;
         this.publisherId = publisherId;
         this.freeText = freeText;
@@ -57,6 +65,8 @@ public class Post {
         this.typeOfWorkout = typeOfWorkout;
         this.timestamp = timestamp;
         this.postImgUrl = url;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public static String getCollectionName() {
@@ -119,6 +129,21 @@ public class Post {
         this.postImgUrl = postImgUrl;
     }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
     //
 //    public Map<String, Object> toJson() {

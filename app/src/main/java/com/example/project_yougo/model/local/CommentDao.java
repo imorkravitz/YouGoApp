@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.project_yougo.model.post.Comment;
+import com.example.project_yougo.model.comment.Comment;
 
 import java.util.List;
 
@@ -24,6 +24,9 @@ public interface CommentDao {
 
     @Delete
     void delete(Comment comment);
+
+    @Query("DELETE FROM comment WHERE postId = :postId")
+    void deleteByPostId(String postId);
 
     @Query("DELETE FROM comment")
     void deleteAll();

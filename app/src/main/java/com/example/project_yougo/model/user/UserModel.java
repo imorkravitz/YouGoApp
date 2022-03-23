@@ -271,29 +271,32 @@ public class UserModel {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
-                    FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().updatePassword(password).addOnCompleteListener(
-                            new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()) {
-                                        FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful()) {
-                                                    listener.onUpdateSuccessful();
+                    if(active){
+                        FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().updatePassword(password).addOnCompleteListener(
+                                new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()) {
+                                            FirebaseModel.getInstance().getFirebaseAuthInstance().getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()) {
+                                                        listener.onUpdateSuccessful();
+                                                    }
+                                                    else
+                                                    {
+                                                        listener.onUpdateFailed();
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    listener.onUpdateFailed();
-                                                }
-                                            }
-                                        });
-                                    } else {
-                                        listener.onUpdateFailed();
+                                            });
+                                        } else {
+                                            listener.onUpdateFailed();
+                                        }
                                     }
                                 }
-                            }
-                    );
+                        );
+                    }
+
                     listener.onUpdateSuccessful();
                 } else {
                     listener.onUpdateFailed();
@@ -306,6 +309,7 @@ public class UserModel {
                            String gender,String age, String url,boolean active, UpdateUserCompleteListener listener) {
         User user = new User(userId, email, firstName, lastName, age, gender,url,active);
         DatabaseReference databaseReference = FirebaseModel.getInstance().getDatabaseReference();
+
 
         databaseReference.child("users").child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

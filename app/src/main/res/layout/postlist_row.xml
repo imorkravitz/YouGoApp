@@ -127,15 +127,20 @@
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/post_img_row"
+<!--        <com.google.android.material.imageview.ShapeableImageView-->
+<!--            android:id="@+id/post_img_row"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="200dp"-->
+<!--            android:layout_margin="3dp"-->
+<!--            android:adjustViewBounds="true"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/demo_map"-->
+<!--            app:shapeAppearanceOverlay="@style/roundedImageView" />-->
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/rowPostMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="3dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/demo_map"
-            app:shapeAppearanceOverlay="@style/roundedImageView" />
+            android:layout_height="200dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
