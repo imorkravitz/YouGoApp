@@ -1,5 +1,6 @@
 package com.example.project_yougo.feed;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,8 @@ import androidx.lifecycle.Observer;
 public class PostListFragment extends Fragment {
     private RecyclerView postRecyclerView;
     private PostListViewModel postListViewModel;
+    private static final int PICK_IMAGE_REQUEST = 1;
+
 
 
     @Override
@@ -70,18 +73,6 @@ public class PostListFragment extends Fragment {
     }
 
     private void initPostList() {
-//        PostModel.getInstance().loadPostList(getActivity().getApplicationContext(), new PostModel.PostListLoadListener() {
-//            @Override
-//            public void onPostListLoaded(List<Post> postList) {
-//
-//            }
-//        });
-//        PostModel.getInstance().listenForPostListUpdates(getActivity().getApplicationContext(), new PostModel.PostListUpdateListener() {
-//            @Override
-//            public void onPostListUpdated(List<Post> postList) {
-//                updatePostRecyclerView(postList);
-//            }
-//        });
 
         postListViewModel = new ViewModelProvider(this).get(PostListViewModel.class);
         Observer<List<Post>> observer = new Observer<List<Post>>() {
@@ -109,12 +100,9 @@ public class PostListFragment extends Fragment {
                 adapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int position) {
-                        //TODO fixe that
-                        // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
                     }
                 });
                 postRecyclerView.setAdapter(adapter);
-           //     postRecyclerView.invalidate();
             }
         });
     }
@@ -125,14 +113,14 @@ public class PostListFragment extends Fragment {
         TextView rowPostDifficultyTextView;
         TextView rowPostTypeOfWorkoutTextView;
         ImageView userImg;
-        ImageButton likeBtn;
         ImageButton commentBtn;
         ImageButton addCommentBtn;
         TextView postDate;
         TextView postTime;
- //       ImageView postImg;
         MapView mapView;
         GoogleMap googleMap;
+        ImageView postImg;
+
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -141,16 +129,13 @@ public class PostListFragment extends Fragment {
             rowPostDifficultyTextView = itemView.findViewById(R.id.rowPostDifficultyTextView);
             rowPostTypeOfWorkoutTextView = itemView.findViewById(R.id.rowPostTypeOfWorkoutTextView);
             userImg = itemView.findViewById(R.id.userImg_list_row);
-            likeBtn = itemView.findViewById(R.id.like_btn_row);
             commentBtn = itemView.findViewById(R.id.comment_btn_row);
             addCommentBtn = itemView.findViewById(R.id.add_comment_btn_row);
-
+            postImg = itemView.findViewById(R.id.image_post);
             postDate=itemView.findViewById(R.id.post_date);
             postTime=itemView.findViewById(R.id.time_row);
-           // postImg = itemView.findViewById(R.id.post_img_row);
             mapView = itemView.findViewById(R.id.rowPostMapFragment);
             mapView.getMapAsync(this);
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -177,12 +162,12 @@ public class PostListFragment extends Fragment {
                         .load(user.getImageUrl())
                         .into(userImg);
             }
-//            postImg.setImageResource(R.drawable.demo_map);
-//            if(post.getPostImgUrl() != null) {
-//                Picasso.get()
-//                        .load(post.getPostImgUrl())
-//                        .into(postImg);
-//            }
+            postImg.setImageResource(R.drawable.empty_photo);
+            if(post.getPostImgUrl() != null) {
+                Picasso.get()
+                        .load(post.getPostImgUrl())
+                        .into(postImg);
+            }
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(post.getLatitude(),
                     post.getLongitude())));
@@ -240,8 +225,6 @@ public class PostListFragment extends Fragment {
                 }
             });
 
-         //   UserViewModel userViewModel = new ViewModelProvider(holder).get(UserViewModel.class);
-
             Observer<User> observer = new Observer<User>() {
                 @Override
                 public void onChanged(User user) {
@@ -255,21 +238,8 @@ public class PostListFragment extends Fragment {
                             }
                         }
                     });
-
-                    // might be null if user has not been downloaded from firebase db into local db
-//                            holder.userName.setText(user.fullname());
-//                            holder.rowPostFreeTextTextView.setText(post.getFreeText());
-//                            holder.rowPostTypeOfWorkoutTextView.setText(post.getTypeOfWorkout());
-//                            holder.rowPostDifficultyTextView.setText(post.getDifficulty());
-
                 }
             };
-
-//
-//
-//            userViewModel.getUserLiveData(post.getPublisherId(), getViewLifecycleOwner(), PostListFragment.this)
-//                    .observe(getViewLifecycleOwner(), observer);
-
 
             holder.commentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -291,8 +261,6 @@ public class PostListFragment extends Fragment {
         public int getItemCount() {
             return postList.size();
         }
-
-
     }
 
     @Override
@@ -315,5 +283,4 @@ public class PostListFragment extends Fragment {
     private interface UserListAvailableListener {
         void onUserListAvailable(List<User> userList);
     }
-
 }
