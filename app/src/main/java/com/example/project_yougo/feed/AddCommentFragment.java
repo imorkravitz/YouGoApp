@@ -18,7 +18,6 @@ import com.example.project_yougo.model.user.UserModel;
 import com.example.project_yougo.model.comment.CommentModel;
 
 public class AddCommentFragment extends Fragment {
-
     private String postId;
     private EditText contentEditText;
     private Button addButton;

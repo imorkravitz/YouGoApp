@@ -8,7 +8,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.project_yougo.model.post.Comment;
-import com.example.project_yougo.model.post.Post;
 
 import java.util.List;
 
@@ -17,8 +16,8 @@ public interface CommentDao {
     @Query("SELECT * FROM comment")
     LiveData<List<Comment>> getAll();
 
-    @Query("SELECT * FROM comment where id=:postId")
-    List<Comment>  getOfPost(String postId);
+    @Query("SELECT * FROM comment where postId=:postId")
+    LiveData<List<Comment>> getOfPost(String postId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Comment... comment);

@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCmx7pUhUbaFd_Rsmt9YvN7mi2qfkOasFc"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
         <activity
             android:name=".feed.FeedActivity"
             android:exported="false" />

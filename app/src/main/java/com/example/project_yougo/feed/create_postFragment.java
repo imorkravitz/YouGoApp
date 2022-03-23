@@ -2,6 +2,8 @@ package com.example.project_yougo.feed;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
@@ -20,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -29,6 +33,11 @@ import android.widget.Toast;
 
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.post.PostModel;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.InputStream;
@@ -39,6 +48,7 @@ public class create_postFragment extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GALLERY = 2;
     private Button createPostButton;
+    private FloatingActionButton selectMapLocationButton;
     private EditText freeTexEditText;
     private EditText difficultyEditText;
     private EditText typeOfWorkoutEditText;
@@ -67,6 +77,15 @@ public class create_postFragment extends Fragment {
             }
         });
 
+        selectMapLocationButton = view.findViewById(R.id.create_post_frag_addIlocation_btn);
+
+        selectMapLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSelectMapLocationButtonClicked();
+            }
+        });
+
         freeTexEditText = view.findViewById(R.id.create_post_frag_freeText_PL);
         difficultyEditText = view.findViewById(R.id.create_post_frag_difficulty);
         typeOfWorkoutEditText = view.findViewById(R.id.create_post_frag_TOW_PT);
@@ -74,6 +93,11 @@ public class create_postFragment extends Fragment {
 
         return view;
 
+    }
+
+    private void onSelectMapLocationButtonClicked() {
+        MapDialog mapDialog = new MapDialog(getContext());
+        mapDialog.show();
     }
 
     public void onCreatePostButtonClicked() {
@@ -200,5 +224,51 @@ public class create_postFragment extends Fragment {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
+    }
+
+    private class MapDialog extends Dialog implements OnMapReadyCallback,
+            GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
+        private GoogleMap googleMap;
+
+        public MapDialog(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onCreate(Bundle bundle) {
+            super.onCreate(bundle);
+            try {
+                setContentView(R.layout.map_fragment_dialog);
+            } catch(Exception e) {
+                int a=  5;
+            }
+
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            FragmentManager fragmentManager = getChildFragmentManager();
+
+            SupportMapFragment supportMapFragment =
+                    (SupportMapFragment) fragmentManager.
+                            findFragmentById(R.id.mapFragment);
+            supportMapFragment.getMapAsync(this);
+        }
+
+        @Override
+        public void onMapClick(@NonNull LatLng latLng) {
+            Toast.makeText(getContext(), "onclick " + latLng.latitude + " : " + latLng.longitude,
+                    Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onMapLongClick(@NonNull LatLng latLng) {
+            Toast.makeText(getContext(), "long click " + latLng.latitude + " : " + latLng.longitude,
+                    Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onMapReady(@NonNull GoogleMap googleMap) {
+            this.googleMap = googleMap;
+            this.googleMap.setOnMapClickListener(this);
+            this.googleMap.setOnMapLongClickListener(this);
+        }
     }
 }
