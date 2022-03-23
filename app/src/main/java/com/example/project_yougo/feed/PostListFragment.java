@@ -2,7 +2,6 @@ package com.example.project_yougo.feed;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
@@ -14,7 +13,6 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -24,12 +22,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.project_yougo.R;
 import com.example.project_yougo.model.user.User;
 import com.example.project_yougo.model.post.Post;
 import com.example.project_yougo.model.post.PostModel;
-
 import com.example.project_yougo.model.user.UserModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,22 +35,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
-
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
 import androidx.lifecycle.Observer;
-
 
 public class PostListFragment extends Fragment {
     private RecyclerView postRecyclerView;
     private PostListViewModel postListViewModel;
     private static final int PICK_IMAGE_REQUEST = 1;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,11 +91,18 @@ public class PostListFragment extends Fragment {
                 adapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int position) {
+
+                        //TODO fixe that
+                        // Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToProfileFragment());
+                        String postId=postList.get(position).getId();
+                        Navigation.findNavController(v).navigate(PostListFragmentDirections.actionPostListFragmentToEditPostFragment(postId));
+
                     }
                 });
                 postRecyclerView.setAdapter(adapter);
             }
         });
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
@@ -266,18 +264,6 @@ public class PostListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
-    }
-
-    public static class PostListViewModel extends ViewModel {
-        private LiveData<List<Post>> postListLiveData;
-
-        public LiveData<List<Post>> getPostListLiveData(LifecycleOwner lifecycleOwner,
-                                                        ViewModelStoreOwner viewModelStoreOwner) {
-            if(postListLiveData == null)
-                postListLiveData = PostModel.getInstance().getPostListLiveData(viewModelStoreOwner,
-                        lifecycleOwner);
-            return postListLiveData;
-        }
     }
 
     private interface UserListAvailableListener {
